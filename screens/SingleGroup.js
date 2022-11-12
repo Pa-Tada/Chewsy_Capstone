@@ -7,13 +7,14 @@ import {
   FlatList,
   Image,
   ImageBackground,
+  SafeAreaView,
 } from "react-native";
 
 const events = [
   {
     groupId: 1,
-    restaurantName: "awesome restaurant",
-    restaurantLocation: "new york, new york",
+    restaurantName: "awesome restaurant and more words",
+    restaurantLocation: "soho, new york city, new york",
     restaurantImgUrl:
       "https://static01.nyt.com/images/2018/12/16/world/16xp-davidson1/merlin_146914890_3e2b450f-94bf-472f-b717-a7b8b4004b1a-superJumbo.jpg",
     submissions: 4,
@@ -21,7 +22,7 @@ const events = [
   {
     groupId: 2,
     restaurantName: "awesome restaurant 2",
-    restaurantLocation: "new york, new york",
+    restaurantLocation: "harlem, new york city, new york",
     restaurantImgUrl:
       "https://static01.nyt.com/images/2018/12/16/world/16xp-davidson1/merlin_146914890_3e2b450f-94bf-472f-b717-a7b8b4004b1a-superJumbo.jpg",
     submissions: 2,
@@ -75,9 +76,9 @@ const friends = [
 
 const SingleGroup = () => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.friendsWrapper}>
-        <Text style={styles.sectionTitle}> Your Friends </Text>
+        <Text style={styles.sectionTitle}>Your Friends</Text>
         <View style={styles.friends}>
           <FlatList
             data={friends}
@@ -85,8 +86,8 @@ const SingleGroup = () => {
             horizontal
             renderItem={({ item }) => (
               <View style={styles.list}>
-                <Image style={styles.img} source={item.imgUrl} />
-                <Text style={styles.name}> {item.firstName} </Text>
+                <Image style={styles.img} source={{ uri: item.imgUrl }} />
+                <Text style={styles.name}>{item.firstName}</Text>
               </View>
             )}
           />
@@ -94,7 +95,7 @@ const SingleGroup = () => {
       </View>
 
       <View style={styles.eventsWrapper}>
-        <Text style={styles.sectionTitle}> Your Events </Text>
+        <Text style={styles.sectionTitle}>Your Events</Text>
         <View style={styles.events}>
           <FlatList
             data={events}
@@ -102,81 +103,109 @@ const SingleGroup = () => {
             horizontal
             renderItem={({ item }) => (
               <View style={styles.eventList}>
-                {/* <Image
+                <Image
                   style={styles.eventImg}
                   source={require("../assets/eventImg1.jpg")}
-                /> */}
-                <Text style={styles.eventName}> {item.restaurantName} </Text>
-                <Text style={styles.eventLoc}> {item.restaurantLocation} </Text>
+                />
+                <Text style={styles.eventName}>{item.restaurantName}</Text>
+                <Text style={styles.eventLoc}>{item.restaurantLocation}</Text>
               </View>
             )}
           />
         </View>
       </View>
 
-      <TouchableOpacity>
-        <View style={styles.buttonWrapper}>
-          <Text style={styles.button}> Create Event</Text>
-        </View>
-      </TouchableOpacity>
-    </View>
+      <View style={styles.buttonWrapper}>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Create Event</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#E8EAED",
+    flex: 1,
+    alignItems: "center",
+    backgroundColor: "#242526",
   },
   sectionTitle: {
     fontSize: 24,
     fontWeight: "bold",
+    color: "white",
   },
-  friends: {
-    padding: 2,
-    paddingLeft: 6,
-    paddingBottom: 8,
-    paddingTop: 4,
+  friendsWrapper: {
+    paddingTop:40,
+    paddingHorizontal: 6,
+    flex: 2,
+    justifyContent: "center",
+    // backgroundColor: "blue"
   },
+  friends: {},
   list: {
-    backgroundColor: "pink",
     marginTop: 24,
     marginHorizontal: 5,
-    padding: 10,
-    borderColor: "black",
-    borderWidth: 1,
     borderRadius: 50,
-    width: 80,
-    height: 80,
+    width: 100,
+    height: 200,
+    alignItems: "center",
   },
   img: {
-    resizeMode: "contain",
+    width: 100,
+    height: 100,
+    borderRadius: 50,
   },
   name: {
     marginTop: 2,
     fontWeight: "bold",
+    color: "darkgray",
   },
-  buttonWrapper: {
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    borderRadius: 60,
-    borderWidth: 2,
-    width: 150,
-    backgroundColor: "linen",
-    borderColor: "#C0C0C0",
-    alignItems: "center",
+  eventsWrapper: {
+    paddingHorizontal: 6,
+    flex: 2,
+    justifyContent: "center",
   },
+  events: {},
   eventList: {
     marginTop: 24,
     marginHorizontal: 5,
-    padding: 10,
-    borderColor: "black",
-    borderWidth: 1,
+    width: 180,
+    height: 250,
+  },
+  eventImg: {
     width: 180,
     height: 180,
   },
-  eventImg: {
-    resizeMode: "contain",
-  }
+  eventName: {
+    marginTop: 2,
+    fontWeight: "bold",
+    color: "darkgray",
+  },
+  eventLoc: {
+    marginTop: 2,
+    color: "darkgray",
+  },
+  buttonWrapper: {
+    paddingVertical: 30,
+    paddingHorizontal: 10,
+    flex: 0.2,
+    justifyContent: "center",
+  },
+  button: {
+    borderRadius: 60,
+    width: 250,
+    height: 50,
+    backgroundColor: "#CC5801",
+  },
+  buttonText: {
+    paddingTop: 10,
+    textAlign: "center",
+    color: "black",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
 });
 
 export default SingleGroup;

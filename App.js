@@ -11,9 +11,9 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Individual" component={Individual} />
-        <Stack.Screen name="SingleGroup" component={SingleGroup} />
+        <Stack.Screen name="Home" component={Home} options={{headerShown:false}}/>
+        <Stack.Screen name="Individual" component={Individual} options={{headerShown:false}}/>
+        <Stack.Screen name="SingleGroup" component={SingleGroup} options={{headerShown:false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

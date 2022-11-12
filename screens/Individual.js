@@ -7,6 +7,7 @@ import {
   FlatList,
   Image,
   ImageBackground,
+  SafeAreaView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -27,22 +28,41 @@ const events = [
   },
 ];
 
+const groups = [
+  {
+    id: 1,
+    name: "pete's group",
+  },
+  { id: 2, name: "Wanda and olivia's group" },
+];
+
 const Individual = () => {
   const navigation = useNavigation();
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.groupsWrapper}>
-        <Text style={styles.sectionTitle}> Your Groups </Text>
+        <Text style={styles.sectionTitle}>Your Groups</Text>
         <View style={styles.groups}>
-          <TouchableOpacity onPress={() => navigation.navigate("SingleGroup")}>
-            <View style={styles.buttonWrapper}>
-              <Text style={styles.button}> Group 1 </Text>
-            </View>
-          </TouchableOpacity>
+          <FlatList
+            data={groups}
+            keyExtractor={(item) => item.id}
+            horizontal
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() => navigation.navigate("SingleGroup")}
+              >
+                <View style={styles.list}>
+                  {/* <Image style={styles.img} source={{ uri: item.imgUrl }} /> */}
+                  <Text style={styles.name}>{item.name}</Text>
+                </View>
+              </TouchableOpacity>
+            )}
+          />
         </View>
       </View>
+
       <View style={styles.eventsWrapper}>
-        <Text style={styles.sectionTitle}> Your Events </Text>
+        <Text style={styles.sectionTitle}>Your Events</Text>
         <View style={styles.events}>
           <FlatList
             data={events}
@@ -50,57 +70,81 @@ const Individual = () => {
             horizontal
             renderItem={({ item }) => (
               <View style={styles.eventList}>
-                {/* <Image
+                <Image
                   style={styles.eventImg}
                   source={require("../assets/eventImg1.jpg")}
-                /> */}
-                <Text style={styles.eventName}> {item.restaurantName} </Text>
-                <Text style={styles.eventLoc}> {item.restaurantLocation} </Text>
+                />
+                <Text style={styles.eventName}>{item.restaurantName}</Text>
+                <Text style={styles.eventLoc}>{item.restaurantLocation}</Text>
               </View>
             )}
           />
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
-  },
-  groupsWrapper: {
+    backgroundColor: "#242526",
   },
   sectionTitle: {
     fontSize: 24,
     fontWeight: "bold",
+    color: "white",
+  },
+  groupsWrapper: {
+    paddingTop:20,
+    paddingHorizontal: 6,
+    flex: 1,
+    justifyContent: "center",
   },
   groups: {},
-  eventsWrapper: {},
-  events: {},
-  buttonWrapper: {
-    padding: 10,
-    backgroundColor: "linen",
-    borderColor: "#C0C0C0",
-    alignItems: "center",
+  list: {
+    borderWidth:1,
     marginTop: 24,
     marginHorizontal: 5,
-    borderWidth: 1,
     width: 180,
     height: 180,
+    alignItems: "center",
   },
+  // img: {
+  //   width: 100,
+  //   height: 100,
+  //   borderRadius: 50,
+  // },
+  name: {
+    marginTop: 2,
+    fontWeight: "bold",
+    color: "darkgray",
+  },
+  eventsWrapper: {
+    paddingTop: 30,
+    paddingHorizontal: 6,
+    flex: 1,
+    justifyContent: "flex-start",
+  },
+  events: {},
   eventList: {
     marginTop: 24,
     marginHorizontal: 5,
-    padding: 10,
-    borderColor: "black",
-    borderWidth: 1,
+    width: 180,
+    height: 250,
+  },
+  eventImg: {
     width: 180,
     height: 180,
   },
-  eventImg: {
-    resizeMode: "contain",
+  eventName: {
+    marginTop: 2,
+    fontWeight: "bold",
+    color: "darkgray",
+  },
+  eventLoc: {
+    marginTop: 2,
+    color: "darkgray",
   },
 });
 
