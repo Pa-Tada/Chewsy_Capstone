@@ -10,58 +10,77 @@ import {
   KeyboardAvoidingView,
   TextInput,
   ImageBackground,
+  Platform,
 } from "react-native";
 
 const Home = () => {
   const navigation = useNavigation();
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.logo}>Chewsy</Text>
+    <View style={styles.container}>
+      <ImageBackground
+        style={styles.backgroundImg}
+        source={require("../assets/homeBackground.jpg")}
+      ></ImageBackground>
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.inputWrapper}
+        style={styles.midWrapper}
       >
-        <TextInput style={styles.input} placeholder="Email"></TextInput>
-        <TextInput style={styles.input} placeholder="Password"></TextInput>
+        <Text style={styles.logo}>Chewsy</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          placeholderTextColor="white"
+        ></TextInput>
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          placeholderTextColor="white"
+        ></TextInput>
         <TouchableOpacity onPress={() => navigation.navigate("Individual")}>
           <View style={styles.buttonWrapper}>
-            <Text style={styles.button}> Log in or Sign up </Text>
+            <Text style={styles.button}>Log In or Sign Up</Text>
           </View>
         </TouchableOpacity>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "#242526",
     justifyContent: "center",
     alignItems: "center",
   },
-  // background: {
-  //   flex: 1,
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  //   width: 500,
-  //   opacity: 0.5,
-  // },
-  logo: {
-    fontSize: 30,
-    fontWeight: "bold",
-    color: "orange",
+  backgroundImg: {
+    flex: 1,
+    width: 500,
+    opacity: 0.5,
+    position: "relative",
   },
-  inputWrapper: {
+  midWrapper: {
     paddingVertical: 30,
     paddingHorizontal: 15,
     alignItems: "center",
+    position: "absolute",
+    shadowColor: "black",
+    shadowOffset: { height: 2, width: 2 },
+    shadowOpacity: 1,
+    shadowRadius: 1,
+  },
+  logo: {
+    fontSize: 35,
+    fontWeight: "bold",
+    color: "orange",
+    paddingBottom: 20,
   },
   input: {
-    color: "black",
-    backgroundColor: "white",
+    marginBottom: 8,
+    color: "white",
+    backgroundColor: "#242526",
     paddingVertical: 10,
     paddingHorizontal: 10,
     borderColor: "#C0C0C0",
@@ -73,10 +92,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 10,
     borderRadius: 60,
-    borderWidth: 2,
     width: 150,
-    backgroundColor: "linen",
-    borderColor: "#C0C0C0",
+    backgroundColor: "orange",
     alignItems: "center",
   },
   button: {},

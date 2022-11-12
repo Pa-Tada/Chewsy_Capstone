@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     width: 250,
     height: 50,
-    backgroundColor: "#CC5801",
+    backgroundColor: "orange",
   },
   buttonText: {
     paddingTop: 10,
