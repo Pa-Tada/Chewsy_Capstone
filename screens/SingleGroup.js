@@ -86,7 +86,9 @@ const SingleGroup = () => {
             horizontal
             renderItem={({ item }) => (
               <View style={styles.list}>
+                 <View style={styles.shadow}>
                 <Image style={styles.img} source={{ uri: item.imgUrl }} />
+                </View>
                 <Text style={styles.name}>{item.firstName}</Text>
               </View>
             )}
@@ -101,15 +103,16 @@ const SingleGroup = () => {
             data={events}
             keyExtractor={(item) => item.index}
             horizontal
-            renderItem={({ item }) => (
-              <View style={styles.eventList}>
+            renderItem={({ item, index }) => (
+
+              <TouchableOpacity style={styles.eventList}>
                 <Image
                   style={styles.eventImg}
                   source={require("../assets/eventImg1.jpg")}
                 />
                 <Text style={styles.eventName}>{item.restaurantName}</Text>
                 <Text style={styles.eventLoc}>{item.restaurantLocation}</Text>
-              </View>
+              </TouchableOpacity>
             )}
           />
         </View>
@@ -136,6 +139,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
   },
+  shadow: {
+    shadowColor: "black",
+    shadowOffset: { height: -1, width: 1 },
+    shadowOpacity: 0.8,
+    shadowRadius: 1,
+  },
   friendsWrapper: {
     paddingTop:40,
     paddingHorizontal: 6,
@@ -147,9 +156,9 @@ const styles = StyleSheet.create({
   list: {
     marginTop: 24,
     marginHorizontal: 5,
-    borderRadius: 50,
     width: 100,
     height: 200,
+    borderRadius: 50,
     alignItems: "center",
   },
   img: {
@@ -173,10 +182,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     width: 180,
     height: 250,
+    borderRadius: 15,
   },
   eventImg: {
     width: 180,
     height: 180,
+    borderRadius: 15,
   },
   eventName: {
     marginTop: 2,
@@ -186,6 +197,7 @@ const styles = StyleSheet.create({
   eventLoc: {
     marginTop: 2,
     color: "darkgray",
+    fontSize: 12,
   },
   buttonWrapper: {
     paddingVertical: 30,
