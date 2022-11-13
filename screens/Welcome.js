@@ -13,7 +13,7 @@ import {
   Platform,
 } from "react-native";
 
-const Home = () => {
+const Welcome = () => {
   const navigation = useNavigation();
 
   return (
@@ -38,7 +38,7 @@ const Home = () => {
           placeholder="Password"
           placeholderTextColor="white"
         ></TextInput>
-        <TouchableOpacity onPress={() => navigation.navigate("Individual")}>
+        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <View style={styles.buttonWrapper}>
             <Text style={styles.button}>Log In or Sign Up</Text>
           </View>
@@ -99,4 +99,4 @@ const styles = StyleSheet.create({
   button: {},
 });
 
-export default Home;
+export default Welcome;

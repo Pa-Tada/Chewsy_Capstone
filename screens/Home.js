@@ -43,7 +43,7 @@ const groups = [
 // return ()
 // }
 
-const Individual = () => {
+const Home = () => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
@@ -186,4 +186,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Individual;
+export default Home;
