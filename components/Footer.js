@@ -1,12 +1,14 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { Icon } from '@rneui/themed';
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
 
 const Footer = (props) => {
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.iconWrapper}>
+      <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.navigate("Home")}>
         {/* Link to HOMEPAGE: substitute later with <Image style={styles.icon} source={{ uri: PROFILE IMAGE }}/> */}
         <Icon type="antdesign" name="home" color='white' style={styles.icon} />
       </TouchableOpacity>

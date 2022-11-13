@@ -13,7 +13,7 @@ import {
   Platform,
 } from "react-native";
 
-const Home = () => {
+const Welcome = () => {
   const navigation = useNavigation();
 
   return (
@@ -99,4 +99,4 @@ const styles = StyleSheet.create({
   button: {},
 });
 
-export default Home;
+export default Welcome;
