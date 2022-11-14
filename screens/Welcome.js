@@ -34,6 +34,7 @@ const Welcome = () => {
           placeholderTextColor="white"
         ></TextInput>
         <TextInput
+        secureTextEntry
           style={styles.input}
           placeholder="Password"
           placeholderTextColor="white"

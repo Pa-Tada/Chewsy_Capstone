@@ -1,17 +1,20 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { Icon } from '@rneui/themed';
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
+
 
 const Footer = (props) => {
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.iconWrapper}>
-        {/* Link to HOMEPAGE: substitute later with <Image style={styles.icon} source={{ uri: PROFILE IMAGE }}/> */}
+      <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.navigate("Home")}>
+        {/* Link to HOMEPAGE: maybe substitute later with <Image style={styles.icon} source={{ uri: PROFILE IMAGE }}/> */}
         <Icon type="antdesign" name="home" color='white' style={styles.icon} />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.iconWrapper}>
+      <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.navigate("Profile")}>
           {/* PROFILE LONG FORM */}
         <Icon type="antdesign" name="form" color='white' style={styles.icon}/>
       </TouchableOpacity>
@@ -38,7 +41,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 0.4,
     borderColor: "gray",
     paddingHorizontal: 40,
-    flex: 0.2,
+    flex: 0.25,
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
