@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import {
   StyleSheet,
   Text,
@@ -37,6 +38,19 @@ const groups = [
 ];
 
 const Individual = () => {
+
+  const fetchUsers = async () =>{
+    try{
+
+      const {data} = await axios.get('/api/users')
+      console.log('hello')
+      console.log(data)
+      return data
+     }catch(error){
+       console.error(error)
+     }
+  }
+
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
@@ -49,7 +63,7 @@ const Individual = () => {
             horizontal
             renderItem={({ item }) => (
               <TouchableOpacity style={styles.list}
-                onPress={() => navigation.navigate("SingleGroup")}
+                onPress={() => fetchUsers()}
               >
                   {/* <Image style={styles.img} source={{ uri: item.imgUrl }} /> */}
                   <Text style={styles.name}>{item.name}</Text>
@@ -58,7 +72,7 @@ const Individual = () => {
           />
         </View>
       </View>
-
+      {/* navigation.navigate("SingleGroup") */}
       <View style={styles.eventsWrapper}>
         <Text style={styles.sectionTitle}>Your Events</Text>
         <View style={styles.events}>

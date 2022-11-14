@@ -7,13 +7,17 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "seed": "node server/db/seed.js"
+    "seed": "node server/db/seed.js",
+    "start:seed": "npx start & npx seed"
   },
   "dependencies": {
     "@react-navigation/native": "^6.0.13",
     "@react-navigation/native-stack": "^6.9.1",
+    "axios": "^1.1.3",
     "expo": "~47.0.3",
     "expo-status-bar": "~1.4.2",
+    "express": "^4.18.2",
+    "morgan": "^1.10.0",
     "pg": "^8.8.0",
     "react": "18.1.0",
     "react-native": "0.70.5",
