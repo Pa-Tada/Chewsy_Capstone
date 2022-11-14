@@ -1,11 +1,12 @@
 const {
   db,
-  models: { User,  },
+  models: { User },
 } = require("../db");
-const Group = require("../db/models/Group.js")
-const UserGroups = require("../db/models/UserGroups")
-const Event = require("../db/models/Event")
 
+// for whatever reason I had to put Group, UserGroups, and Event in its own variable rather than in the deconstructed object at the top
+const Group = require("../db/models/Group.js");
+const UserGroups = require("../db/models/UserGroups");
+const Event = require("../db/models/Event");
 
 async function seed() {
   await db.sync({ force: true }); // clears db and matches models to tables
@@ -63,8 +64,11 @@ async function seed() {
       id: 1,
       name: "pete's group",
     },
-    { id: 2,
-      name: "Wanda and olivia's group" }
+    { id: 2, name: "Wanda and olivia's group" },
+    {
+      id: 3,
+      name: "Charles' group",
+    },
   ];
   const userGroups = [
     {
@@ -88,15 +92,25 @@ async function seed() {
       isLeader: false,
     },
     {
-      groupId:2,
+      groupId: 2,
       userId: 2,
-      isLeader: false
+      isLeader: false,
     },
     {
-      groupId:2,
+      groupId: 2,
       userId: 4,
-      isLeader: true
-    }
+      isLeader: true,
+    },
+    {
+      groupId: 3,
+      userId: 3,
+      isLeader: true,
+    },
+    {
+      groupId: 3,
+      userId: 1,
+      isLeader: false,
+    },
   ];
 
   const events = [
@@ -108,12 +122,12 @@ async function seed() {
       submissions: 4,
     },
     {
-      groupId:2,
+      groupId: 2,
       // restaurantCode:1,
       restaurantName: "awesome restaurant 2",
       restaurantLocation: "new york, new york",
-      submissions:2
-    }
+      submissions: 2,
+    },
   ];
 
   await Promise.all(
@@ -124,7 +138,6 @@ async function seed() {
 
   await Promise.all(
     groups.map((currentGroup) => {
-      console.log(currentGroup)
       return Group.create(currentGroup);
     })
   );
