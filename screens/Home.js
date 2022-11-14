@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import {
   StyleSheet,
   Text,
@@ -43,6 +44,20 @@ const groups = [
 ];
 
 
+
+  // const fetchUsers = async () =>{
+  //   try{
+
+  //     const {data} = await axios.get('/api/users')
+  //     console.log('hello')
+  //     console.log(data)
+  //     return data
+  //    }catch(error){
+  //      console.error(error)
+  //    }
+  // }
+
+
 const Home = () => {
   const navigation = useNavigation();
   return (
@@ -65,7 +80,7 @@ const Home = () => {
             horizontal
             renderItem={({ item }) => (
               <TouchableOpacity style={styles.list}
-                onPress={() => navigation.navigate("SingleGroup")}
+                onPress={() => <Image style={styles.img} source={{ uri: item.imgUrl }} />}
               >
                   <View style={styles.shadow}>
                   {/* <Image style={styles.img} source={{ uri: item.imgUrl }} /> */}
@@ -76,7 +91,7 @@ const Home = () => {
           />
         </View>
       </View>
-
+      {/* navigation.navigate("SingleGroup") */}
       <View style={styles.eventsWrapper}>
         <Text style={styles.sectionTitle}>Your Events</Text>
         <View style={styles.events}>
