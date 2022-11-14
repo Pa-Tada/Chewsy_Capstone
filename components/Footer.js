@@ -3,6 +3,7 @@ import { Icon } from '@rneui/themed';
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 
+
 const Footer = (props) => {
   const navigation = useNavigation();
 
@@ -13,7 +14,7 @@ const Footer = (props) => {
         <Icon type="antdesign" name="home" color='white' style={styles.icon} />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.iconWrapper}>
+      <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.navigate("Profile")}>
           {/* PROFILE LONG FORM */}
         <Icon type="antdesign" name="form" color='white' style={styles.icon}/>
       </TouchableOpacity>
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 0.4,
     borderColor: "gray",
     paddingHorizontal: 40,
-    flex: 0.2,
+    flex: 0.25,
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",

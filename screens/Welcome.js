@@ -34,11 +34,12 @@ const Welcome = () => {
           placeholderTextColor="white"
         ></TextInput>
         <TextInput
+        secureTextEntry
           style={styles.input}
           placeholder="Password"
           placeholderTextColor="white"
         ></TextInput>
-        <TouchableOpacity onPress={() => navigation.navigate("Individual")}>
+        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <View style={styles.buttonWrapper}>
             <Text style={styles.button}>Log In or Sign Up</Text>
           </View>

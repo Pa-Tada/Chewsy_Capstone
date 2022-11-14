@@ -14,6 +14,7 @@ import Header from "../components/Header";
 
 const events = [
   {
+    id: 1,
     groupId: 1,
     restaurantName: "awesome restaurant and more words",
     restaurantLocation: "soho, new york city, new york",
@@ -22,6 +23,7 @@ const events = [
     submissions: 4,
   },
   {
+    id: 2,
     groupId: 2,
     restaurantName: "awesome restaurant 2",
     restaurantLocation: "harlem, new york city, new york",
@@ -33,42 +35,42 @@ const events = [
 
 const friends = [
   {
-    userId: 1,
+    id: 1,
     firstName: "Pete",
     lastName: "Davidson",
     imgUrl:
       "https://static01.nyt.com/images/2018/12/16/world/16xp-davidson1/merlin_146914890_3e2b450f-94bf-472f-b717-a7b8b4004b1a-superJumbo.jpg",
   },
   {
-    userId: 2,
+    id: 2,
     firstName: "Olivia",
     lastName: "Rodrigo",
     imgUrl:
       "https://people.com/thmb/dv8KhUNc3TKeFQomQQK_ED3k4tA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():focal(719x289:721x291)/Olivia-Rodrigo-fdf97f03ad6b4b94a178c3d6088b7308.jpg",
   },
   {
-    userId: 3,
+    id: 3,
     firstName: "Charles",
     lastName: "Barkely",
     imgUrl:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/1_charles_barkley_2019_%28cropped%29.jpg/1200px-1_charles_barkley_2019_%28cropped%29.jpg",
   },
   {
-    userId: 4,
+    id: 4,
     firstName: "Wanda",
     lastName: "Sykes",
     imgUrl:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlhhuFmKXC41WL4-MVoLkxg_8ZdO38ab4txZ3v9vGTgm46Hv4tyAsUI20&s",
   },
   {
-    userId: 5,
+    id: 5,
     firstName: "Captain",
     lastName: "America",
     imgUrl:
       "https://c8.alamy.com/comp/CPNCC5/captain-america-the-first-avenger-CPNCC5.jpg",
   },
   {
-    userId: 6,
+    id: 6,
     firstName: "Larry",
     lastName: "David",
     imgUrl:
@@ -79,7 +81,6 @@ const friends = [
 const SingleGroup = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <Header/>
       <View style={styles.friendsWrapper}>
 
       <View style={styles.titleContainer}>
@@ -118,7 +119,7 @@ const SingleGroup = () => {
         <View style={styles.events}>
           <FlatList
             data={events}
-            keyExtractor={(item) => item.index}
+            keyExtractor={(item) => item.id}
             horizontal
             renderItem={({ item, index }) => (
               <TouchableOpacity style={styles.eventList}>

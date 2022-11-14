@@ -15,6 +15,7 @@ import Footer from "../components/Footer";
 
 const events = [
   {
+    id: 1,
     restaurantName: "awesome restaurant",
     restaurantLocation: "new york, new york",
     restaurantImgUrl:
@@ -22,6 +23,7 @@ const events = [
     submissions: 4,
   },
   {
+    id: 2,
     restaurantName: "awesome restaurant 2",
     restaurantLocation: "new york, new york",
     restaurantImgUrl:
@@ -43,11 +45,10 @@ const groups = [
 // return ()
 // }
 
-const Individual = () => {
+const Home = () => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
-      <Header/>
       <View style={styles.groupsWrapper}>
 
       <View style={styles.titleContainer}>
@@ -64,7 +65,7 @@ const Individual = () => {
             data={groups}
             keyExtractor={(item) => item.id}
             horizontal
-            renderItem={({ item, index }) => (
+            renderItem={({ item }) => (
               <TouchableOpacity style={styles.list}
                 onPress={() => navigation.navigate("SingleGroup")}
               >
@@ -83,7 +84,7 @@ const Individual = () => {
         <View style={styles.events}>
           <FlatList
             data={events}
-            keyExtractor={(item) => item.index}
+            keyExtractor={(item) => item.id}
             horizontal
             renderItem={({ item }) => (
               <TouchableOpacity style={styles.eventList}>
@@ -186,4 +187,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Individual;
+export default Home;
