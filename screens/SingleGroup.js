@@ -6,9 +6,11 @@ import {
   View,
   FlatList,
   Image,
-  ImageBackground,
   SafeAreaView,
 } from "react-native";
+import { Icon } from '@rneui/themed';
+import Footer from "../components/Footer";
+import Header from "../components/Header";
 
 const events = [
   {
@@ -77,8 +79,17 @@ const friends = [
 const SingleGroup = () => {
   return (
     <SafeAreaView style={styles.container}>
+      <Header/>
       <View style={styles.friendsWrapper}>
+
+      <View style={styles.titleContainer}>
         <Text style={styles.sectionTitle}>Your Friends</Text>
+        <TouchableOpacity style={styles.iconWrapper}>
+                    {/* ADD FRIEND */}
+          <Icon type="antdesign" size="28px" name="adduser" color='gainsboro' />
+        </TouchableOpacity>
+        </View>
+
         <View style={styles.friends}>
           <FlatList
             data={friends}
@@ -86,9 +97,7 @@ const SingleGroup = () => {
             horizontal
             renderItem={({ item }) => (
               <View style={styles.list}>
-                 <View style={styles.shadow}>
-                <Image style={styles.img} source={{ uri: item.imgUrl }} />
-                </View>
+                  <Image style={styles.img} source={{ uri: item.imgUrl }} />
                 <Text style={styles.name}>{item.firstName}</Text>
               </View>
             )}
@@ -97,19 +106,28 @@ const SingleGroup = () => {
       </View>
 
       <View style={styles.eventsWrapper}>
+
+      <View style={styles.titleContainer}>
         <Text style={styles.sectionTitle}>Your Events</Text>
+        <TouchableOpacity style={styles.iconWrapper}>
+                    {/* CREATE EVENT*/}
+          <Icon type="material-community" size="30px" name="calendar-plus" color='gainsboro' />
+        </TouchableOpacity>
+        </View>
+
         <View style={styles.events}>
           <FlatList
             data={events}
             keyExtractor={(item) => item.index}
             horizontal
             renderItem={({ item, index }) => (
-
               <TouchableOpacity style={styles.eventList}>
-                <Image
-                  style={styles.eventImg}
-                  source={require("../assets/eventImg1.jpg")}
-                />
+                <View style={styles.shadow}>
+                  <Image
+                    style={styles.eventImg}
+                    source={require("../assets/eventImg1.jpg")}
+                  />
+                </View>
                 <Text style={styles.eventName}>{item.restaurantName}</Text>
                 <Text style={styles.eventLoc}>{item.restaurantLocation}</Text>
               </TouchableOpacity>
@@ -118,26 +136,36 @@ const SingleGroup = () => {
         </View>
       </View>
 
-      <View style={styles.buttonWrapper}>
+      {/* <View style={styles.buttonWrapper}>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Create Event</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
+      <Footer/>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#E8EAED",
     flex: 1,
-    alignItems: "center",
     backgroundColor: "#242526",
+  },
+  titleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    //backgroundColor: "dodgerblue"
   },
   sectionTitle: {
     fontSize: 24,
     fontWeight: "bold",
     color: "white",
+  },
+  iconWrapper: {
+    shadowColor: "black",
+    shadowOffset: { height: 1, width: 1 },
+    shadowOpacity: 1,
+    shadowRadius: 1,
   },
   shadow: {
     shadowColor: "black",
@@ -146,16 +174,14 @@ const styles = StyleSheet.create({
     shadowRadius: 1,
   },
   friendsWrapper: {
-    paddingTop:40,
-    paddingHorizontal: 6,
-    flex: 2,
-    justifyContent: "center",
-    // backgroundColor: "blue"
+    marginTop:30,
+    paddingHorizontal: 12,
+    flex: 1,
   },
   friends: {},
   list: {
     marginTop: 24,
-    marginHorizontal: 5,
+    marginRight: 8,
     width: 100,
     height: 200,
     borderRadius: 50,
@@ -172,14 +198,13 @@ const styles = StyleSheet.create({
     color: "darkgray",
   },
   eventsWrapper: {
-    paddingHorizontal: 6,
-    flex: 2,
-    justifyContent: "center",
+    paddingHorizontal: 12,
+    flex: 1.3,
   },
   events: {},
   eventList: {
     marginTop: 24,
-    marginHorizontal: 5,
+    marginRight: 8,
     width: 180,
     height: 250,
     borderRadius: 15,
@@ -199,25 +224,25 @@ const styles = StyleSheet.create({
     color: "darkgray",
     fontSize: 12,
   },
-  buttonWrapper: {
-    paddingVertical: 30,
-    paddingHorizontal: 10,
-    flex: 0.2,
-    justifyContent: "center",
-  },
-  button: {
-    borderRadius: 60,
-    width: 250,
-    height: 50,
-    backgroundColor: "orange",
-  },
-  buttonText: {
-    paddingTop: 10,
-    textAlign: "center",
-    color: "black",
-    fontSize: 20,
-    fontWeight: "bold",
-  },
+  // buttonWrapper: {
+  //   paddingVertical: 30,
+  //   paddingHorizontal: 10,
+  //   flex: 0.2,
+  //   justifyContent: "center",
+  // },
+  // button: {
+  //   borderRadius: 60,
+  //   width: 250,
+  //   height: 50,
+  //   backgroundColor: "orange",
+  // },
+  // buttonText: {
+  //   paddingTop: 10,
+  //   textAlign: "center",
+  //   color: "black",
+  //   fontSize: 20,
+  //   fontWeight: "bold",
+  // },
 });
 
 export default SingleGroup;
