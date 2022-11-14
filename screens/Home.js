@@ -39,17 +39,17 @@ const groups = [
 
 const Individual = () => {
 
-  const fetchUsers = async () =>{
-    try{
+  // const fetchUsers = async () =>{
+  //   try{
 
-      const {data} = await axios.get('/api/users')
-      console.log('hello')
-      console.log(data)
-      return data
-     }catch(error){
-       console.error(error)
-     }
-  }
+  //     const {data} = await axios.get('/api/users')
+  //     console.log('hello')
+  //     console.log(data)
+  //     return data
+  //    }catch(error){
+  //      console.error(error)
+  //    }
+  // }
 
   const navigation = useNavigation();
   return (
@@ -63,9 +63,8 @@ const Individual = () => {
             horizontal
             renderItem={({ item }) => (
               <TouchableOpacity style={styles.list}
-                onPress={() => fetchUsers()}
+                onPress={() => <Image style={styles.img} source={{ uri: item.imgUrl }} />}
               >
-                  {/* <Image style={styles.img} source={{ uri: item.imgUrl }} /> */}
                   <Text style={styles.name}>{item.name}</Text>
               </TouchableOpacity>
             )}
