@@ -13,16 +13,17 @@ export default Header
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#242526",
+    flex: 0.2,
     justifyContent: "center",
     alignItems: "center",
+    width: "100%",
+    flexDirection: "row",
+    borderBottomWidth: 0.4,
+    borderColor: "gray",
   },
   logo: {
-    fontSize: 35,
+    fontSize: 20,
     fontWeight: "bold",
     color: "orange",
-    paddingVertical: 30,
-    paddingHorizontal: 15,
   },
 })

@@ -13,14 +13,14 @@ import {
   Platform,
 } from "react-native";
 
-const Home = () => {
+const Welcome = () => {
   const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
       <ImageBackground
         style={styles.backgroundImg}
-        source={require("../assets/homeBackground.jpg")}
+        source={{uri: "https://images.unsplash.com/photo-1533640924469-f04e06f8898d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=852&q=80"}}
       ></ImageBackground>
 
       <KeyboardAvoidingView
@@ -34,11 +34,12 @@ const Home = () => {
           placeholderTextColor="white"
         ></TextInput>
         <TextInput
+        secureTextEntry
           style={styles.input}
           placeholder="Password"
           placeholderTextColor="white"
         ></TextInput>
-        <TouchableOpacity onPress={() => navigation.navigate("Individual")}>
+        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <View style={styles.buttonWrapper}>
             <Text style={styles.button}>Log In or Sign Up</Text>
           </View>
@@ -99,4 +100,4 @@ const styles = StyleSheet.create({
   button: {},
 });
 
-export default Home;
+export default Welcome;

@@ -7,13 +7,18 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
-  ImageBackground,
   SafeAreaView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { Icon, Divider } from '@rneui/themed';
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
+
+// Dummy image - need to make dynamic based on logged in user
 const events = [
   {
+    id: 1,
     restaurantName: "awesome restaurant",
     restaurantLocation: "new york, new york",
     restaurantImgUrl:
@@ -21,6 +26,7 @@ const events = [
     submissions: 4,
   },
   {
+    id: 2,
     restaurantName: "awesome restaurant 2",
     restaurantLocation: "new york, new york",
     restaurantImgUrl:
@@ -37,7 +43,7 @@ const groups = [
   { id: 2, name: "Wanda and olivia's group" },
 ];
 
-const Individual = () => {
+
 
   // const fetchUsers = async () =>{
   //   try{
@@ -51,11 +57,22 @@ const Individual = () => {
   //    }
   // }
 
+
+const Home = () => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
+      <Divider/>
       <View style={styles.groupsWrapper}>
+
+      <View style={styles.titleContainer}>
         <Text style={styles.sectionTitle}>Your Groups</Text>
+        <TouchableOpacity style={styles.iconWrapper}>
+                    {/* CREATE GROUP */}
+          <Icon type="antdesign" size="28px" name="addusergroup" color='gainsboro' />
+        </TouchableOpacity>
+        </View>
+
         <View style={styles.groups}>
           <FlatList
             data={groups}
@@ -65,6 +82,9 @@ const Individual = () => {
               <TouchableOpacity style={styles.list}
                 onPress={() => <Image style={styles.img} source={{ uri: item.imgUrl }} />}
               >
+                  <View style={styles.shadow}>
+                  {/* <Image style={styles.img} source={{ uri: item.imgUrl }} /> */}
+                  </View>
                   <Text style={styles.name}>{item.name}</Text>
               </TouchableOpacity>
             )}
@@ -77,7 +97,7 @@ const Individual = () => {
         <View style={styles.events}>
           <FlatList
             data={events}
-            keyExtractor={(item) => item.index}
+            keyExtractor={(item) => item.id}
             horizontal
             renderItem={({ item }) => (
               <TouchableOpacity style={styles.eventList}>
@@ -94,6 +114,7 @@ const Individual = () => {
           />
         </View>
       </View>
+      <Footer/>
     </SafeAreaView>
   );
 };
@@ -103,10 +124,21 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#242526",
   },
+  titleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    //backgroundColor: "dodgerblue"
+  },
   sectionTitle: {
     fontSize: 24,
     fontWeight: "bold",
     color: "white",
+  },
+  iconWrapper: {
+    shadowColor: "black",
+    shadowOffset: { height: 1, width: 1 },
+    shadowOpacity: 1,
+    shadowRadius: 1,
   },
   shadow: {
     shadowColor: "black",
@@ -115,24 +147,19 @@ const styles = StyleSheet.create({
     shadowRadius: 1,
   },
   groupsWrapper: {
-    paddingTop:20,
-    paddingHorizontal: 6,
+    marginTop:30,
+    paddingHorizontal: 12,
     flex: 1,
-    justifyContent: "center",
   },
   groups: {},
   list: {
     borderWidth:1,
     borderRadius: 15,
     marginTop: 24,
-    marginHorizontal: 5,
+    marginRight: 8,
     width: 180,
     height: 180,
     alignItems: "center",
-    shadowColor: "black",
-    shadowOffset: { height: -1, width: 1 },
-    shadowOpacity: 1,
-    shadowRadius: 1,
   },
   // img: {
   //   width: 180,
@@ -145,15 +172,13 @@ const styles = StyleSheet.create({
     color: "darkgray",
   },
   eventsWrapper: {
-    paddingTop: 30,
-    paddingHorizontal: 6,
-    flex: 1,
-    justifyContent: "flex-start",
+    paddingHorizontal: 12,
+    flex: 1.3,
   },
   events: {},
   eventList: {
     marginTop: 24,
-    marginHorizontal: 5,
+    marginRight: 8,
     width: 180,
     height: 250,
     borderRadius: 15,
@@ -162,7 +187,6 @@ const styles = StyleSheet.create({
     width: 180,
     height: 180,
     borderRadius: 15,
-
   },
   eventName: {
     marginTop: 2,
@@ -176,4 +200,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Individual;
+export default Home;
