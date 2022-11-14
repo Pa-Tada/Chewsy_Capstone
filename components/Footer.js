@@ -10,7 +10,7 @@ const Footer = (props) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.navigate("Home")}>
-        {/* Link to HOMEPAGE: substitute later with <Image style={styles.icon} source={{ uri: PROFILE IMAGE }}/> */}
+        {/* Link to HOMEPAGE: maybe substitute later with <Image style={styles.icon} source={{ uri: PROFILE IMAGE }}/> */}
         <Icon type="antdesign" name="home" color='white' style={styles.icon} />
       </TouchableOpacity>
 

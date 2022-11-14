@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
 import React from "react";
-import { Icon, Input, Avatar } from "@rneui/themed";
+import { Icon, Input, Avatar, Divider } from "@rneui/themed";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -28,6 +28,7 @@ const fields = [
   { id: 11, field: "Restaurants You Haven't Liked" },
 ];
 
+// Dummy image - need to make dynamic based on logged in user
 const firstItem = () => {
   return (
     <View>
@@ -52,7 +53,7 @@ const Profile = () => {
   return (
 
     <View style={styles.container}>
-
+<Divider/>
       <View style={styles.contents}>
         <Text style={styles.sectionTitle}>Edit Profile</Text>
 
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   contents: {
-    flex: 2,
+    flex: 1.7,
     alignItems: "center"
   },
   sectionTitle:{
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
   form: {
     alignSelf: "center",
     width: "80%",
-    paddingBottom: 60,
+    paddingBottom: 55,
   },
   buttonWrapper: {
     paddingVertical: 10,

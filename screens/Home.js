@@ -9,10 +9,12 @@ import {
   SafeAreaView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Icon } from '@rneui/themed';
+import { Icon, Divider } from '@rneui/themed';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
+
+// Dummy image - need to make dynamic based on logged in user
 const events = [
   {
     id: 1,
@@ -40,15 +42,12 @@ const groups = [
   { id: 2, name: "Wanda and olivia's group" },
 ];
 
-// const firstItem = () => {
-//   const navigation = useNavigation()
-// return ()
-// }
 
 const Home = () => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
+      <Divider/>
       <View style={styles.groupsWrapper}>
 
       <View style={styles.titleContainer}>
@@ -61,7 +60,6 @@ const Home = () => {
 
         <View style={styles.groups}>
           <FlatList
-          // ListHeaderComponent={firstItem}
             data={groups}
             keyExtractor={(item) => item.id}
             horizontal
