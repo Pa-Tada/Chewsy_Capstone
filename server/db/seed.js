@@ -1,7 +1,11 @@
 const {
   db,
-  models: { User, Group, UserGroup, Event },
+  models: { User,  },
 } = require("../db");
+const Group = require("../db/models/Group.js")
+const UserGroups = require("../db/models/UserGroups")
+const Event = require("../db/models/Event")
+
 
 async function seed() {
   await db.sync({ force: true }); // clears db and matches models to tables
@@ -37,7 +41,7 @@ async function seed() {
       email: "iAmRich@aol.com",
       imgUrl:
         "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/1_charles_barkley_2019_%28cropped%29.jpg/1200px-1_charles_barkley_2019_%28cropped%29.jpg",
-      rating: 2, // are we rating our of 10?
+      rating: 4, // are we rating our of 10?
       foodGenre: "American",
       affordability: 2, // are we rating out of 4?
     },
@@ -60,7 +64,7 @@ async function seed() {
       name: "pete's group",
     },
     { id: 2,
-      name: "Wanda and olivia's group" },
+      name: "Wanda and olivia's group" }
   ];
   const userGroups = [
     {
@@ -120,13 +124,14 @@ async function seed() {
 
   await Promise.all(
     groups.map((currentGroup) => {
+      console.log(currentGroup)
       return Group.create(currentGroup);
     })
   );
 
   await Promise.all(
     userGroups.map((currentUserGroup) => {
-      return UserGroup.create(currentUserGroup);
+      return UserGroups.create(currentUserGroup);
     })
   );
 
