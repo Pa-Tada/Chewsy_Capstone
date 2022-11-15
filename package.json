@@ -7,8 +7,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "seed": "node server/db/seed.js",
-    "start:seed": "npx start & npx seed"
+    "seed": "node server/db/seed.js"
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.2.2",

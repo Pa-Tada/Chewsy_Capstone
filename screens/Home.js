@@ -1,5 +1,5 @@
-import React from "react";
-//import axios from "axios";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import {
   StyleSheet,
   Text,
@@ -10,11 +10,10 @@ import {
   SafeAreaView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Icon, Divider } from '@rneui/themed';
+import { Icon, Divider } from "@rneui/themed";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-
 
 // Dummy image - need to make dynamic based on logged in user
 const events = [
@@ -44,30 +43,33 @@ const groups = [
   { id: 2, name: "Wanda and olivia's group" },
 ];
 
-
-
-  // const fetchUsers = async () =>{
-  //   try{
-
-  //     const {data} = await axios.get('/api/users')
-  //     console.log('hello')
-  //     console.log(data)
-  //     return data
-  //    }catch(error){
-  //      console.error(error)
-  //    }
-  // }
-
-
 const Home = () => {
   const navigation = useNavigation();
+  const [trial, setTrial] = useState({});
+
+  const fetchUsers = async () => {
+    try {
+      const { data } = await axios.get("http://192.168.1.22:8080/api/events/1");
+      console.log(data);
+      setTrial(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
-      <Divider/>
+      <Divider />
 
       <View style={styles.groupsWrapper}>
         <View style={styles.titleContainer}>
-          <Text style={styles.sectionTitle}>Your Groups</Text>
+          <Text style={styles.sectionTitle}>
+            Your Groups {trial.restaurantLocation}
+          </Text>
           <TouchableOpacity style={styles.iconWrapper}>
             {/* CREATE GROUP */}
             <Icon
@@ -85,9 +87,9 @@ const Home = () => {
             keyExtractor={(item) => item.id}
             horizontal
             renderItem={({ item }) => (
-              <TouchableOpacity style={styles.list}
-                onPress={() => navigation.navigate("SingleGroup")}
-              >
+              <TouchableOpacity style={styles.list}>
+                {/* // navigation.navigate("SingleGroup") */}
+
                 <View style={styles.shadow}>
                   {/* <Image style={styles.img} source={{ uri: item.imgUrl }} /> */}
                 </View>
