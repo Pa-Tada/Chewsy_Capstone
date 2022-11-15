@@ -6,9 +6,10 @@ import Welcome from "./screens/Welcome";
 import Home from "./screens/Home";
 import SingleGroup from "./screens/SingleGroup";
 import SingleEvent from "./screens/SingleEvent";
-import AppLoading from "expo-app-loading";
+//import AppLoading from "expo-app-loading";
 import useFonts from "./hooks/useFonts";
 import Profile from "./screens/Profile";
+//import AppLoading from "expo-splash-screen"
 
 
 
@@ -25,21 +26,21 @@ import Profile from "./screens/Profile";
 export default function App() {
   const Stack = createNativeStackNavigator();
 
-  const [IsReady, SetIsReady] = useState(false);
+  // const [IsReady, SetIsReady] = useState(false);
 
-  const FontLoading = async () => {
-    await useFonts(); // Font is being loaded here
-  };
+  // const FontLoading = async () => {
+  //   await useFonts(); // Font is being loaded here
+  // };
 
-  if (!IsReady) {
-    return (
-      <AppLoading
-        startAsync={FontLoading}
-        onFinish={() => SetIsReady(true)}
-        onError={() => {}}
-      />
-    );
-  }
+  // if (!IsReady) {
+  //   return (
+  //     <AppLoading
+  //       startAsync={FontLoading}
+  //       onFinish={() => SetIsReady(true)}
+  //       onError={() => {}}
+  //     />
+  //   );
+  // }
 
   return (
     <NavigationContainer>
@@ -54,6 +55,7 @@ export default function App() {
             headerTitleStyle: {
               fontSize: 20,
               fontWeight: "bold",
+              //fontFamily: "Pacifico_400Regular"
             },
           }}
         >
@@ -74,7 +76,7 @@ export default function App() {
             name="SingleGroup"
             component={SingleGroup}
 
-            options={{ headerShown: false }}
+            options={{ title: "Chewsy", headerBackVisible: false }}
           />
           <Stack.Screen
             name="SingleEvent"

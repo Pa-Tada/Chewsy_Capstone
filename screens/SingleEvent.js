@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-
+import { Divider } from "@rneui/themed";
 
 export default function EventPage() {
   const [restaurantData, setRestaurantData] = useState([]);
@@ -27,7 +27,7 @@ export default function EventPage() {
   Sorry Orlando, I'll delete this before the final review, just wanted to keep the logic here so we can easily reference it
 
     with our yelp request, we want to:
-    get restaurants that are open at the time of the event - (bug with this, need to find workaround) 
+    get restaurants that are open at the time of the event - (bug with this, need to find workaround)
     get restaurants that are open on the day of the event - [see above]
 
     have available reservation space (based on group size) [] - there is a yelp reservations query, but ideally, we want to query all available reservation platforms and cross reference them to decide on availability, probably will work on that after 1st demo
@@ -66,58 +66,63 @@ export default function EventPage() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header />
-      <View style={{ justifyContent: "center", alignItems: "center" }}>
-        <Text style={styles.eventText}>
-          {"\n"}Event Time: {eventTime}
-        </Text>
-        <Text style={styles.eventText}>
-          Event Date: {eventDate}
-          {"\n"}
-        </Text>
-        {!isShown ? (
-          <View>
-            <TouchableOpacity
-              style={styles.roundButton1}
-              onPress={() =>
-                setIsShown(!isShown) && Alert.alert("Your restaurant is ready!")
-              }
-            >
-              <Text style={{ fontFamily: "Pacifico_400Regular", fontSize: 42 }}>
-                Chewse
+      <Divider />
+      <View style={styles.contents}>
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          <Text style={styles.eventText}>
+            {"\n"}Event Time: {eventTime}
+          </Text>
+          <Text style={styles.eventText}>
+            Event Date: {eventDate}
+            {"\n"}
+          </Text>
+          {!isShown ? (
+            <View>
+              <TouchableOpacity
+                style={styles.roundButton1}
+                onPress={() =>
+                  setIsShown(!isShown) &&
+                  Alert.alert("Your restaurant is ready!")
+                }
+              >
+                <Text
+                  style={{ fontFamily: "Pacifico_400Regular", fontSize: 42 }}
+                >
+                  Chewse
+                </Text>
+              </TouchableOpacity>
+              <Text> </Text>
+            </View>
+          ) : null}
+          {isShown && (
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <Text style={styles.eventText}>
+                Your Restaurant Is:
+                {"\n"}
               </Text>
-            </TouchableOpacity>
-            <Text> </Text>
-          </View>
-        ) : null}
-        {isShown && (
-          <View style={{ justifyContent: "center", alignItems: "center" }}>
-            <Text style={styles.eventText}>
-              Your Restaurant Is:
-              {"\n"}
-            </Text>
-            <Image
-              style={styles.imgEvent}
-              source={{ uri: restaurantData[0].image_url }}
-            />
-            <Text style={styles.eventText}>
-              {"\n"}
-              {restaurantData[0].name}
-              {"\n"}
-            </Text>
+              <Image
+                style={styles.imgEvent}
+                source={{ uri: restaurantData[0].image_url }}
+              />
+              <Text style={styles.eventText}>
+                {"\n"}
+                {restaurantData[0].name}
+                {"\n"}
+              </Text>
 
-            <Text style={styles.eventText}>
-              {restaurantData[0].location.address1}
-            </Text>
+              <Text style={styles.eventText}>
+                {restaurantData[0].location.address1}
+              </Text>
 
-            <Text style={styles.eventText}>
-              {restaurantData[0].location.city},{" "}
-              {restaurantData[0].location.state}{" "}
-              {restaurantData[0].location.zip_code}
-              {"\n"}
-            </Text>
-          </View>
-        )}
+              <Text style={styles.eventText}>
+                {restaurantData[0].location.city},{" "}
+                {restaurantData[0].location.state}{" "}
+                {restaurantData[0].location.zip_code}
+                {"\n"}
+              </Text>
+            </View>
+          )}
+        </View>
       </View>
       <Footer />
     </SafeAreaView>
@@ -128,6 +133,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#242526",
+  },
+  contents: {
+    flex: 2.4,
+    alignItems: "center",
   },
   titleContainer: {
     flexDirection: "row",
