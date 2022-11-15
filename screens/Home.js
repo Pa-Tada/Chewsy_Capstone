@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import {
   StyleSheet,
   Text,
@@ -9,12 +10,15 @@ import {
   SafeAreaView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Icon } from '@rneui/themed';
+import { Icon, Divider } from '@rneui/themed';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
+
+// Dummy image - need to make dynamic based on logged in user
 const events = [
   {
+    id: 1,
     restaurantName: "awesome restaurant",
     restaurantLocation: "new york, new york",
     restaurantImgUrl:
@@ -22,6 +26,7 @@ const events = [
     submissions: 4,
   },
   {
+    id: 2,
     restaurantName: "awesome restaurant 2",
     restaurantLocation: "new york, new york",
     restaurantImgUrl:
@@ -38,16 +43,26 @@ const groups = [
   { id: 2, name: "Wanda and olivia's group" },
 ];
 
-// const firstItem = () => {
-//   const navigation = useNavigation()
-// return ()
-// }
+
+
+  // const fetchUsers = async () =>{
+  //   try{
+
+  //     const {data} = await axios.get('/api/users')
+  //     console.log('hello')
+  //     console.log(data)
+  //     return data
+  //    }catch(error){
+  //      console.error(error)
+  //    }
+  // }
+
 
 const Home = () => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
-      <Header/>
+      <Divider/>
       <View style={styles.groupsWrapper}>
 
       <View style={styles.titleContainer}>
@@ -60,13 +75,12 @@ const Home = () => {
 
         <View style={styles.groups}>
           <FlatList
-          // ListHeaderComponent={firstItem}
             data={groups}
             keyExtractor={(item) => item.id}
             horizontal
-            renderItem={({ item, index }) => (
+            renderItem={({ item }) => (
               <TouchableOpacity style={styles.list}
-                onPress={() => navigation.navigate("SingleGroup")}
+                onPress={() => <Image style={styles.img} source={{ uri: item.imgUrl }} />}
               >
                   <View style={styles.shadow}>
                   {/* <Image style={styles.img} source={{ uri: item.imgUrl }} /> */}
@@ -77,13 +91,13 @@ const Home = () => {
           />
         </View>
       </View>
-
+      {/* navigation.navigate("SingleGroup") */}
       <View style={styles.eventsWrapper}>
         <Text style={styles.sectionTitle}>Your Events</Text>
         <View style={styles.events}>
           <FlatList
             data={events}
-            keyExtractor={(item) => item.index}
+            keyExtractor={(item) => item.id}
             horizontal
             renderItem={({ item }) => (
               <TouchableOpacity style={styles.eventList}>

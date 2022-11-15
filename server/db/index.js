@@ -1,8 +1,8 @@
 const db = require("./db");
 
 const User = require("./models/User");
-const Events = require("./models/Events");
-const Groups = require("./models/Order");
+const Events = require("./models/Event");
+const Groups = require("./models/Group");
 const UserGroups = require("./models/UserGroups");
 
 Groups.belongsToMany(User, { through: UserGroups, unique: false });

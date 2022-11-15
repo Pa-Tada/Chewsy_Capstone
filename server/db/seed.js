@@ -1,7 +1,12 @@
 const {
   db,
-  models: { User, Group, UserGroup, Event },
+  models: { User },
 } = require("../db");
+
+// for whatever reason I had to put Group, UserGroups, and Event in its own variable rather than in the deconstructed object at the top
+const Group = require("../db/models/Group.js");
+const UserGroups = require("../db/models/UserGroups");
+const Event = require("../db/models/Event");
 
 async function seed() {
   await db.sync({ force: true }); // clears db and matches models to tables
@@ -37,7 +42,7 @@ async function seed() {
       email: "iAmRich@aol.com",
       imgUrl:
         "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/1_charles_barkley_2019_%28cropped%29.jpg/1200px-1_charles_barkley_2019_%28cropped%29.jpg",
-      rating: 2, // are we rating our of 10?
+      rating: 4, // are we rating our of 10?
       foodGenre: "American",
       affordability: 2, // are we rating out of 4?
     },
@@ -59,8 +64,11 @@ async function seed() {
       id: 1,
       name: "pete's group",
     },
-    { id: 2,
-      name: "Wanda and olivia's group" },
+    { id: 2, name: "Wanda and olivia's group" },
+    {
+      id: 3,
+      name: "Charles' group",
+    },
   ];
   const userGroups = [
     {
@@ -84,15 +92,25 @@ async function seed() {
       isLeader: false,
     },
     {
-      groupId:2,
+      groupId: 2,
       userId: 2,
-      isLeader: false
+      isLeader: false,
     },
     {
-      groupId:2,
+      groupId: 2,
       userId: 4,
-      isLeader: true
-    }
+      isLeader: true,
+    },
+    {
+      groupId: 3,
+      userId: 3,
+      isLeader: true,
+    },
+    {
+      groupId: 3,
+      userId: 1,
+      isLeader: false,
+    },
   ];
 
   const events = [
@@ -104,12 +122,12 @@ async function seed() {
       submissions: 4,
     },
     {
-      groupId:2,
+      groupId: 2,
       // restaurantCode:1,
       restaurantName: "awesome restaurant 2",
       restaurantLocation: "new york, new york",
-      submissions:2
-    }
+      submissions: 2,
+    },
   ];
 
   await Promise.all(
@@ -126,7 +144,7 @@ async function seed() {
 
   await Promise.all(
     userGroups.map((currentUserGroup) => {
-      return UserGroup.create(currentUserGroup);
+      return UserGroups.create(currentUserGroup);
     })
   );
 
