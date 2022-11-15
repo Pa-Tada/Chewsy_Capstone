@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+//import axios from "axios";
 import {
   StyleSheet,
   Text,
@@ -80,7 +80,7 @@ const Home = () => {
             horizontal
             renderItem={({ item }) => (
               <TouchableOpacity style={styles.list}
-                onPress={() => <Image style={styles.img} source={{ uri: item.imgUrl }} />}
+                onPress={() => navigation.navigate("SingleGroup")}
               >
                   <View style={styles.shadow}>
                   {/* <Image style={styles.img} source={{ uri: item.imgUrl }} /> */}
