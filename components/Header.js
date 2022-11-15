@@ -1,15 +1,16 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View } from "react-native";
+import React from "react";
 
 const Header = () => {
+  
   return (
     <View style={styles.container}>
       <Text style={styles.logo}>Chewsy</Text>
     </View>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
 
 const styles = StyleSheet.create({
   container: {
@@ -22,8 +23,9 @@ const styles = StyleSheet.create({
     borderColor: "gray",
   },
   logo: {
-    fontSize: 20,
+    fontSize: 29,
     fontWeight: "bold",
     color: "orange",
+    fontFamily: "Pacifico_400Regular",
   },
-})
+});

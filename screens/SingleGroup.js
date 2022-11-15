@@ -8,9 +8,11 @@ import {
   Image,
   SafeAreaView,
 } from "react-native";
+
 import { Icon, Divider } from '@rneui/themed';
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import { useNavigation } from "@react-navigation/native";
 
 
 // Dummy data - need to make dynamic based on logged in user
@@ -81,17 +83,22 @@ const friends = [
 ];
 
 const SingleGroup = () => {
+  const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
       <Divider/>
       <View style={styles.friendsWrapper}>
-
-      <View style={styles.titleContainer}>
-        <Text style={styles.sectionTitle}>Your Friends</Text>
-        <TouchableOpacity style={styles.iconWrapper}>
-                    {/* ADD FRIEND */}
-          <Icon type="antdesign" size="28px" name="adduser" color='gainsboro' />
-        </TouchableOpacity>
+        <View style={styles.titleContainer}>
+          <Text style={styles.sectionTitle}>Your Friends</Text>
+          <TouchableOpacity style={styles.iconWrapper}>
+            {/* ADD FRIEND */}
+            <Icon
+              type="antdesign"
+              size="28px"
+              name="adduser"
+              color="gainsboro"
+            />
+          </TouchableOpacity>
         </View>
 
         <View style={styles.friends}>
@@ -101,7 +108,7 @@ const SingleGroup = () => {
             horizontal
             renderItem={({ item }) => (
               <View style={styles.list}>
-                  <Image style={styles.img} source={{ uri: item.imgUrl }} />
+                <Image style={styles.img} source={{ uri: item.imgUrl }} />
                 <Text style={styles.name}>{item.firstName}</Text>
               </View>
             )}
@@ -110,13 +117,17 @@ const SingleGroup = () => {
       </View>
 
       <View style={styles.eventsWrapper}>
-
-      <View style={styles.titleContainer}>
-        <Text style={styles.sectionTitle}>Your Events</Text>
-        <TouchableOpacity style={styles.iconWrapper}>
-                    {/* CREATE EVENT*/}
-          <Icon type="material-community" size="30px" name="calendar-plus" color='gainsboro' />
-        </TouchableOpacity>
+        <View style={styles.titleContainer}>
+          <Text style={styles.sectionTitle}>Your Events</Text>
+          <TouchableOpacity style={styles.iconWrapper}>
+            {/* CREATE EVENT*/}
+            <Icon
+              type="material-community"
+              size="30px"
+              name="calendar-plus"
+              color="gainsboro"
+            />
+          </TouchableOpacity>
         </View>
 
         <View style={styles.events}>
@@ -124,8 +135,12 @@ const SingleGroup = () => {
             data={events}
             keyExtractor={(item) => item.id}
             horizontal
-            renderItem={({ item }) => (
-              <TouchableOpacity style={styles.eventList}>
+            renderItem={({ item, index }) => (
+              <TouchableOpacity
+                style={styles.eventList}
+                onPress={() => navigation.navigate("SingleEvent")}
+              >
+
                 <View style={styles.shadow}>
                   <Image
                     style={styles.eventImg}
@@ -139,12 +154,13 @@ const SingleGroup = () => {
           />
         </View>
       </View>
+
       <Footer/>
     </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#242526",
@@ -172,7 +188,7 @@ const styles = StyleSheet.create({
     shadowRadius: 1,
   },
   friendsWrapper: {
-    marginTop:30,
+    marginTop: 30,
     paddingHorizontal: 12,
     flex: 1,
   },
