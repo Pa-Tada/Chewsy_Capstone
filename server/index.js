@@ -1,5 +1,5 @@
 const { db } = require("./db");
-const PORT = process.env.PORT || 8080; // is ours 19000???
+const PORT = process.env.PORT || 19000;
 const app = require('./app')
 const seed = require("./db/seed");
 
