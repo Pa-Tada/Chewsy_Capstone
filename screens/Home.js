@@ -9,7 +9,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Icon } from '@rneui/themed';
+import { Icon } from "@rneui/themed";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -47,31 +47,36 @@ const Home = () => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
-      <Header/>
+      <Header />
       <View style={styles.groupsWrapper}>
-
-      <View style={styles.titleContainer}>
-        <Text style={styles.sectionTitle}>Your Groups</Text>
-        <TouchableOpacity style={styles.iconWrapper}>
-                    {/* CREATE GROUP */}
-          <Icon type="antdesign" size="28px" name="addusergroup" color='gainsboro' />
-        </TouchableOpacity>
+        <View style={styles.titleContainer}>
+          <Text style={styles.sectionTitle}>Your Groups</Text>
+          <TouchableOpacity style={styles.iconWrapper}>
+            {/* CREATE GROUP */}
+            <Icon
+              type="antdesign"
+              size="28px"
+              name="addusergroup"
+              color="gainsboro"
+            />
+          </TouchableOpacity>
         </View>
 
         <View style={styles.groups}>
           <FlatList
-          // ListHeaderComponent={firstItem}
+            // ListHeaderComponent={firstItem}
             data={groups}
             keyExtractor={(item) => item.id}
             horizontal
             renderItem={({ item, index }) => (
-              <TouchableOpacity style={styles.list}
+              <TouchableOpacity
+                style={styles.list}
                 onPress={() => navigation.navigate("SingleGroup")}
               >
-                  <View style={styles.shadow}>
+                <View style={styles.shadow}>
                   {/* <Image style={styles.img} source={{ uri: item.imgUrl }} /> */}
-                  </View>
-                  <Text style={styles.name}>{item.name}</Text>
+                </View>
+                <Text style={styles.name}>{item.name}</Text>
               </TouchableOpacity>
             )}
           />
@@ -83,15 +88,18 @@ const Home = () => {
         <View style={styles.events}>
           <FlatList
             data={events}
-            keyExtractor={(item) => item.index}
+            keyExtractor={(item) => item.id}
             horizontal
-            renderItem={({ item }) => (
-              <TouchableOpacity style={styles.eventList}>
+            renderItem={({ item, index }) => (
+              <TouchableOpacity
+                style={styles.eventList}
+                onPress={() => navigation.navigate("SingleEvent")}
+              >
                 <View style={styles.shadow}>
-                <Image
-                  style={styles.eventImg}
-                  source={require("../assets/eventImg1.jpg")}
-                />
+                  <Image
+                    style={styles.eventImg}
+                    source={require("../assets/eventImg1.jpg")}
+                  />
                 </View>
                 <Text style={styles.eventName}>{item.restaurantName}</Text>
                 <Text style={styles.eventLoc}>{item.restaurantLocation}</Text>
@@ -100,7 +108,7 @@ const Home = () => {
           />
         </View>
       </View>
-      <Footer/>
+      <Footer />
     </SafeAreaView>
   );
 };
@@ -133,13 +141,13 @@ const styles = StyleSheet.create({
     shadowRadius: 1,
   },
   groupsWrapper: {
-    marginTop:30,
+    marginTop: 30,
     paddingHorizontal: 12,
     flex: 1,
   },
   groups: {},
   list: {
-    borderWidth:1,
+    borderWidth: 1,
     borderRadius: 15,
     marginTop: 24,
     marginRight: 8,
