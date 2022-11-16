@@ -3,7 +3,7 @@ const express = require("express");
 const morgan = require("morgan");
 const app = express();
 module.exports = app;
-
+import { REACT_APP_YELP_API_KEY } from "@env"
 
 // logging middleware
 app.use(morgan("dev"));

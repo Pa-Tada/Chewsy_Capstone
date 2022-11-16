@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,13 +7,15 @@ import {
   FlatList,
   Image,
   SafeAreaView,
+  Modal,
+  Button,
 } from "react-native";
 
-import { Icon, Divider } from '@rneui/themed';
+import { Icon, Divider, Input } from "@rneui/themed";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { useNavigation } from "@react-navigation/native";
-
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 // Dummy data - need to make dynamic based on logged in user
 const events = [
@@ -82,15 +84,63 @@ const friends = [
   },
 ];
 
+const addFriendField = [{ id: 1, field: "Email/Username" }];
+
 const SingleGroup = () => {
   const navigation = useNavigation();
+
+  const lastItem = () => {
+    return (
+      <TouchableOpacity style={styles.button1}>
+        <View style={styles.buttonWrapper}>
+          <Button title="Submit" onPress={() => setModalOpen(false)}></Button>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+  const [modalOpen, setModalOpen] = useState(false);
+
   return (
     <SafeAreaView style={styles.container}>
-      <Divider/>
+      <Divider />
+      <Modal visible={modalOpen} animationType="slide">
+        <SafeAreaView style={styles.modalContent}>
+          <View style={styles.modalContent}>
+            <Icon name="close" size={24} onPress={() => setModalOpen(false)} />
+            <View style={styles.container}>
+              <Divider />
+              <View style={styles.contents}>
+                <Text style={styles.sectionTitle}>Add Friends</Text>
+
+                <View style={styles.form}>
+                  <FlatList
+                    // ListHeaderComponent={firstItem}
+                    ListFooterComponent={lastItem}
+                    data={addFriendField}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => (
+                      <Input
+                        labelStyle={{ fontWeight: "normal" }}
+                        inputStyle={{ color: "white", fontSize: 14 }}
+                        label={item.field}
+                      />
+                    )}
+                  />
+                </View>
+              </View>
+              {/* <Footer /> */}
+            </View>
+          </View>
+        </SafeAreaView>
+      </Modal>
+
       <View style={styles.friendsWrapper}>
         <View style={styles.titleContainer}>
           <Text style={styles.sectionTitle}>Your Friends</Text>
-          <TouchableOpacity style={styles.iconWrapper}>
+          <TouchableOpacity
+            style={styles.iconWrapper}
+            onPress={() => setModalOpen(true)}
+          >
             {/* ADD FRIEND */}
             <Icon
               type="antdesign"
@@ -140,7 +190,6 @@ const SingleGroup = () => {
                 style={styles.eventList}
                 onPress={() => navigation.navigate("SingleEvent")}
               >
-
                 <View style={styles.shadow}>
                   <Image
                     style={styles.eventImg}
@@ -155,7 +204,7 @@ const SingleGroup = () => {
         </View>
       </View>
 
-      <Footer/>
+      <Footer />
     </SafeAreaView>
   );
 };
@@ -174,6 +223,8 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     color: "white",
+    alignContent: "center",
+    justifyContent: "center",
   },
   iconWrapper: {
     shadowColor: "black",
@@ -237,6 +288,17 @@ export const styles = StyleSheet.create({
     marginTop: 2,
     color: "darkgray",
     fontSize: 12,
+  },
+  modalToggle: {
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: "#f2f2f2",
+    padding: 10,
+    borderRadius: 10,
+    alignSelf: "center",
+  },
+  modalContent: {
+    flex: 1,
   },
 });
 

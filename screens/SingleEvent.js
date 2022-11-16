@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import {
   StyleSheet,
@@ -15,13 +16,11 @@ import {
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { Divider } from "@rneui/themed";
+import { REACT_APP_YELP_API_KEY } from "@env";
 
 export default function EventPage() {
   const [restaurantData, setRestaurantData] = useState([]);
   const [isShown, setIsShown] = useState(false);
-
-  const YELP_API_KEY =
-    "B8tXd1VFuNtHopwciij9wWEJvg4_K7EcQf3Hwmfmw4HQ9nGpmZnuUaeSRhsCJ6ZoHJzJgAHlJS3LAohZjPYoSNmn_BI30b7KkQfztRUSTuqNO4EXFC8cL3zQyyVsY3Yx";
 
   /*
   Sorry Orlando, I'll delete this before the final review, just wanted to keep the logic here so we can easily reference it
@@ -46,23 +45,27 @@ export default function EventPage() {
   const [longitude, setLongitude] = useState("73.9690"); // having issues with this query, need to review documentation further
   const [latitude, setLatitude] = useState("40.6602"); // having issues with this query, need to review documentation further
 
-  const getRestaurantsFromYelp = () => {
-    const yelpUrl = `https://api.yelp.com/v3/businesses/search?term=restaurant&location=${eventLocation}&price=${budget}&radius=${radius}&categories=${cuisineType}&sortby=rating&limit=1`;
-
-    const apiOptions = {
-      headers: {
-        Authorization: `Bearer ${YELP_API_KEY}`,
-      },
-    };
-
-    return fetch(yelpUrl, apiOptions)
-      .then((response) => response.json())
-      .then((json) => setRestaurantData(json.businesses));
+  const getRestaurantData = async () => {
+    try {
+      const { data } = await axios.get(
+        `https://api.yelp.com/v3/businesses/search?term=restaurant&location=${eventLocation}&price=${budget}&radius=${radius}&categories=${cuisineType}&sortby=rating&limit=1`,
+        {
+          headers: {
+            Authorization: `Bearer ${REACT_APP_YELP_API_KEY}`,
+          },
+        }
+      );
+      setRestaurantData(data.businesses);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
-    getRestaurantsFromYelp();
+    getRestaurantData();
   }, []);
+
+  console.log(restaurantData);
 
   return (
     <SafeAreaView style={styles.container}>
