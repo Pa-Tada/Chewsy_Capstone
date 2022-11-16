@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Icon, Divider } from "@rneui/themed";
+import { auth } from "../firebase";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -80,7 +81,7 @@ useEffect(()=> {
       <View style={styles.groupsWrapper}>
         <View style={styles.titleContainer}>
           <Text style={styles.sectionTitle}>
-            Your Groups
+            {auth.currentUser.email}'s Groups {trial.restaurantLocation}
           </Text>
           <TouchableOpacity style={styles.iconWrapper}>
             {/* CREATE GROUP */}
@@ -111,7 +112,7 @@ useEffect(()=> {
         </View>
       </View>
       <View style={styles.eventsWrapper}>
-        <Text style={styles.sectionTitle}>Your Events</Text>
+        <Text style={styles.sectionTitle}>{auth.currentUser.email}'s Events</Text>
         <View style={styles.events}>
           <FlatList
             data={events}
