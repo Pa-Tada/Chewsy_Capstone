@@ -86,8 +86,9 @@ export default function EventPage() {
                 }
               >
                 <Text
-                  style={{ fontFamily: "Pacifico_400Regular", fontSize: 42 }}
+                  style={{  fontSize: 42 }}
                 >
+                  {/*fontFamily: "Pacifico_400Regular",*/}
                   Chewse
                 </Text>
               </TouchableOpacity>
@@ -212,7 +213,7 @@ const styles = StyleSheet.create({
     color: "darkgray",
   },
   eventText: {
-    fontFamily: "Inter_400Regular",
+    //fontFamily: "Inter_400Regular",
     fontSize: 16,
     color: "white",
   },

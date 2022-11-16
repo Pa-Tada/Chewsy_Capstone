@@ -35,31 +35,43 @@ const events = [
   },
 ];
 
-const groups = [
-  {
-    id: 1,
-    name: "pete's group",
-  },
-  { id: 2, name: "Wanda and olivia's group" },
-];
+// const groups = [
+//   {
+//     id: 1,
+//     name: "pete's group",
+//   },
+//   { id: 2, name: "Wanda and olivia's group" },
+// ];
 
 const Home = () => {
   const navigation = useNavigation();
-  const [trial, setTrial] = useState({});
+  //const [trial, setTrial] = useState({});
+  // const fetchUsers = async () => {
+  //   try {
+  //     const { data } = await axios.get("http://192.168.1.22:8080/api/events/1");
+  //     console.log(data);
+  //     setTrial(data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-  const fetchUsers = async () => {
+  // useEffect(() => {
+  //   fetchUsers();
+  // }, []);
+
+const [groups, setGroups] = useState([])
+useEffect(()=> {
+  const getGroups = async () => {
     try {
-      const { data } = await axios.get("http://192.168.1.22:8080/api/events/1");
+      const { data } = await axios.get("http://192.168.1.22:8080/api/groups/1");
       console.log(data);
-      setTrial(data);
+      setGroups(data);
     } catch (error) {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+}, [])
 
   return (
     <SafeAreaView style={styles.container}>
@@ -68,7 +80,7 @@ const Home = () => {
       <View style={styles.groupsWrapper}>
         <View style={styles.titleContainer}>
           <Text style={styles.sectionTitle}>
-            Your Groups {trial.restaurantLocation}
+            Your Groups
           </Text>
           <TouchableOpacity style={styles.iconWrapper}>
             {/* CREATE GROUP */}
@@ -87,8 +99,7 @@ const Home = () => {
             keyExtractor={(item) => item.id}
             horizontal
             renderItem={({ item }) => (
-              <TouchableOpacity style={styles.list}>
-                {/* // navigation.navigate("SingleGroup") */}
+              <TouchableOpacity style={styles.list} onPress= {()=> navigation.navigate("SingleGroup")}>
 
                 <View style={styles.shadow}>
                   {/* <Image style={styles.img} source={{ uri: item.imgUrl }} /> */}
@@ -99,7 +110,6 @@ const Home = () => {
           />
         </View>
       </View>
-      {/* navigation.navigate("SingleGroup") */}
       <View style={styles.eventsWrapper}>
         <Text style={styles.sectionTitle}>Your Events</Text>
         <View style={styles.events}>
@@ -172,11 +182,7 @@ const styles = StyleSheet.create({
     height: 180,
     alignItems: "center",
   },
-  // img: {
-  //   width: 180,
-  //   height: 180,
-  //   borderRadius: 15,
-  // },
+  img: {},
   name: {
     marginTop: 2,
     fontWeight: "bold",
