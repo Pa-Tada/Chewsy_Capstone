@@ -1,22 +1,18 @@
 import React from "react";
-import axios from "axios";
 import { useEffect, useState } from "react";
+import { REACT_APP_YELP_API_KEY } from "@env";
+import axios from "axios";
 import {
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  FlatList,
   Image,
   SafeAreaView,
-  SectionList,
-  Button,
   Alert,
 } from "react-native";
 import Footer from "../components/Footer";
-import Header from "../components/Header";
 import { Divider } from "@rneui/themed";
-import { REACT_APP_YELP_API_KEY } from "@env";
 
 export default function EventPage() {
   const [restaurantData, setRestaurantData] = useState([]);
@@ -65,8 +61,6 @@ export default function EventPage() {
     getRestaurantData();
   }, []);
 
-  console.log(restaurantData);
-
   return (
     <SafeAreaView style={styles.container}>
       <Divider />
@@ -88,11 +82,7 @@ export default function EventPage() {
                   Alert.alert("Your restaurant is ready!")
                 }
               >
-                <Text
-                  style={{ fontFamily: "Pacifico_400Regular", fontSize: 42 }}
-                >
-                  Chewse
-                </Text>
+                <Text style={{ fontSize: 42 }}>Chewse</Text>
               </TouchableOpacity>
               <Text> </Text>
             </View>
@@ -105,22 +95,22 @@ export default function EventPage() {
               </Text>
               <Image
                 style={styles.imgEvent}
-                source={{ uri: restaurantData[0].image_url }}
+                source={{ uri: restaurantData[0]?.image_url }}
               />
               <Text style={styles.eventText}>
                 {"\n"}
-                {restaurantData[0].name}
+                {restaurantData[0]?.name}
                 {"\n"}
               </Text>
 
               <Text style={styles.eventText}>
-                {restaurantData[0].location.address1}
+                {restaurantData[0]?.location.address1}
               </Text>
 
               <Text style={styles.eventText}>
-                {restaurantData[0].location.city},{" "}
-                {restaurantData[0].location.state}{" "}
-                {restaurantData[0].location.zip_code}
+                {restaurantData[0]?.location.city},{" "}
+                {restaurantData[0]?.location.state}{" "}
+                {restaurantData[0]?.location.zip_code}
                 {"\n"}
               </Text>
             </View>
@@ -215,7 +205,7 @@ const styles = StyleSheet.create({
     color: "darkgray",
   },
   eventText: {
-    fontFamily: "Inter_400Regular",
+    // fontFamily: "Inter_400Regular",
     fontSize: 16,
     color: "white",
   },
