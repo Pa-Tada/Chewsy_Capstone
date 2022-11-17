@@ -21,7 +21,7 @@ const events = [
   {
     id: 1,
     restaurantName: "awesome restaurant",
-    restaurantLocation: "new york, new york",
+    restaurantLocation: "harlem, new york, new york",
     restaurantImgUrl:
       "https://static01.nyt.com/images/2018/12/16/world/16xp-davidson1/merlin_146914890_3e2b450f-94bf-472f-b717-a7b8b4004b1a-superJumbo.jpg",
     submissions: 4,
@@ -29,7 +29,7 @@ const events = [
   {
     id: 2,
     restaurantName: "awesome restaurant 2",
-    restaurantLocation: "new york, new york",
+    restaurantLocation: "soho, new york, new york",
     restaurantImgUrl:
       "https://static01.nyt.com/images/2018/12/16/world/16xp-davidson1/merlin_146914890_3e2b450f-94bf-472f-b717-a7b8b4004b1a-superJumbo.jpg",
     submissions: 2,
@@ -46,21 +46,34 @@ const groups = [
 
 const Home = () => {
   const navigation = useNavigation();
-  const [trial, setTrial] = useState({});
+  
+  //const [trial, setTrial] = useState({});
+  // const fetchUsers = async () => {
+  //   try {
+  //     const { data } = await axios.get("http://192.168.1.22:8080/api/events/1");
+  //     console.log(data);
+  //     setTrial(data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-  const fetchUsers = async () => {
-    try {
-      const { data } = await axios.get("http://192.168.1.22:8080/api/events/1");
-      console.log(data);
-      setTrial(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // useEffect(() => {
+  //   fetchUsers();
+  // }, []);
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+// const [groups, setGroups] = useState([])
+// useEffect(()=> {
+//   const getGroups = async () => {
+//     try {
+//       const { data } = await axios.get("http://192.168.1.22:8080/api/groups/1");
+//       console.log(data);
+//       setGroups(data);
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   };
+// }, [])
 
   return (
     <SafeAreaView style={styles.container}>
@@ -69,7 +82,7 @@ const Home = () => {
       <View style={styles.groupsWrapper}>
         <View style={styles.titleContainer}>
           <Text style={styles.sectionTitle}>
-            {auth.currentUser.email}'s Groups {trial.restaurantLocation}
+            {auth.currentUser.email}'s Groups
           </Text>
           <TouchableOpacity style={styles.iconWrapper}>
             {/* CREATE GROUP */}
@@ -88,8 +101,7 @@ const Home = () => {
             keyExtractor={(item) => item.id}
             horizontal
             renderItem={({ item }) => (
-              <TouchableOpacity style={styles.list}>
-                {/* // navigation.navigate("SingleGroup") */}
+              <TouchableOpacity style={styles.list} onPress= {()=> navigation.navigate("SingleGroup")}>
 
                 <View style={styles.shadow}>
                   {/* <Image style={styles.img} source={{ uri: item.imgUrl }} /> */}
@@ -100,7 +112,6 @@ const Home = () => {
           />
         </View>
       </View>
-      {/* navigation.navigate("SingleGroup") */}
       <View style={styles.eventsWrapper}>
         <Text style={styles.sectionTitle}>{auth.currentUser.email}'s Events</Text>
         <View style={styles.events}>
@@ -108,7 +119,7 @@ const Home = () => {
             data={events}
             keyExtractor={(item) => item.id}
             horizontal
-            renderItem={({ item, index }) => (
+            renderItem={({ item }) => (
               <TouchableOpacity
                 style={styles.eventList}
                 onPress={() => navigation.navigate("SingleEvent")}
@@ -173,11 +184,7 @@ const styles = StyleSheet.create({
     height: 180,
     alignItems: "center",
   },
-  // img: {
-  //   width: 180,
-  //   height: 180,
-  //   borderRadius: 15,
-  // },
+  img: {},
   name: {
     marginTop: 2,
     fontWeight: "bold",

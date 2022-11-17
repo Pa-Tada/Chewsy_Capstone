@@ -7,7 +7,7 @@ import Home from "./screens/Home";
 import SingleGroup from "./screens/SingleGroup";
 import SingleEvent from "./screens/SingleEvent";
 //import AppLoading from "expo-app-loading";
-import useFonts from "./hooks/useFonts";
+//import useFonts from "./hooks/useFonts";
 import Profile from "./screens/Profile";
 //import AppLoading from "expo-splash-screen"
 
