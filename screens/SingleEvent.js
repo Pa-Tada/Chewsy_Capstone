@@ -1,27 +1,22 @@
 import React from "react";
 import { useEffect, useState } from "react";
+import { REACT_APP_YELP_API_KEY } from "@env";
+import axios from "axios";
 import {
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  FlatList,
   Image,
   SafeAreaView,
-  SectionList,
-  Button,
   Alert,
 } from "react-native";
 import Footer from "../components/Footer";
-import Header from "../components/Header";
 import { Divider } from "@rneui/themed";
 
 export default function EventPage() {
   const [restaurantData, setRestaurantData] = useState([]);
   const [isShown, setIsShown] = useState(false);
-
-  const YELP_API_KEY =
-    "B8tXd1VFuNtHopwciij9wWEJvg4_K7EcQf3Hwmfmw4HQ9nGpmZnuUaeSRhsCJ6ZoHJzJgAHlJS3LAohZjPYoSNmn_BI30b7KkQfztRUSTuqNO4EXFC8cL3zQyyVsY3Yx";
 
   /*
   Sorry Orlando, I'll delete this before the final review, just wanted to keep the logic here so we can easily reference it
@@ -46,23 +41,27 @@ export default function EventPage() {
   const [longitude, setLongitude] = useState("73.9690"); // having issues with this query, need to review documentation further
   const [latitude, setLatitude] = useState("40.6602"); // having issues with this query, need to review documentation further
 
-  const getRestaurantsFromYelp = () => {
-    const yelpUrl = `https://api.yelp.com/v3/businesses/search?term=restaurant&location=${eventLocation}&price=${budget}&radius=${radius}&categories=${cuisineType}&sortby=rating&limit=1`;
-
-    const apiOptions = {
-      headers: {
-        Authorization: `Bearer ${YELP_API_KEY}`,
-      },
-    };
-
-    return fetch(yelpUrl, apiOptions)
-      .then((response) => response.json())
-      .then((json) => setRestaurantData(json.businesses));
+  const getRestaurantData = async () => {
+    try {
+      const { data } = await axios.get(
+        `https://api.yelp.com/v3/businesses/search?term=restaurant&location=${eventLocation}&price=${budget}&radius=${radius}&categories=${cuisineType}&sortby=rating&limit=1`,
+        {
+          headers: {
+            Authorization: `Bearer ${REACT_APP_YELP_API_KEY}`,
+          },
+        }
+      );
+      setRestaurantData(data.businesses);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
-    getRestaurantsFromYelp();
+    getRestaurantData();
   }, []);
+
+  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -85,12 +84,9 @@ export default function EventPage() {
                   Alert.alert("Your restaurant is ready!")
                 }
               >
-                <Text
-                  style={{  fontSize: 42 }}
-                >
-                  {/*fontFamily: "Pacifico_400Regular",*/}
-                  Chewse
-                </Text>
+
+                <Text style={{ fontSize: 42 }}>Chewse</Text>
+
               </TouchableOpacity>
               <Text> </Text>
             </View>
@@ -103,22 +99,22 @@ export default function EventPage() {
               </Text>
               <Image
                 style={styles.imgEvent}
-                source={{ uri: restaurantData[0].image_url }}
+                source={{ uri: restaurantData[0]?.image_url }}
               />
               <Text style={styles.eventText}>
                 {"\n"}
-                {restaurantData[0].name}
+                {restaurantData[0]?.name}
                 {"\n"}
               </Text>
 
               <Text style={styles.eventText}>
-                {restaurantData[0].location.address1}
+                {restaurantData[0]?.location.address1}
               </Text>
 
               <Text style={styles.eventText}>
-                {restaurantData[0].location.city},{" "}
-                {restaurantData[0].location.state}{" "}
-                {restaurantData[0].location.zip_code}
+                {restaurantData[0]?.location.city},{" "}
+                {restaurantData[0]?.location.state}{" "}
+                {restaurantData[0]?.location.zip_code}
                 {"\n"}
               </Text>
             </View>
@@ -213,7 +209,8 @@ const styles = StyleSheet.create({
     color: "darkgray",
   },
   eventText: {
-    //fontFamily: "Inter_400Regular",
+    // fontFamily: "Inter_400Regular",
+
     fontSize: 16,
     color: "white",
   },

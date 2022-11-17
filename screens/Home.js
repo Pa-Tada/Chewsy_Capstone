@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState } from "react";
+//import axios from "axios";
 import {
   StyleSheet,
   Text,
@@ -8,9 +8,12 @@ import {
   FlatList,
   Image,
   SafeAreaView,
+  Button,
+  Modal,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Icon, Divider } from "@rneui/themed";
+
+import { Icon, Divider, Input } from "@rneui/themed";
 import { auth } from "../firebase";
 
 import Header from "../components/Header";
@@ -44,47 +47,81 @@ const groups = [
   { id: 2, name: "Wanda and olivia's group" },
 ];
 
+// const fetchUsers = async () =>{
+//   try{
+
+//     const {data} = await axios.get('/api/users')
+//     console.log('hello')
+//     console.log(data)
+//     return data
+//    }catch(error){
+//      console.error(error)
+//    }
+// }
+
+const createGroupField = [
+  { id: 1, field: "Group Name" },
+  { id: 2, field: "Group Members" },
+];
+
 const Home = () => {
   const navigation = useNavigation();
-  
-  //const [trial, setTrial] = useState({});
-  // const fetchUsers = async () => {
-  //   try {
-  //     const { data } = await axios.get("http://192.168.1.22:8080/api/events/1");
-  //     console.log(data);
-  //     setTrial(data);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchUsers();
-  // }, []);
-
-// const [groups, setGroups] = useState([])
-// useEffect(()=> {
-//   const getGroups = async () => {
-//     try {
-//       const { data } = await axios.get("http://192.168.1.22:8080/api/groups/1");
-//       console.log(data);
-//       setGroups(data);
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   };
-// }, [])
+  const groupLastItem = () => {
+    return (
+      <View>
+        <TouchableOpacity onPress={() => setGroupModalOpen(false)}>
+          <View style={styles.buttonWrapper}>
+            <Text style={styles.button}>Create Group</Text>
+          </View>
+        </TouchableOpacity>
+        <Button
+          title="Cancel"
+          onPress={() => setGroupModalOpen(false)}
+        ></Button>
+      </View>
+    );
+  };
+  const [groupModalOpen, setGroupModalOpen] = useState(false);
 
   return (
     <SafeAreaView style={styles.container}>
       <Divider />
+      <Modal visible={groupModalOpen} animationType="slide">
+        <SafeAreaView style={styles.modalContent}>
+          <View style={styles.modalContent}>
+            <View style={styles.container}>
+              <Divider />
+              <View style={styles.contents}>
+                <Text style={styles.sectionTitle}>Create Group</Text>
+
+                <View style={styles.form}>
+                  <FlatList
+                    ListFooterComponent={groupLastItem}
+                    data={createGroupField}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => (
+                      <Input
+                        labelStyle={{ fontWeight: "normal" }}
+                        inputStyle={{ color: "white", fontSize: 14 }}
+                        label={item.field}
+                      />
+                    )}
+                  />
+                </View>
+              </View>
+              {/* <Footer /> */}
+            </View>
+          </View>
+        </SafeAreaView>
+      </Modal>
 
       <View style={styles.groupsWrapper}>
         <View style={styles.titleContainer}>
-          <Text style={styles.sectionTitle}>
-            {auth.currentUser.email}'s Groups
-          </Text>
-          <TouchableOpacity style={styles.iconWrapper}>
+          <Text style={styles.sectionTitle}>{auth.currentUser.email}'s Groups</Text>
+          <TouchableOpacity
+            style={styles.iconWrapper}
+            onPress={() => setGroupModalOpen(true)}
+          >
             {/* CREATE GROUP */}
             <Icon
               type="antdesign"
@@ -101,7 +138,10 @@ const Home = () => {
             keyExtractor={(item) => item.id}
             horizontal
             renderItem={({ item }) => (
-              <TouchableOpacity style={styles.list} onPress= {()=> navigation.navigate("SingleGroup")}>
+              <TouchableOpacity
+                style={styles.list}
+                onPress={() => navigation.navigate("SingleGroup")}
+              >
 
                 <View style={styles.shadow}>
                   {/* <Image style={styles.img} source={{ uri: item.imgUrl }} /> */}
@@ -146,6 +186,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#242526",
+  },
+  buttonWrapper: {
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 60,
+    width: 150,
+    backgroundColor: "orange",
+    alignItems: "center",
+    alignSelf: "center",
   },
   titleContainer: {
     flexDirection: "row",
@@ -216,6 +265,17 @@ const styles = StyleSheet.create({
     marginTop: 2,
     color: "darkgray",
     fontSize: 12,
+  },
+  modalToggle: {
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: "#f2f2f2",
+    padding: 10,
+    borderRadius: 10,
+    alignSelf: "center",
+  },
+  modalContent: {
+    flex: 1,
   },
 });
 
