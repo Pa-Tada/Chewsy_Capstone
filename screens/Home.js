@@ -21,7 +21,7 @@ const events = [
   {
     id: 1,
     restaurantName: "awesome restaurant",
-    restaurantLocation: "new york, new york",
+    restaurantLocation: "harlem, new york, new york",
     restaurantImgUrl:
       "https://static01.nyt.com/images/2018/12/16/world/16xp-davidson1/merlin_146914890_3e2b450f-94bf-472f-b717-a7b8b4004b1a-superJumbo.jpg",
     submissions: 4,
@@ -29,23 +29,24 @@ const events = [
   {
     id: 2,
     restaurantName: "awesome restaurant 2",
-    restaurantLocation: "new york, new york",
+    restaurantLocation: "soho, new york, new york",
     restaurantImgUrl:
       "https://static01.nyt.com/images/2018/12/16/world/16xp-davidson1/merlin_146914890_3e2b450f-94bf-472f-b717-a7b8b4004b1a-superJumbo.jpg",
     submissions: 2,
   },
 ];
 
-// const groups = [
-//   {
-//     id: 1,
-//     name: "pete's group",
-//   },
-//   { id: 2, name: "Wanda and olivia's group" },
-// ];
+const groups = [
+  {
+    id: 1,
+    name: "pete's group",
+  },
+  { id: 2, name: "Wanda and olivia's group" },
+];
 
 const Home = () => {
   const navigation = useNavigation();
+  
   //const [trial, setTrial] = useState({});
   // const fetchUsers = async () => {
   //   try {
@@ -61,18 +62,18 @@ const Home = () => {
   //   fetchUsers();
   // }, []);
 
-const [groups, setGroups] = useState([])
-useEffect(()=> {
-  const getGroups = async () => {
-    try {
-      const { data } = await axios.get("http://192.168.1.22:8080/api/groups/1");
-      console.log(data);
-      setGroups(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-}, [])
+// const [groups, setGroups] = useState([])
+// useEffect(()=> {
+//   const getGroups = async () => {
+//     try {
+//       const { data } = await axios.get("http://192.168.1.22:8080/api/groups/1");
+//       console.log(data);
+//       setGroups(data);
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   };
+// }, [])
 
   return (
     <SafeAreaView style={styles.container}>
@@ -81,7 +82,7 @@ useEffect(()=> {
       <View style={styles.groupsWrapper}>
         <View style={styles.titleContainer}>
           <Text style={styles.sectionTitle}>
-            {auth.currentUser.email}'s Groups {trial.restaurantLocation}
+            {auth.currentUser.email}'s Groups
           </Text>
           <TouchableOpacity style={styles.iconWrapper}>
             {/* CREATE GROUP */}
@@ -118,7 +119,7 @@ useEffect(()=> {
             data={events}
             keyExtractor={(item) => item.id}
             horizontal
-            renderItem={({ item, index }) => (
+            renderItem={({ item }) => (
               <TouchableOpacity
                 style={styles.eventList}
                 onPress={() => navigation.navigate("SingleEvent")}

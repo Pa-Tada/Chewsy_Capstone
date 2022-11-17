@@ -12,6 +12,7 @@ import React from "react";
 import { Icon, Input, Avatar, Divider } from "@rneui/themed";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { auth } from "../firebase";
 
 const fields = [
   { id: 1, field: "Email" },
