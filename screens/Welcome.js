@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -12,15 +12,50 @@ import {
   ImageBackground,
   Platform,
 } from "react-native";
+import { auth } from "../firebase";
 
 const Welcome = () => {
   const navigation = useNavigation();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  useEffect(()=>{
+    const unsubscribe = auth.onAuthStateChanged(user=>{
+      if(user){
+        navigation.navigate("Home")
+      }
+    })
+    return unsubscribe // from my research this unsubscribe variable makes it so it stops pinging this listener apparently--- its possible it's not necessary
+  },[])
+
+  const handleSignup = () => {
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .then((userCredentials) => {
+        const user = userCredentials.user;
+        console.log("Registered with:",user.email);
+      })
+      .catch((error) => alert(error.message));
+  };
+
+  const handleLogin = () => {
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .then((userCredentials) => {
+        const user = userCredentials.user;
+        console.log("Logged in with:", user.email);
+      })
+      .catch((error) => alert(error.message));
+  };
 
   return (
     <View style={styles.container}>
       <ImageBackground
         style={styles.backgroundImg}
-        source={{uri: "https://images.unsplash.com/photo-1533640924469-f04e06f8898d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=852&q=80"}}
+        source={{
+          uri: "https://images.unsplash.com/photo-1533640924469-f04e06f8898d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=852&q=80",
+        }}
       ></ImageBackground>
 
       <KeyboardAvoidingView
@@ -31,17 +66,26 @@ const Welcome = () => {
         <TextInput
           style={styles.input}
           placeholder="Email"
+          value={email}
+          onChangeText={(text) => setEmail(text)}
           placeholderTextColor="white"
         ></TextInput>
         <TextInput
-        secureTextEntry
+          secureTextEntry
           style={styles.input}
           placeholder="Password"
+          value={password}
+          onChangeText={(text) => setPassword(text)}
           placeholderTextColor="white"
         ></TextInput>
-        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+        <TouchableOpacity onPress={handleSignup}>
           <View style={styles.buttonWrapper}>
-            <Text style={styles.button}>Log In or Sign Up</Text>
+            <Text style={styles.button}>Sign Up</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleLogin}>
+          <View style={styles.buttonWrapper}>
+            <Text style={styles.button}>Log In</Text>
           </View>
         </TouchableOpacity>
       </KeyboardAvoidingView>
@@ -91,6 +135,7 @@ const styles = StyleSheet.create({
   },
   buttonWrapper: {
     paddingVertical: 10,
+    marginVertical: 2,
     paddingHorizontal: 10,
     borderRadius: 60,
     width: 150,

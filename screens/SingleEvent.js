@@ -84,7 +84,9 @@ export default function EventPage() {
                   Alert.alert("Your restaurant is ready!")
                 }
               >
+
                 <Text style={{ fontSize: 42 }}>Chewse</Text>
+
               </TouchableOpacity>
               <Text> </Text>
             </View>
@@ -208,6 +210,7 @@ const styles = StyleSheet.create({
   },
   eventText: {
     // fontFamily: "Inter_400Regular",
+
     fontSize: 16,
     color: "white",
   },

@@ -239,7 +239,7 @@ const SingleGroup = () => {
             data={events}
             keyExtractor={(item) => item.id}
             horizontal
-            renderItem={({ item, index }) => (
+            renderItem={({ item }) => (
               <TouchableOpacity
                 style={styles.eventList}
                 onPress={() => navigation.navigate("SingleEvent")}
