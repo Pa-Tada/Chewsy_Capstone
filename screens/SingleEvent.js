@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { REACT_APP_YELP_API_KEY } from "@env";
+// import { REACT_APP_YELP_API_KEY } from "@env"
 import axios from "axios";
 import {
   StyleSheet,
@@ -61,7 +62,7 @@ export default function EventPage() {
     getRestaurantData();
   }, []);
 
-  
+
 
   return (
     <SafeAreaView style={styles.container}>

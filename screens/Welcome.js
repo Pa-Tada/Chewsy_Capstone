@@ -13,9 +13,14 @@ import {
   Platform,
 } from "react-native";
 import { auth } from "../firebase";
+import {getFirestore, collection, getDocs, addDoc} from "firebase/firestore"
+
 
 const Welcome = () => {
   const navigation = useNavigation();
+
+  const db = getFirestore()
+  const colRef = collection(db, "users")
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,6 +42,7 @@ const Welcome = () => {
         console.log("Registered with:",user.email);
       })
       .catch((error) => alert(error.message));
+    addDoc(colRef, {email: email})
   };
 
   const handleLogin = () => {

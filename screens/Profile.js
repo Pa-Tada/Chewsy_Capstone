@@ -60,17 +60,17 @@ const lastItem = () => {
 };
 
 const Profile = () => {
-  console.log("CHECK HERE FOR UID", auth.currentUser.uid)
-  useEffect(()=> {
-    const getUser = async () => {
-      const usersRef = db.collection("users");
-      //console.log(usersRef)
-      const user = await usersRef.where("email", "==", "petedavidson@snl.com").get();
-      //const user = await firebase.firestore().collection('users').doc("qn91knUBt6Ysypra66OAgBKJnWi1").get();
-      console.log("CHECK HERE FOR USER",user)
-  }
-  getUser()
-}, [])
+//   console.log("CHECK HERE FOR UID", auth.currentUser.uid)
+//   useEffect(()=> {
+//     const getUser = async () => {
+//       const usersRef = db.collection("users");
+//       //console.log(usersRef)
+//       const user = await usersRef.where("email", "==", "petedavidson@snl.com").get();
+//       //const user = await firebase.firestore().collection('users').doc("qn91knUBt6Ysypra66OAgBKJnWi1").get();
+//       console.log("CHECK HERE FOR USER",user)
+//   }
+//   getUser()
+// }, [])
 
  //   if (user.empty) {
     //   console.log('No matching documents.');
