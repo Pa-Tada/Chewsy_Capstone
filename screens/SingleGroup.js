@@ -112,7 +112,7 @@ const SingleGroup = () => {
       <View>
         <TouchableOpacity onPress={() => setEventModalOpen(false)}>
           <View style={styles.buttonWrapper}>
-            <Text style={styles.button}>Submit</Text>
+            <Text style={styles.button}>Create Event</Text>
           </View>
         </TouchableOpacity>
         <Button
