@@ -61,6 +61,8 @@ export default function EventPage() {
     getRestaurantData();
   }, []);
 
+  
+
   return (
     <SafeAreaView style={styles.container}>
       <Divider />
