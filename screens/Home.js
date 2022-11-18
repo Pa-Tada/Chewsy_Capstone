@@ -42,6 +42,118 @@ const Home = () => {
   const [events, setEvents] = useState([]);
   const [groupModalOpen, setGroupModalOpen] = useState(false);
 
+  const getUser = async () => {
+    try {
+      const docRef =  doc(db, "users", auth.currentUser.uid);
+      //const gettingUser = await getDoc(docRef);
+      onSnapshot(docRef, (doc) => {
+        setUser({ ...doc.data(), id: doc.id });
+      });
+      //setUser({ ...gettingUser.data(), id: gettingUser.id })
+      console.log("USER", user);
+
+      let grArr = [];
+      await user.groupIds?.map(async (groupId) => {
+        const docRef = doc(db, "groups", groupId);
+        //   const gettingGroup = await getDoc(docRef);
+        //   arr.push({ ...gettingGroup.data(), id: gettingGroup.id });
+        // });
+        onSnapshot(docRef, (doc) => {
+          grArr.push({ ...doc.data(), id: doc.id });
+        });
+      });
+      setGroups(grArr);
+      console.log("GROUPS", groups);
+
+      let evArr = [];
+      await user.groupIds?.map((groupId) => {
+        const colRef = collection(db, "events");
+        const gettingEvent = query(
+          colRef,
+          where("groupId", "==", `${groupId}`)
+        );
+        onSnapshot(gettingEvent, (snapshot) => {
+          snapshot.docs.forEach((doc) => {
+            evArr.push({ ...doc.data(), id: doc.id });
+          });
+        });
+      });
+      setEvents(evArr);
+      console.log("EVENTS", events);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+
+  useEffect(() => {
+    getUser()
+  }, []);
+
+   //  useEffect(() => {
+  // const getUser = async () => {
+  //   try {
+    // const docRef = doc(db, "users", auth.currentUser.uid);
+    // //const gettingUser = await getDoc(docRef);
+    // onSnapshot(docRef, (doc) => {
+    //   setUser({ ...doc.data(), id: doc.id });
+    // });
+    // console.log("USER", user);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+  //getUser()
+//  }, []);
+
+ //  useEffect(() => {
+  // const getGroups = async () => {
+  //   try {
+    // let grArr = [];
+    // await user.groupIds?.map(async (groupId) => {
+    //   const docRef = doc(db, "groups", groupId);
+    //   //   const gettingGroup = await getDoc(docRef);
+    //   //   arr.push({ ...gettingGroup.data(), id: gettingGroup.id });
+    //   // });
+    //   onSnapshot(docRef, (doc) => {
+    //     grArr.push({ ...doc.data(), id: doc.id });
+    //   });
+    // });
+    // setGroups(grArr);
+    // console.log("GROUPS", groups);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+  //getGroups()
+//  }, []);
+
+//  useEffect(() => {
+  // const getEvents = async () => {
+  //   try {
+    // let evArr = [];
+    // await user.groupIds?.map((groupId) => {
+    //   const colRef = collection(db, "events");
+    //   const gettingEvent = query(
+    //     colRef,
+    //     where("groupId", "==", `${groupId}`)
+    //   );
+    //   onSnapshot(gettingEvent, (snapshot) => {
+    //     snapshot.docs.forEach((doc) => {
+    //       evArr.push({ ...doc.data(), id: doc.id });
+    //     });
+    //   });
+    // });
+    // setEvents(evArr);
+    // console.log("EVENTS", events);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+  //getEvents()
+//  }, []);
+
+
   const groupLastItem = () => {
     return (
       <View>
@@ -58,62 +170,6 @@ const Home = () => {
     );
   };
 
-
-  const getUser = async () => {
-    try {
-      const docRef = doc(db, "users", auth.currentUser.uid);
-      const gettingUser = await getDoc(docRef);
-
-      setUser({ ...gettingUser.data(), id: gettingUser.id });
-      console.log("USER", user);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const getGroups = async (groupArr) => {
-    try {
-      let arr = [];
-      groupArr.map(async (groupId) => {
-        const docRef = doc(db, "groups", groupId);
-        const gettingGroup = await getDoc(docRef);
-        arr.push({ ...gettingGroup.data(), id: gettingGroup.id });
-      });
-      setGroups(arr);
-      console.log("GROUPS", groups);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const getEvents = async (groupArr) => {
-    try {
-      let arr = [];
-      groupArr.map(async (groupId) => {
-        const colRef = collection(db, "events");
-        const gettingEvent =  query(colRef, where("groupId", "==", `${groupId}`))
-
-        onSnapshot(gettingEvent, (snapshot)=> {
-          snapshot.docs.forEach((doc)=> {
-            arr.push({...doc.data(), id: doc.id})
-          })
-        })
-      });
-      setEvents(arr);
-
-      console.log("EVENTS", events);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-
-  useEffect(() => {
-    getUser();
-    getGroups(user.groupIds);
-    getEvents(user.groupIds)
-  }, []);
-
   return (
     <SafeAreaView style={styles.container}>
       <Divider />
@@ -125,7 +181,6 @@ const Home = () => {
               <Divider />
               <View style={styles.contents}>
                 <Text style={styles.sectionTitle}>Create Group</Text>
-
                 <View style={styles.form}>
                   <FlatList
                     ListFooterComponent={groupLastItem}
@@ -149,7 +204,10 @@ const Home = () => {
       <View style={styles.groupsWrapper}>
         <View style={styles.titleContainer}>
           <Text style={styles.sectionTitle}>{user.firstName}'s Groups</Text>
-          <TouchableOpacity style={styles.iconWrapper} onPress={() => setGroupModalOpen(true)}>
+          <TouchableOpacity
+            style={styles.iconWrapper}
+            onPress={() => setGroupModalOpen(true)}
+          >
             {/* CREATE GROUP */}
             <Icon
               type="antdesign"
@@ -194,7 +252,7 @@ const Home = () => {
                 <View style={styles.shadow}>
                   <Image
                     style={styles.eventImg}
-                    source={{uri: item.restImgUrl}}
+                    source={{ uri: item.restImgUrl }}
                   />
                 </View>
                 <Text style={styles.eventName}>{item.restName}</Text>

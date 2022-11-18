@@ -22,15 +22,4 @@ if (firebase.apps.length === 0) {
 const auth = firebase.auth();
 const db = getFirestore();
 
-// const colRef = collection(db, "users")
-// getDocs(colRef).then((snapshot)=> {
-//   let users = []
-//   snapshot.docs.forEach((doc)=> {
-//     users.push({...doc.data(), id: doc.id})
-//   })
-//   console.log(users)
-// }).catch(err=> {
-//   console.log(err.message)
-// })
-
 export { auth, db };
