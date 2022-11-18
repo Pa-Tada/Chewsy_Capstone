@@ -247,7 +247,7 @@ const SingleGroup = () => {
                 <View style={styles.shadow}>
                   <Image
                     style={styles.eventImg}
-                    source={require("../assets/eventImg1.jpg")}
+                    source={{uri: "https://static01.nyt.com/images/2018/12/16/world/16xp-davidson1/merlin_146914890_3e2b450f-94bf-472f-b717-a7b8b4004b1a-superJumbo.jpg"}}
                   />
                 </View>
                 <Text style={styles.eventName}>{item.restaurantName}</Text>

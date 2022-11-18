@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-//import axios from "axios";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -14,50 +13,22 @@ import {
 import { useNavigation } from "@react-navigation/native";
 
 import { Icon, Divider, Input } from "@rneui/themed";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  addDoc,
+  deleteDoc,
+  doc,
+  orderBy,
+  serverTimestamp,
+  getDoc,
+  query,
+  where,
+} from "firebase/firestore";
 
-import Header from "../components/Header";
 import Footer from "../components/Footer";
-
-// Dummy image - need to make dynamic based on logged in user
-const events = [
-  {
-    id: 1,
-    restaurantName: "awesome restaurant",
-    restaurantLocation: "harlem, new york, new york",
-    restaurantImgUrl:
-      "https://static01.nyt.com/images/2018/12/16/world/16xp-davidson1/merlin_146914890_3e2b450f-94bf-472f-b717-a7b8b4004b1a-superJumbo.jpg",
-    submissions: 4,
-  },
-  {
-    id: 2,
-    restaurantName: "awesome restaurant 2",
-    restaurantLocation: "soho, new york, new york",
-    restaurantImgUrl:
-      "https://static01.nyt.com/images/2018/12/16/world/16xp-davidson1/merlin_146914890_3e2b450f-94bf-472f-b717-a7b8b4004b1a-superJumbo.jpg",
-    submissions: 2,
-  },
-];
-
-const groups = [
-  {
-    id: 1,
-    name: "pete's group",
-  },
-  { id: 2, name: "Wanda and olivia's group" },
-];
-
-// const fetchUsers = async () =>{
-//   try{
-
-//     const {data} = await axios.get('/api/users')
-//     console.log('hello')
-//     console.log(data)
-//     return data
-//    }catch(error){
-//      console.error(error)
-//    }
-// }
 
 const createGroupField = [
   { id: 1, field: "Group Name" },
@@ -66,6 +37,123 @@ const createGroupField = [
 
 const Home = () => {
   const navigation = useNavigation();
+  const [user, setUser] = useState({});
+  const [groups, setGroups] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [groupModalOpen, setGroupModalOpen] = useState(false);
+
+  const getUser = async () => {
+    try {
+      const docRef =  doc(db, "users", auth.currentUser.uid);
+      //const gettingUser = await getDoc(docRef);
+      onSnapshot(docRef, (doc) => {
+        setUser({ ...doc.data(), id: doc.id });
+      });
+      //setUser({ ...gettingUser.data(), id: gettingUser.id })
+      console.log("USER", user);
+
+      let grArr = [];
+      await user.groupIds?.map(async (groupId) => {
+        const docRef = doc(db, "groups", groupId);
+        //   const gettingGroup = await getDoc(docRef);
+        //   arr.push({ ...gettingGroup.data(), id: gettingGroup.id });
+        // });
+        onSnapshot(docRef, (doc) => {
+          grArr.push({ ...doc.data(), id: doc.id });
+        });
+      });
+      setGroups(grArr);
+      console.log("GROUPS", groups);
+
+      let evArr = [];
+      await user.groupIds?.map((groupId) => {
+        const colRef = collection(db, "events");
+        const gettingEvent = query(
+          colRef,
+          where("groupId", "==", `${groupId}`)
+        );
+        onSnapshot(gettingEvent, (snapshot) => {
+          snapshot.docs.forEach((doc) => {
+            evArr.push({ ...doc.data(), id: doc.id });
+          });
+        });
+      });
+      setEvents(evArr);
+      console.log("EVENTS", events);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+
+  useEffect(() => {
+    getUser()
+  }, []);
+
+   //  useEffect(() => {
+  // const getUser = async () => {
+  //   try {
+    // const docRef = doc(db, "users", auth.currentUser.uid);
+    // //const gettingUser = await getDoc(docRef);
+    // onSnapshot(docRef, (doc) => {
+    //   setUser({ ...doc.data(), id: doc.id });
+    // });
+    // console.log("USER", user);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+  //getUser()
+//  }, []);
+
+ //  useEffect(() => {
+  // const getGroups = async () => {
+  //   try {
+    // let grArr = [];
+    // await user.groupIds?.map(async (groupId) => {
+    //   const docRef = doc(db, "groups", groupId);
+    //   //   const gettingGroup = await getDoc(docRef);
+    //   //   arr.push({ ...gettingGroup.data(), id: gettingGroup.id });
+    //   // });
+    //   onSnapshot(docRef, (doc) => {
+    //     grArr.push({ ...doc.data(), id: doc.id });
+    //   });
+    // });
+    // setGroups(grArr);
+    // console.log("GROUPS", groups);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+  //getGroups()
+//  }, []);
+
+//  useEffect(() => {
+  // const getEvents = async () => {
+  //   try {
+    // let evArr = [];
+    // await user.groupIds?.map((groupId) => {
+    //   const colRef = collection(db, "events");
+    //   const gettingEvent = query(
+    //     colRef,
+    //     where("groupId", "==", `${groupId}`)
+    //   );
+    //   onSnapshot(gettingEvent, (snapshot) => {
+    //     snapshot.docs.forEach((doc) => {
+    //       evArr.push({ ...doc.data(), id: doc.id });
+    //     });
+    //   });
+    // });
+    // setEvents(evArr);
+    // console.log("EVENTS", events);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+  //getEvents()
+//  }, []);
+
+
   const groupLastItem = () => {
     return (
       <View>
@@ -81,11 +169,11 @@ const Home = () => {
       </View>
     );
   };
-  const [groupModalOpen, setGroupModalOpen] = useState(false);
 
   return (
     <SafeAreaView style={styles.container}>
       <Divider />
+
       <Modal visible={groupModalOpen} animationType="slide">
         <SafeAreaView style={styles.modalContent}>
           <View style={styles.modalContent}>
@@ -93,7 +181,6 @@ const Home = () => {
               <Divider />
               <View style={styles.contents}>
                 <Text style={styles.sectionTitle}>Create Group</Text>
-
                 <View style={styles.form}>
                   <FlatList
                     ListFooterComponent={groupLastItem}
@@ -109,7 +196,6 @@ const Home = () => {
                   />
                 </View>
               </View>
-              {/* <Footer /> */}
             </View>
           </View>
         </SafeAreaView>
@@ -117,7 +203,7 @@ const Home = () => {
 
       <View style={styles.groupsWrapper}>
         <View style={styles.titleContainer}>
-          <Text style={styles.sectionTitle}>{auth.currentUser.email}'s Groups</Text>
+          <Text style={styles.sectionTitle}>{user.firstName}'s Groups</Text>
           <TouchableOpacity
             style={styles.iconWrapper}
             onPress={() => setGroupModalOpen(true)}
@@ -142,7 +228,6 @@ const Home = () => {
                 style={styles.list}
                 onPress={() => navigation.navigate("SingleGroup")}
               >
-
                 <View style={styles.shadow}>
                   {/* <Image style={styles.img} source={{ uri: item.imgUrl }} /> */}
                 </View>
@@ -153,7 +238,7 @@ const Home = () => {
         </View>
       </View>
       <View style={styles.eventsWrapper}>
-        <Text style={styles.sectionTitle}>{auth.currentUser.email}'s Events</Text>
+        <Text style={styles.sectionTitle}>{user.firstName}'s Events</Text>
         <View style={styles.events}>
           <FlatList
             data={events}
@@ -167,11 +252,11 @@ const Home = () => {
                 <View style={styles.shadow}>
                   <Image
                     style={styles.eventImg}
-                    source={require("../assets/eventImg1.jpg")}
+                    source={{ uri: item.restImgUrl }}
                   />
                 </View>
-                <Text style={styles.eventName}>{item.restaurantName}</Text>
-                <Text style={styles.eventLoc}>{item.restaurantLocation}</Text>
+                <Text style={styles.eventName}>{item.restName}</Text>
+                <Text style={styles.eventLoc}>{item.restLoc}</Text>
               </TouchableOpacity>
             )}
           />
