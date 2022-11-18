@@ -7,9 +7,12 @@ import {
   FlatList,
   Image,
   SafeAreaView,
+  Button,
+  Modal,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Icon, Divider } from "@rneui/themed";
+
+import { Icon, Divider, Input } from "@rneui/themed";
 import { auth, db } from "../firebase";
 import {
   collection,
@@ -27,12 +30,33 @@ import {
 
 import Footer from "../components/Footer";
 
+const createGroupField = [
+  { id: 1, field: "Group Name" },
+  { id: 2, field: "Group Members" },
+];
 
 const Home = () => {
   const navigation = useNavigation();
   const [user, setUser] = useState({});
   const [groups, setGroups] = useState([]);
   const [events, setEvents] = useState([]);
+  const [groupModalOpen, setGroupModalOpen] = useState(false);
+
+  const groupLastItem = () => {
+    return (
+      <View>
+        <TouchableOpacity onPress={() => setGroupModalOpen(false)}>
+          <View style={styles.buttonWrapper}>
+            <Text style={styles.button}>Create Group</Text>
+          </View>
+        </TouchableOpacity>
+        <Button
+          title="Cancel"
+          onPress={() => setGroupModalOpen(false)}
+        ></Button>
+      </View>
+    );
+  };
 
 
   const getUser = async () => {
@@ -94,10 +118,38 @@ const Home = () => {
     <SafeAreaView style={styles.container}>
       <Divider />
 
+      <Modal visible={groupModalOpen} animationType="slide">
+        <SafeAreaView style={styles.modalContent}>
+          <View style={styles.modalContent}>
+            <View style={styles.container}>
+              <Divider />
+              <View style={styles.contents}>
+                <Text style={styles.sectionTitle}>Create Group</Text>
+
+                <View style={styles.form}>
+                  <FlatList
+                    ListFooterComponent={groupLastItem}
+                    data={createGroupField}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => (
+                      <Input
+                        labelStyle={{ fontWeight: "normal" }}
+                        inputStyle={{ color: "white", fontSize: 14 }}
+                        label={item.field}
+                      />
+                    )}
+                  />
+                </View>
+              </View>
+            </View>
+          </View>
+        </SafeAreaView>
+      </Modal>
+
       <View style={styles.groupsWrapper}>
         <View style={styles.titleContainer}>
           <Text style={styles.sectionTitle}>{user.firstName}'s Groups</Text>
-          <TouchableOpacity style={styles.iconWrapper}>
+          <TouchableOpacity style={styles.iconWrapper} onPress={() => setGroupModalOpen(true)}>
             {/* CREATE GROUP */}
             <Icon
               type="antdesign"
@@ -161,6 +213,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#242526",
+  },
+  buttonWrapper: {
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 60,
+    width: 150,
+    backgroundColor: "orange",
+    alignItems: "center",
+    alignSelf: "center",
   },
   titleContainer: {
     flexDirection: "row",
@@ -231,6 +292,17 @@ const styles = StyleSheet.create({
     marginTop: 2,
     color: "darkgray",
     fontSize: 12,
+  },
+  modalToggle: {
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: "#f2f2f2",
+    padding: 10,
+    borderRadius: 10,
+    alignSelf: "center",
+  },
+  modalContent: {
+    flex: 1,
   },
 });
 

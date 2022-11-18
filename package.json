@@ -7,7 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "seed": "node server/db/seed.js"
+    "seed": "node server/db/seed.js",
+    "start:seed": "npx start & npx seed"
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.2.2",
@@ -31,6 +32,7 @@
     "pg": "^8.8.0",
     "react": "18.1.0",
     "react-native": "0.70.5",
+    "react-native-dotenv": "^3.4.2",
     "react-native-gesture-handler": "~2.8.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-reanimated": "~2.12.0",
