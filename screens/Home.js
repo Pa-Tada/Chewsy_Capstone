@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import {
   StyleSheet,
   Text,
@@ -11,69 +10,85 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Icon, Divider } from "@rneui/themed";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  addDoc,
+  deleteDoc,
+  doc,
+  orderBy,
+  serverTimestamp,
+  getDoc,
+  query,
+  where,
+} from "firebase/firestore";
 
-import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-// Dummy image - need to make dynamic based on logged in user
-const events = [
-  {
-    id: 1,
-    restaurantName: "awesome restaurant",
-    restaurantLocation: "harlem, new york, new york",
-    restaurantImgUrl:
-      "https://static01.nyt.com/images/2018/12/16/world/16xp-davidson1/merlin_146914890_3e2b450f-94bf-472f-b717-a7b8b4004b1a-superJumbo.jpg",
-    submissions: 4,
-  },
-  {
-    id: 2,
-    restaurantName: "awesome restaurant 2",
-    restaurantLocation: "soho, new york, new york",
-    restaurantImgUrl:
-      "https://static01.nyt.com/images/2018/12/16/world/16xp-davidson1/merlin_146914890_3e2b450f-94bf-472f-b717-a7b8b4004b1a-superJumbo.jpg",
-    submissions: 2,
-  },
-];
-
-const groups = [
-  {
-    id: 1,
-    name: "pete's group",
-  },
-  { id: 2, name: "Wanda and olivia's group" },
-];
 
 const Home = () => {
   const navigation = useNavigation();
-  
-  //const [trial, setTrial] = useState({});
-  // const fetchUsers = async () => {
-  //   try {
-  //     const { data } = await axios.get("http://192.168.1.22:8080/api/events/1");
-  //     console.log(data);
-  //     setTrial(data);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
+  const [user, setUser] = useState({});
+  const [groups, setGroups] = useState([]);
+  const [events, setEvents] = useState([]);
 
-  // useEffect(() => {
-  //   fetchUsers();
-  // }, []);
 
-// const [groups, setGroups] = useState([])
-// useEffect(()=> {
-//   const getGroups = async () => {
-//     try {
-//       const { data } = await axios.get("http://192.168.1.22:8080/api/groups/1");
-//       console.log(data);
-//       setGroups(data);
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   };
-// }, [])
+  const getUser = async () => {
+    try {
+      const docRef = doc(db, "users", auth.currentUser.uid);
+      const gettingUser = await getDoc(docRef);
+
+      setUser({ ...gettingUser.data(), id: gettingUser.id });
+      console.log("USER", user);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getGroups = async (groupArr) => {
+    try {
+      let arr = [];
+      groupArr.map(async (groupId) => {
+        const docRef = doc(db, "groups", groupId);
+        const gettingGroup = await getDoc(docRef);
+        arr.push({ ...gettingGroup.data(), id: gettingGroup.id });
+      });
+      setGroups(arr);
+      console.log("GROUPS", groups);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getEvents = async (groupArr) => {
+    try {
+      let arr = [];
+      groupArr.map(async (groupId) => {
+        const colRef = collection(db, "events");
+        const gettingEvent =  query(colRef, where("groupId", "==", `${groupId}`))
+
+        onSnapshot(gettingEvent, (snapshot)=> {
+          snapshot.docs.forEach((doc)=> {
+            arr.push({...doc.data(), id: doc.id})
+          })
+        })
+      });
+      setEvents(arr);
+
+      console.log("EVENTS", events);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+
+  useEffect(() => {
+    getUser();
+    getGroups(user.groupIds);
+    getEvents(user.groupIds)
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -81,9 +96,7 @@ const Home = () => {
 
       <View style={styles.groupsWrapper}>
         <View style={styles.titleContainer}>
-          <Text style={styles.sectionTitle}>
-            {auth.currentUser.email}'s Groups
-          </Text>
+          <Text style={styles.sectionTitle}>{user.firstName}'s Groups</Text>
           <TouchableOpacity style={styles.iconWrapper}>
             {/* CREATE GROUP */}
             <Icon
@@ -101,8 +114,10 @@ const Home = () => {
             keyExtractor={(item) => item.id}
             horizontal
             renderItem={({ item }) => (
-              <TouchableOpacity style={styles.list} onPress= {()=> navigation.navigate("SingleGroup")}>
-
+              <TouchableOpacity
+                style={styles.list}
+                onPress={() => navigation.navigate("SingleGroup")}
+              >
                 <View style={styles.shadow}>
                   {/* <Image style={styles.img} source={{ uri: item.imgUrl }} /> */}
                 </View>
@@ -113,7 +128,7 @@ const Home = () => {
         </View>
       </View>
       <View style={styles.eventsWrapper}>
-        <Text style={styles.sectionTitle}>{auth.currentUser.email}'s Events</Text>
+        <Text style={styles.sectionTitle}>{user.firstName}'s Events</Text>
         <View style={styles.events}>
           <FlatList
             data={events}
@@ -127,11 +142,11 @@ const Home = () => {
                 <View style={styles.shadow}>
                   <Image
                     style={styles.eventImg}
-                    source={require("../assets/eventImg1.jpg")}
+                    source={{uri: item.restImgUrl}}
                   />
                 </View>
-                <Text style={styles.eventName}>{item.restaurantName}</Text>
-                <Text style={styles.eventLoc}>{item.restaurantLocation}</Text>
+                <Text style={styles.eventName}>{item.restName}</Text>
+                <Text style={styles.eventLoc}>{item.restLoc}</Text>
               </TouchableOpacity>
             )}
           />
