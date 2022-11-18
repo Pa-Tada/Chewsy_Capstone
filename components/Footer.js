@@ -1,35 +1,51 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import { Icon } from '@rneui/themed';
+import { Icon } from "@rneui/themed";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
-
 
 const Footer = (props) => {
   const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.navigate("Home")}>
+      <TouchableOpacity
+        style={styles.iconWrapper}
+        onPress={() => navigation.navigate("Home")}
+      >
         {/* Link to HOMEPAGE: maybe substitute later with <Image style={styles.icon} source={{ uri: PROFILE IMAGE }}/> */}
-        <Icon type="antdesign" name="home" color='white' style={styles.icon} />
+        <Icon type="antdesign" name="home" color="white" style={styles.icon} />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.navigate("Profile")}>
-          {/* PROFILE LONG FORM */}
-        <Icon type="antdesign" name="form" color='white' style={styles.icon}/>
+      <TouchableOpacity
+        style={styles.iconWrapper}
+        onPress={() => navigation.navigate("Profile")}
+      >
+        {/* PROFILE LONG FORM */}
+        <Icon type="antdesign" name="form" color="white" style={styles.icon} />
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.iconWrapper}>
-          {/* PENDING INVITATIONS */}
-        <Icon type="antdesign" name="calendar" color='white' style={styles.icon}/>
+        {/* PENDING INVITATIONS */}
+        <Icon
+          type="antdesign"
+          name="calendar"
+          color="white"
+          style={styles.icon}
+        />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.iconWrapper}>
-          {/* LOG OUT */}
-        <Icon type="antdesign" name="logout" color='white' style={styles.icon}/>
+      <TouchableOpacity
+        style={styles.iconWrapper}
+        onPress={() => navigation.navigate("Welcome")}
+      >
+        {/* LOG OUT */}
+        <Icon
+          type="antdesign"
+          name="logout"
+          color="white"
+          style={styles.icon}
+        />
       </TouchableOpacity>
-
-
     </View>
   );
 };
@@ -47,7 +63,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   iconWrapper: {
-    marginTop:12,
+    marginTop: 12,
     shadowColor: "black",
     shadowOffset: { height: 1, width: 1 },
     shadowOpacity: 1,
