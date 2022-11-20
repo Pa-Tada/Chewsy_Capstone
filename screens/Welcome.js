@@ -13,14 +13,13 @@ import {
   Platform,
 } from "react-native";
 import { auth } from "../firebase";
-import {getFirestore, collection, getDocs, addDoc} from "firebase/firestore"
+import {getFirestore, doc, setDoc} from "firebase/firestore"
 
 
 const Welcome = () => {
   const navigation = useNavigation();
 
   const db = getFirestore()
-  const colRef = collection(db, "users")
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,15 +33,17 @@ const Welcome = () => {
     return unsubscribe // from my research this unsubscribe variable makes it so it stops pinging this listener apparently--- its possible it's not necessary
   },[])
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
+    let user;
     auth
       .createUserWithEmailAndPassword(email, password)
       .then((userCredentials) => {
-        const user = userCredentials.user;
-        console.log("Registered with:",user.email);
+        user = userCredentials.user;
+      })
+      .then(()=>{
+        setDoc(doc(db, 'users', user.uid),{email:user.email})
       })
       .catch((error) => alert(error.message));
-    addDoc(colRef, {email: email})
   };
 
   const handleLogin = () => {
@@ -50,7 +51,6 @@ const Welcome = () => {
       .signInWithEmailAndPassword(email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
-        console.log("Logged in with:", user.email);
       })
       .catch((error) => alert(error.message));
   };
