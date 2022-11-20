@@ -1,33 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  FlatList,
-  Image,
-  SafeAreaView,
-  Button,
-  Modal,
-} from "react-native";
+import {StyleSheet,Text,View,TouchableOpacity,FlatList,Image,SafeAreaView,Button,Modal} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { Icon, Divider, Input } from "@rneui/themed";
-import { auth, db } from "../firebase";
-import {
-  collection,
-  getDocs,
-  onSnapshot,
-  addDoc,
-  deleteDoc,
-  doc,
-  orderBy,
-  serverTimestamp,
-  getDoc,
-  query,
-  where,
-} from "firebase/firestore";
-
+import { auth, db, currUser, allUsers, allGroups, allEvents } from "../firebase";
+import {collection,getDocs,onSnapshot,addDoc,deleteDoc,doc,orderBy,serverTimestamp,getDoc,query,where} from "firebase/firestore";
 import Footer from "../components/Footer";
 
 const createGroupField = [
@@ -42,117 +19,75 @@ const Home = () => {
   const [events, setEvents] = useState([]);
   const [groupModalOpen, setGroupModalOpen] = useState(false);
 
-  const getUser = async () => {
-    try {
-      const docRef =  doc(db, "users", auth.currentUser.uid);
-      //const gettingUser = await getDoc(docRef);
-      onSnapshot(docRef, (doc) => {
-        setUser({ ...doc.data(), id: doc.id });
-      });
-      //setUser({ ...gettingUser.data(), id: gettingUser.id })
-      console.log("USER", user);
 
-      let grArr = [];
-      await user.groupIds?.map(async (groupId) => {
-        const docRef = doc(db, "groups", groupId);
-        //   const gettingGroup = await getDoc(docRef);
-        //   arr.push({ ...gettingGroup.data(), id: gettingGroup.id });
-        // });
-        onSnapshot(docRef, (doc) => {
-          grArr.push({ ...doc.data(), id: doc.id });
-        });
-      });
-      setGroups(grArr);
-      console.log("GROUPS", groups);
+  //  Oliviarodrigo@gmail.com
+  //  ADD .orderBy("timestamp", "desc") to all queries to sor
+  const userActivity = () => {
 
-      let evArr = [];
-      await user.groupIds?.map((groupId) => {
-        const colRef = collection(db, "events");
-        const gettingEvent = query(
-          colRef,
-          where("groupId", "==", `${groupId}`)
-        );
-        onSnapshot(gettingEvent, (snapshot) => {
-          snapshot.docs.forEach((doc) => {
-            evArr.push({ ...doc.data(), id: doc.id });
-          });
-        });
-      });
-      setEvents(evArr);
-      console.log("EVENTS", events);
-    } catch (err) {
-      console.log(err);
-    }
+    const filteredUsers = allUsers.filter((user)=> user.id===auth.currentUser.uid)
+    setUser(filteredUsers[0])
+    console.log("USER", user);
+
+    let filteredGroups = []
+    let filteredEvents = []
+
+    user.groupIds?.map((groupId)=> {
+       allGroups.filter((group)=> {
+        if (group.id==groupId) filteredGroups.push(group)
+      })
+      allEvents.filter((event)=> {
+        if (event.groupId==groupId) filteredEvents.push(event)
+      })
+    })
+
+    setGroups(filteredGroups)
+    console.log("GROUPS", groups)
+    setEvents(filteredEvents)
+    console.log("EVENTS", events)
   };
-
-
   useEffect(() => {
-    getUser()
+    userActivity()
   }, []);
 
-   //  useEffect(() => {
   // const getUser = async () => {
-  //   try {
-    // const docRef = doc(db, "users", auth.currentUser.uid);
-    // //const gettingUser = await getDoc(docRef);
-    // onSnapshot(docRef, (doc) => {
-    //   setUser({ ...doc.data(), id: doc.id });
-    // });
-    // console.log("USER", user);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-  //getUser()
-//  }, []);
 
- //  useEffect(() => {
-  // const getGroups = async () => {
-  //   try {
-    // let grArr = [];
-    // await user.groupIds?.map(async (groupId) => {
-    //   const docRef = doc(db, "groups", groupId);
-    //   //   const gettingGroup = await getDoc(docRef);
-    //   //   arr.push({ ...gettingGroup.data(), id: gettingGroup.id });
-    //   // });
-    //   onSnapshot(docRef, (doc) => {
-    //     grArr.push({ ...doc.data(), id: doc.id });
-    //   });
-    // });
-    // setGroups(grArr);
-    // console.log("GROUPS", groups);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-  //getGroups()
-//  }, []);
+  //     let grArr = [];
+  //     await user.groupIds?.map((groupId) => {
+  //       const docRef = doc(db, "groups", groupId); //   const gettingGroup = await getDoc(docRef); arr.push({ ...gettingGroup.data(), id: gettingGroup.id });});
+  //       onSnapshot(docRef, (doc) => {
+  //         grArr.push({ ...doc.data(), id: doc.id });
+  //       });
+  //     })
+  //     setGroups(grArr);
+  //     console.log("GROUPS", groups);
 
-//  useEffect(() => {
-  // const getEvents = async () => {
-  //   try {
-    // let evArr = [];
-    // await user.groupIds?.map((groupId) => {
-    //   const colRef = collection(db, "events");
-    //   const gettingEvent = query(
-    //     colRef,
-    //     where("groupId", "==", `${groupId}`)
-    //   );
-    //   onSnapshot(gettingEvent, (snapshot) => {
-    //     snapshot.docs.forEach((doc) => {
-    //       evArr.push({ ...doc.data(), id: doc.id });
-    //     });
-    //   });
-    // });
-    // setEvents(evArr);
-    // console.log("EVENTS", events);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-  //getEvents()
-//  }, []);
+  //     // let grArr = [];
+  //     //   const ocRef = doc(db, "groups", "zJo7r2oP9NT0I3dumF6l");
+  //     //   onSnapshot(ocRef, (doc) => {
+  //     //     grArr.push({ ...doc.data(), id: doc.id });
+  //     //   });
+  //     // setGroups(grArr);
+  //     // console.log("GROUPS", groups);
 
+  //     let evArr = [];
+  //     await user.groupIds?.map((groupId) => {
+  //       const colRef = collection(db, "events");
+  //       const gettingEvent = query(colRef, where("groupId", "==", `${groupId}`));
+  //         onSnapshot(gettingEvent, (snapshot) => {
+  //           snapshot.docs.forEach((doc) => {
+  //             evArr.push({ ...doc.data(), id: doc.id });
+  //           });
+  //         });
+  //     })
+  //     setEvents(evArr);
+  //     console.log("EVENTS", events);
+
+  //     const docRef =  doc(db, "users", auth.currentUser.uid); ////const gettingUser = await getDoc(docRef);
+  //     onSnapshot(docRef, (doc) => {
+  //       setUser({ ...doc.data(), id: doc.id }); //setUser({ ...gettingUser.data(), id: gettingUser.id })
+  //     });
+  //     console.log("USER", user);
+  // };
 
   const groupLastItem = () => {
     return (
@@ -170,6 +105,7 @@ const Home = () => {
     );
   };
 
+  if (user.groupIds?.length > 0){
   return (
     <SafeAreaView style={styles.container}>
       <Divider />
@@ -220,6 +156,7 @@ const Home = () => {
 
         <View style={styles.groups}>
           <FlatList
+          showsVerticalScrollIndicator={false}
             data={groups}
             keyExtractor={(item) => item.id}
             horizontal
@@ -241,6 +178,7 @@ const Home = () => {
         <Text style={styles.sectionTitle}>{user.firstName}'s Events</Text>
         <View style={styles.events}>
           <FlatList
+          showsVerticalScrollIndicator={false}
             data={events}
             keyExtractor={(item) => item.id}
             horizontal
@@ -265,6 +203,11 @@ const Home = () => {
       <Footer />
     </SafeAreaView>
   );
+} else {
+  return (
+    <Text> Looks like you don't have any plans yet. Create groups to get started! </Text>
+  )
+}
 };
 
 const styles = StyleSheet.create({
@@ -326,7 +269,7 @@ const styles = StyleSheet.create({
   },
   eventsWrapper: {
     paddingHorizontal: 12,
-    flex: 1.3,
+    flex: 1.2,
   },
   events: {},
   eventList: {
