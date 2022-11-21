@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import {StyleSheet,Text,View,TouchableOpacity,FlatList,Image,SafeAreaView,Button,Modal} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import { auth, db, allUsers, allEvents } from "../firebase";
+import { auth, db } from "../firebase";
 import {collection,getDocs,onSnapshot,addDoc,deleteDoc,doc, orderBy,serverTimestamp,getDoc,query,where} from "firebase/firestore";
 
 
@@ -11,50 +11,24 @@ const Groups = (props) => {
   const navigation = useNavigation();
   const [groups, setGroups] = useState([{name: "Loading...", id: "unique"}]);
 
-  // const groupsRef = collection(db, "groups")
-  // let allGroups;
-  // onSnapshot(groupsRef, (docSnap)=> {
-  // allGroups = []
-  //   docSnap.forEach((doc)=> {
-  //     allGroups.push({ ...doc.data(), id: doc.id })
-  //   })})
-  // groupIds?.map((groupId) => {
-  //   let allGroups = []
-  //   onSnapshot(collection(db, "groups"), (docSnap)=> {
-  //     docSnap.docs.map((doc)=> {
-  //       if (doc.id == groupId) allGroups.push({ ...doc.data(), id: doc.id })})
-  //   })
-  // })
-
   useEffect(() => {
-const unsub = onSnapshot(collection(db, "groups"),  (snapshot)=> {
-  let grArr = []
- snapshot.docs.map( doc=> {
-    if (groupIds?.includes(doc.id))
-    grArr.push({...doc.data(), id: doc.id})
+    const q = query(collection(db, "groups"), orderBy("createdAt", "desc"))
+    const unsub = onSnapshot(q,  (snapshot)=> {
+    let grArr = []
+      snapshot.docs.map(doc=> {
+        if (groupIds?.includes(doc.id))
+        grArr.push({...doc.data(), id: doc.id})
+      })
+    setGroups(grArr)
+    console.log("GROUPS", groups)
   })
-  setGroups(grArr)
-  // console.log("PS", ps)
-})
-    // const getGroups = async() => {
-    //     let filteredGroups = []
-    //     groupIds?.map((groupId)=> {
-    //       allGroups.filter((group)=> {
-    //         if (group.id==groupId) filteredGroups.push(group)
-    //       })
-    //     })
-    //     setGroups(filteredGroups)
+  return unsub
+  }, [groupIds, setGroups]);
 
-    // }
-    // getGroups()
-return unsub
-}, [groupIds]);
-
-
-  if (groups?.length){
   return (
         <View style={styles.groups}>
           <FlatList
+          extraData={groups}
           showsHorizontalScrollIndicator={false}
             data={groups}
             keyExtractor={(item) => item?.id}
@@ -76,11 +50,6 @@ return unsub
           />
         </View>
   );
-  } else {
-    return (
-      <Text> Looks like you don't have any plans yet. Create groups to get started! </Text>
-    )
-  }
 }
 
 const styles = StyleSheet.create({
@@ -90,14 +59,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 1,
   },
-  groupsWrapper: {
-    marginTop: 30,
-    paddingHorizontal: 12,
-    flex: 1,
-  },
   groups: {},
   list: {
-    //borderWidth: 1,
     borderRadius: 15,
     marginTop: 24,
     marginRight: 8,

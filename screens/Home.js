@@ -3,10 +3,11 @@ import {StyleSheet,Text,View,TouchableOpacity,FlatList,Image,SafeAreaView,Button
 import { useNavigation } from "@react-navigation/native";
 
 import { Icon, Divider, Input } from "@rneui/themed";
-import { auth, db, currUser, allUsers, allGroups, allEvents } from "../firebase";
+import { auth, db, allUsers } from "../firebase";
 import {collection,getDocs,onSnapshot,addDoc,deleteDoc,doc,orderBy,serverTimestamp,getDoc,query,where} from "firebase/firestore";
 import Footer from "../components/Footer";
 import Groups from "../components/Groups";
+import Events from "../components/Events";
 
 const createGroupField = [
   { id: 1, field: "Group Name" },
@@ -16,34 +17,17 @@ const createGroupField = [
 const Home = () => {
   const navigation = useNavigation();
   const [user, setUser] = useState({});
-  //const [groups, setGroups] = useState([{name: "Loading...", id: "unique"}]);
-  const [events, setEvents] = useState([]);
   const [groupModalOpen, setGroupModalOpen] = useState(false);
 
   // Oliviarodrigo@gmail.com
-  const userActivity = () => {
+  const userInfo = () => {
     const filteredUsers = allUsers.filter((user)=> user.id===auth.currentUser.uid)
     setUser(filteredUsers[0])
     console.log("USER", user);
-
-    //let filteredGroups = []
-    let filteredEvents = []
-    user.groupIds?.map((groupId)=> {
-      //  allGroups.filter((group)=> {
-      //   if (group.id==groupId) filteredGroups.push(group)
-      // })
-      allEvents.filter((event)=> {
-        if (event.groupId==groupId) filteredEvents.push(event)
-      })
-    })
-    // setGroups(filteredGroups)
-    // console.log("GROUPS", groups)
-    setEvents(filteredEvents)
-    console.log("EVENTS", events)
   };
 
   useEffect(() => {
-     userActivity()
+     userInfo()
   }, [user.groupIds]);
 
   const groupLastItem = () => {
@@ -62,7 +46,7 @@ const Home = () => {
     );
   };
 
-  //if (events.length > 0){
+if (user.groupIds?.length){
   return (
     <SafeAreaView style={styles.container}>
       <Divider />
@@ -109,64 +93,20 @@ const Home = () => {
             />
           </TouchableOpacity>
         </View>
-<Groups groupIds={user.groupIds}/>
-        {/* <View style={styles.groups}>
-          <FlatList
-          showsHorizontalScrollIndicator={false}
-            data={groups}
-            keyExtractor={(item) => item.id}
-            horizontal
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.list}
-                onPress={() => navigation.navigate("SingleGroup", {groupId: item.id, currentGroup: item})}
-              >
-                <View style={styles.shadow}>
-                  <Image
-                    style={styles.groupImg}
-                    source={{ uri: item.imgUrl }}
-                  />
-                </View>
-                <Text style={styles.name}>{item.name}</Text>
-              </TouchableOpacity>
-            )}
-          />
-        </View> */}
+        <Groups groupIds={user.groupIds}/>
       </View>
       <View style={styles.eventsWrapper}>
         <Text style={styles.sectionTitle}>Your Events</Text>
-        <View style={styles.events}>
-          <FlatList
-          showsHorizontalScrollIndicator={false}
-            data={events}
-            keyExtractor={(item) => item.id}
-            horizontal
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.eventList}
-                onPress={() => navigation.navigate("SingleEvent")}
-              >
-                <View style={styles.shadow}>
-                  <Image
-                    style={styles.eventImg}
-                    source={{ uri: item.restImgUrl }}
-                  />
-                </View>
-                <Text style={styles.eventName}>{item.restName}</Text>
-                <Text style={styles.eventLoc}>{item.restLoc}</Text>
-              </TouchableOpacity>
-            )}
-          />
-        </View>
+        <Events groupIds={user.groupIds}/>
       </View>
       <Footer />
     </SafeAreaView>
   );
-  // } else {
-  //   return (
-  //     <Text> Looks like you don't have any plans yet. Create groups to get started! </Text>
-  //   )
-  // }
+  } else {
+    return (
+      <Text>Looks like you don't have any plans yet. Create groups to get started!</Text>
+    )
+  }
 }
 
 const styles = StyleSheet.create({
@@ -210,53 +150,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     flex: 1,
   },
-  groups: {},
-  list: {
-    //borderWidth: 1,
-    borderRadius: 15,
-    marginTop: 24,
-    marginRight: 8,
-    width: 180,
-    height: 200,
-    alignItems: "center",
-  },
-  groupImg: {
-    width: 180,
-    height: 180,
-    borderRadius: 15,
-  },
-  name: {
-    marginTop: 2,
-    fontWeight: "bold",
-    color: "darkgray",
-  },
   eventsWrapper: {
     paddingHorizontal: 12,
     flex: 1,
-  },
-  events: {},
-  eventList: {
-    marginTop: 24,
-    marginRight: 8,
-    width: 180,
-    height: 250,
-    borderRadius: 15,
-    alignItems: "center",
-  },
-eventImg: {
-    width: 180,
-    height: 180,
-    borderRadius: 15,
-  },
-  eventName: {
-    marginTop: 2,
-    fontWeight: "bold",
-    color: "darkgray",
-  },
-  eventLoc: {
-    marginTop: 2,
-    color: "darkgray",
-    fontSize: 12,
   },
   modalToggle: {
     marginBottom: 10,
