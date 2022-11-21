@@ -55,7 +55,11 @@ const lastItem = () => {
 };
 
 const Profile = () => {
-  console.log("CURRENT USER AUTH Email:", auth.currentUser.email, auth.currentUser.uid);
+  console.log(
+    "CURRENT USER AUTH Email:",
+    auth.currentUser.email,
+    auth.currentUser.uid
+  );
   // console.log("CURRENT USER id:", auth.currentUser.id)
   let user;
   const getUser = async () => {
@@ -66,7 +70,7 @@ const Profile = () => {
       // r
 
       if (doc.data().email === auth.currentUser.email) {
-        return user = { data: doc.data(), id: doc.id };
+        return (user = { data: doc.data(), id: doc.id });
         console.log("USER:", user);
       } // try switching this to id
     });
@@ -107,9 +111,9 @@ const Profile = () => {
     // console.log(newArray)
     // setFoodGenre(newArray);
     // console.log("food genre", foodGenre)
-    setLikedRestaurants([...likedRestaurants, likedRestaurantName])
-    setDislikedRestaurants([...dislikedRestaurants, dislikedRestaurantName])
-    setVisitedRestaurants([...visitedRestaurants, visitedRestaurantName])
+    setLikedRestaurants([...likedRestaurants, likedRestaurantName]);
+    setDislikedRestaurants([...dislikedRestaurants, dislikedRestaurantName]);
+    setVisitedRestaurants([...visitedRestaurants, visitedRestaurantName]);
     return setDoc(doc(db, "users", user.id), {
       email: user.data.email,
       firstName: firstName,
@@ -119,8 +123,8 @@ const Profile = () => {
       dietaryRestrictions: dietaryRestrictions,
       affordability: affordability,
       likedRestaurants: likedRestaurants,
-      dislikedRestaurants:dislikedRestaurants,
-      visitedRestaurants: visitedRestaurants
+      dislikedRestaurants: dislikedRestaurants,
+      visitedRestaurants: visitedRestaurants,
     });
   };
   return (
@@ -163,12 +167,12 @@ const Profile = () => {
               onChangeText={(text) => setFoodName(text)}
             />
             <TouchableOpacity
-              onPress={()=>{
-                setFoodGenre([...foodGenre, foodName])
-                setFoodName("")
+              onPress={() => {
+                setFoodGenre([...foodGenre, foodName]);
+                setFoodName("");
               }}
             >
-            <View style={styles.buttonWrapper}>
+              <View style={styles.buttonWrapper2}>
                 <Text style={styles.button}>+</Text>
               </View>
             </TouchableOpacity>
@@ -200,6 +204,17 @@ const Profile = () => {
               value={likedRestaurants}
               onChangeText={(text) => setLikedRestaurantName(text)}
             />
+            <TouchableOpacity
+              onPress={() => {
+                setLikedRestaurants([...likedRestaurants, likedRestaurantName]);
+                setLikedRestaurantName("");
+              }}
+            >
+              <View style={styles.buttonWrapper2}>
+                <Text style={styles.button}>+</Text>
+              </View>
+            </TouchableOpacity>
+
             <Input
               labelStyle={{ fontWeight: "normal" }}
               inputStyle={{ color: "white", fontSize: 14 }}
@@ -207,6 +222,20 @@ const Profile = () => {
               value={dislikedRestaurants}
               onChangeText={(text) => setDislikedRestaurantName(text)}
             />
+            <TouchableOpacity
+              onPress={() => {
+                setDislikedRestaurants([
+                  ...dislikedRestaurants,
+                  dislikedRestaurantName,
+                ]);
+                setDislikedRestaurantName("");
+              }}
+            >
+              <View style={styles.buttonWrapper2}>
+                <Text style={styles.button}>+</Text>
+              </View>
+            </TouchableOpacity>
+
             <Input
               labelStyle={{ fontWeight: "normal" }}
               inputStyle={{ color: "white", fontSize: 14 }}
@@ -214,6 +243,19 @@ const Profile = () => {
               value={visitedRestaurants}
               onChangeText={(text) => setVisitedRestaurantName(text)}
             />
+            <TouchableOpacity
+              onPress={() => {
+                setVisitedRestaurants([
+                  ...visitedRestaurants,
+                  visitedRestaurantName,
+                ]);
+                setVisitedRestaurantName("");
+              }}
+            >
+              <View style={styles.buttonWrapper2}>
+                <Text style={styles.button}>+</Text>
+              </View>
+            </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => {
@@ -223,9 +265,9 @@ const Profile = () => {
                 // setVisitedRestaurants([...visitedRestaurants, visitedRestaurantName])
                 handleEdit();
                 // setFoodName("");
-                setLikedRestaurantName("")
-                setDislikedRestaurantName("")
-                setVisitedRestaurantName("")
+                // setLikedRestaurantName("")
+                // setDislikedRestaurantName("")
+                // setVisitedRestaurantName("")
                 setFirstName("");
                 setLastName("");
               }}
@@ -274,6 +316,16 @@ const styles = StyleSheet.create({
     backgroundColor: "orange",
     alignItems: "center",
     alignSelf: "center",
+  },
+  buttonWrapper2:{
+    width:40,
+    height:40,
+    backgroundColor: "orange",
+    alignItems:"center",
+    justifyContent:"center",
+    marginTop:-15,
+    marginBottom:10,
+    borderRadius:10
   },
   button: {},
 });
