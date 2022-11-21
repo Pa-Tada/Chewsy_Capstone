@@ -12,7 +12,7 @@ import React, { useEffect, useState } from "react";
 import { Icon, Input, Avatar, Divider } from "@rneui/themed";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { auth, db } from "../firebase";
+import { auth, db, user } from "../firebase";
 import firebase from "firebase/compat";
 import {
   getFirestore,
@@ -60,30 +60,31 @@ const Profile = () => {
     auth.currentUser.email,
     auth.currentUser.uid
   );
+  console.log("USER WITHIN FORM:", user)
   // console.log("CURRENT USER id:", auth.currentUser.id)
-  let user;
-  const getUser = async () => {
-    const querySnapshot = await getDocs(collection(db, "users"));
-    querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      // console.log(doc.id, " => ", doc.data());
-      // r
+  // let user;
+  // const getUser = async () => {
+  //   const querySnapshot = await getDocs(collection(db, "users"));
+  //   querySnapshot.forEach((doc) => {
+  //     // doc.data() is never undefined for query doc snapshots
+  //     // console.log(doc.id, " => ", doc.data());
+  //     // r
 
-      if (doc.data().email === auth.currentUser.email) {
-        return (user = { data: doc.data(), id: doc.id });
-        console.log("USER:", user);
-      } // try switching this to id
-    });
-    const docRef = doc(db, "users", auth.currentUser.uid);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-    } else {
-      // doc.data() will be undefined in this case
-      console.log("No such document!");
-    }
-  };
-  getUser();
+  //     if (doc.data().email === auth.currentUser.email) {
+  //       return (user = { data: doc.data(), id: doc.id });
+  //       console.log("USER:", user);
+  //     } // try switching this to id
+  //   });
+  //   const docRef = doc(db, "users", auth.currentUser.uid);
+  //   const docSnap = await getDoc(docRef);
+  //   if (docSnap.exists()) {
+  //     console.log("Document data:", docSnap.data());
+  //   } else {
+  //     // doc.data() will be undefined in this case
+  //     console.log("No such document!");
+  //   }
+  // };
+  // getUser();
   // console.log(doc(db, "users", auth.currentUser.uid));
 
   const [firstName, setFirstName] = useState("");

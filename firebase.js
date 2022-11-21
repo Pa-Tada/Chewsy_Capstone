@@ -1,6 +1,6 @@
 import firebase from "firebase/compat"
 
-import {getFirestore, collection, getDocs} from 'firebase/firestore'
+import {getFirestore, collection, getDocs, doc, getDoc} from 'firebase/firestore'
 
 
 const firebaseConfig = {
@@ -40,5 +40,30 @@ getDocs(colRef)
     // console.log(users)
   })
 
-export {auth, db}
+// get current user data
+let user;
+const getUser = async () => {
+  const querySnapshot = await getDocs(collection(db, "users"));
+  querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    // console.log(doc.id, " => ", doc.data());
+    // r
+
+    if (doc.data().email === auth.currentUser.email) {
+     (user = { data: doc.data(), id: doc.id });
+      console.log("USER:", user);
+    } // try switching this to id
+  });
+  const docRef = doc(db, "users", auth.currentUser.uid);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    console.log("Document data:", docSnap.data());
+  } else {
+    // doc.data() will be undefined in this case
+    console.log("No such document!");
+  }
+};
+getUser();
+
+export {auth, db, user}
 
