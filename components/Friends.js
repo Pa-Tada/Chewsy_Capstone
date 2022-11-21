@@ -18,17 +18,10 @@ import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Events from "../components/Events";
 
-
-const addFriendField = [{ id: 1, field: "Email/Username" }];
-const addEventField = [
-  { id: 1, field: "Event Time" },
-  { id: 2, field: "Event Date" },
-];
-
 const Friends = (props) => {
   const { currentGroup } = props
   const navigation = useNavigation();
-  const [friends, setFriends] = useState([]);
+  const [friends, setFriends] = useState([{name: "Loading...", id: "unique"}]);
 
   useEffect(()=> {
     const unsub = onSnapshot(collection(db, "users"),  (snapshot)=> {
