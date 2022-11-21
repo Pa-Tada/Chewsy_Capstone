@@ -1,5 +1,5 @@
 import firebase from "firebase/compat";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, collection,getDocs,onSnapshot,addDoc,deleteDoc,doc,orderBy,serverTimestamp,getDoc,query,where } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAEHjcMAwTGGilDO0R5rEv9UgMjQ9EABl0",
@@ -22,4 +22,16 @@ if (firebase.apps.length === 0) {
 const auth = firebase.auth();
 const db = getFirestore();
 
-export { auth, db };
+
+const usersRef = collection(db, "users")
+let allUsers;
+onSnapshot(usersRef, (docSnap)=> {
+allUsers = []
+  docSnap.forEach((doc)=> {
+    allUsers.push({ ...doc.data(), id: doc.id }
+    )
+  })
+})
+
+
+export { auth, db, allUsers};

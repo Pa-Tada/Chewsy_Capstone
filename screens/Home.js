@@ -1,34 +1,13 @@
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  FlatList,
-  Image,
-  SafeAreaView,
-  Button,
-  Modal,
-} from "react-native";
+import {StyleSheet,Text,View,TouchableOpacity,FlatList,Image,SafeAreaView,Button,Modal} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { Icon, Divider, Input } from "@rneui/themed";
-import { auth, db } from "../firebase";
-import {
-  collection,
-  getDocs,
-  onSnapshot,
-  addDoc,
-  deleteDoc,
-  doc,
-  orderBy,
-  serverTimestamp,
-  getDoc,
-  query,
-  where,
-} from "firebase/firestore";
-
+import { auth, db, allUsers } from "../firebase";
+import {collection,getDocs,onSnapshot,addDoc,deleteDoc,doc,orderBy,serverTimestamp,getDoc,query,where} from "firebase/firestore";
 import Footer from "../components/Footer";
+import Groups from "../components/Groups";
+import Events from "../components/Events";
 
 const createGroupField = [
   { id: 1, field: "Group Name" },
@@ -38,121 +17,18 @@ const createGroupField = [
 const Home = () => {
   const navigation = useNavigation();
   const [user, setUser] = useState({});
-  const [groups, setGroups] = useState([]);
-  const [events, setEvents] = useState([]);
   const [groupModalOpen, setGroupModalOpen] = useState(false);
 
-  const getUser = async () => {
-    try {
-      const docRef =  doc(db, "users", auth.currentUser.uid);
-      //const gettingUser = await getDoc(docRef);
-      onSnapshot(docRef, (doc) => {
-        setUser({ ...doc.data(), id: doc.id });
-      });
-      //setUser({ ...gettingUser.data(), id: gettingUser.id })
-      console.log("USER", user);
-
-      let grArr = [];
-      await user.groupIds?.map(async (groupId) => {
-        const docRef = doc(db, "groups", groupId);
-        //   const gettingGroup = await getDoc(docRef);
-        //   arr.push({ ...gettingGroup.data(), id: gettingGroup.id });
-        // });
-        onSnapshot(docRef, (doc) => {
-          grArr.push({ ...doc.data(), id: doc.id });
-        });
-      });
-      setGroups(grArr);
-      console.log("GROUPS", groups);
-
-      let evArr = [];
-      await user.groupIds?.map((groupId) => {
-        const colRef = collection(db, "events");
-        const gettingEvent = query(
-          colRef,
-          where("groupId", "==", `${groupId}`)
-        );
-        onSnapshot(gettingEvent, (snapshot) => {
-          snapshot.docs.forEach((doc) => {
-            evArr.push({ ...doc.data(), id: doc.id });
-          });
-        });
-      });
-      setEvents(evArr);
-      console.log("EVENTS", events);
-    } catch (err) {
-      console.log(err);
-    }
+  // Oliviarodrigo@gmail.com
+  const userInfo = () => {
+    const filteredUsers = allUsers.filter((user)=> user.id===auth.currentUser.uid)
+    setUser(filteredUsers[0])
+    console.log("USER", user);
   };
 
-
   useEffect(() => {
-    getUser()
-  }, []);
-
-   //  useEffect(() => {
-  // const getUser = async () => {
-  //   try {
-    // const docRef = doc(db, "users", auth.currentUser.uid);
-    // //const gettingUser = await getDoc(docRef);
-    // onSnapshot(docRef, (doc) => {
-    //   setUser({ ...doc.data(), id: doc.id });
-    // });
-    // console.log("USER", user);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-  //getUser()
-//  }, []);
-
- //  useEffect(() => {
-  // const getGroups = async () => {
-  //   try {
-    // let grArr = [];
-    // await user.groupIds?.map(async (groupId) => {
-    //   const docRef = doc(db, "groups", groupId);
-    //   //   const gettingGroup = await getDoc(docRef);
-    //   //   arr.push({ ...gettingGroup.data(), id: gettingGroup.id });
-    //   // });
-    //   onSnapshot(docRef, (doc) => {
-    //     grArr.push({ ...doc.data(), id: doc.id });
-    //   });
-    // });
-    // setGroups(grArr);
-    // console.log("GROUPS", groups);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-  //getGroups()
-//  }, []);
-
-//  useEffect(() => {
-  // const getEvents = async () => {
-  //   try {
-    // let evArr = [];
-    // await user.groupIds?.map((groupId) => {
-    //   const colRef = collection(db, "events");
-    //   const gettingEvent = query(
-    //     colRef,
-    //     where("groupId", "==", `${groupId}`)
-    //   );
-    //   onSnapshot(gettingEvent, (snapshot) => {
-    //     snapshot.docs.forEach((doc) => {
-    //       evArr.push({ ...doc.data(), id: doc.id });
-    //     });
-    //   });
-    // });
-    // setEvents(evArr);
-    // console.log("EVENTS", events);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-  //getEvents()
-//  }, []);
-
+     userInfo()
+  }, [user.groupIds]);
 
   const groupLastItem = () => {
     return (
@@ -170,6 +46,7 @@ const Home = () => {
     );
   };
 
+if (user.groupIds?.length){
   return (
     <SafeAreaView style={styles.container}>
       <Divider />
@@ -203,12 +80,11 @@ const Home = () => {
 
       <View style={styles.groupsWrapper}>
         <View style={styles.titleContainer}>
-          <Text style={styles.sectionTitle}>{user.firstName}'s Groups</Text>
+          <Text style={styles.sectionTitle}>Your Groups</Text>
           <TouchableOpacity
             style={styles.iconWrapper}
             onPress={() => setGroupModalOpen(true)}
           >
-            {/* CREATE GROUP */}
             <Icon
               type="antdesign"
               size="28px"
@@ -217,55 +93,21 @@ const Home = () => {
             />
           </TouchableOpacity>
         </View>
-
-        <View style={styles.groups}>
-          <FlatList
-            data={groups}
-            keyExtractor={(item) => item.id}
-            horizontal
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.list}
-                onPress={() => navigation.navigate("SingleGroup")}
-              >
-                <View style={styles.shadow}>
-                  {/* <Image style={styles.img} source={{ uri: item.imgUrl }} /> */}
-                </View>
-                <Text style={styles.name}>{item.name}</Text>
-              </TouchableOpacity>
-            )}
-          />
-        </View>
+        <Groups groupIds={user.groupIds}/>
       </View>
       <View style={styles.eventsWrapper}>
-        <Text style={styles.sectionTitle}>{user.firstName}'s Events</Text>
-        <View style={styles.events}>
-          <FlatList
-            data={events}
-            keyExtractor={(item) => item.id}
-            horizontal
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.eventList}
-                onPress={() => navigation.navigate("SingleEvent")}
-              >
-                <View style={styles.shadow}>
-                  <Image
-                    style={styles.eventImg}
-                    source={{ uri: item.restImgUrl }}
-                  />
-                </View>
-                <Text style={styles.eventName}>{item.restName}</Text>
-                <Text style={styles.eventLoc}>{item.restLoc}</Text>
-              </TouchableOpacity>
-            )}
-          />
-        </View>
+        <Text style={styles.sectionTitle}>Your Events</Text>
+        <Events groupIds={user.groupIds}/>
       </View>
       <Footer />
     </SafeAreaView>
   );
-};
+  } else {
+    return (
+      <Text>Looks like you don't have any plans yet. Create groups to get started!</Text>
+    )
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -308,48 +150,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     flex: 1,
   },
-  groups: {},
-  list: {
-    borderWidth: 1,
-    borderRadius: 15,
-    marginTop: 24,
-    marginRight: 8,
-    width: 180,
-    height: 180,
-    alignItems: "center",
-  },
-  img: {},
-  name: {
-    marginTop: 2,
-    fontWeight: "bold",
-    color: "darkgray",
-  },
   eventsWrapper: {
     paddingHorizontal: 12,
-    flex: 1.3,
-  },
-  events: {},
-  eventList: {
-    marginTop: 24,
-    marginRight: 8,
-    width: 180,
-    height: 250,
-    borderRadius: 15,
-  },
-  eventImg: {
-    width: 180,
-    height: 180,
-    borderRadius: 15,
-  },
-  eventName: {
-    marginTop: 2,
-    fontWeight: "bold",
-    color: "darkgray",
-  },
-  eventLoc: {
-    marginTop: 2,
-    color: "darkgray",
-    fontSize: 12,
+    flex: 1,
   },
   modalToggle: {
     marginBottom: 10,
