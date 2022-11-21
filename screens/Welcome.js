@@ -12,14 +12,12 @@ import {
   ImageBackground,
   Platform,
 } from "react-native";
-import { auth, getUser } from "../firebase";
+import { auth, getUser, db } from "../firebase";
 import {getFirestore, doc, setDoc} from "firebase/firestore"
 
 
 const Welcome = () => {
   const navigation = useNavigation();
-
-  const db = getFirestore()
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
