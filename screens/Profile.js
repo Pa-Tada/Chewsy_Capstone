@@ -12,7 +12,7 @@ import React, { useEffect, useState } from "react";
 import { Icon, Input, Avatar, Divider } from "@rneui/themed";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { auth, db, user } from "../firebase";
+import { auth, db, user, getUser } from "../firebase";
 import firebase from "firebase/compat";
 import {
   getFirestore,
@@ -25,7 +25,6 @@ import {
 import { set } from "react-native-reanimated";
 import { Button } from "@rneui/base";
 
-//consider putting a little add button by each of the array objects
 // Dummy image - need to make dynamic based on logged in user
 const firstItem = () => {
   return (
@@ -55,67 +54,30 @@ const lastItem = () => {
 };
 
 const Profile = () => {
-  console.log(
-    "CURRENT USER AUTH Email:",
-    auth.currentUser.email,
-    auth.currentUser.uid
-  );
+
   console.log("USER WITHIN FORM:", user)
-  // console.log("CURRENT USER id:", auth.currentUser.id)
-  // let user;
-  // const getUser = async () => {
-  //   const querySnapshot = await getDocs(collection(db, "users"));
-  //   querySnapshot.forEach((doc) => {
-  //     // doc.data() is never undefined for query doc snapshots
-  //     // console.log(doc.id, " => ", doc.data());
-  //     // r
-
-  //     if (doc.data().email === auth.currentUser.email) {
-  //       return (user = { data: doc.data(), id: doc.id });
-  //       console.log("USER:", user);
-  //     } // try switching this to id
-  //   });
-  //   const docRef = doc(db, "users", auth.currentUser.uid);
-  //   const docSnap = await getDoc(docRef);
-  //   if (docSnap.exists()) {
-  //     console.log("Document data:", docSnap.data());
-  //   } else {
-  //     // doc.data() will be undefined in this case
-  //     console.log("No such document!");
-  //   }
-  // };
-  // getUser();
-  // console.log(doc(db, "users", auth.currentUser.uid));
-
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  // console.log(auth.currentUser.email)
+  const [firstName, setFirstName] = useState(user.data.firstName);
+  const [lastName, setLastName] = useState(user.data.lastName);
 
   const [foodName, setFoodName] = useState("");
-  const [foodGenre, setFoodGenre] = useState([]);
+  const [foodGenre, setFoodGenre] = useState(user.data.foodGenre);
 
-  const [restaurantRating, setRestaurantRating] = useState("4");
-  const [dietaryRestrictions, setDietaryRestrictions] = useState("none");
-  const [affordability, setAffordability] = useState("$");
+  const [restaurantRating, setRestaurantRating] = useState(user.data.restaurantRating);
+  const [dietaryRestrictions, setDietaryRestrictions] = useState(user.data.dietaryRestrictions);
+  const [affordability, setAffordability] = useState(user.data.affordability);
 
-  const [likedRestaurants, setLikedRestaurants] = useState([]);
+  const [likedRestaurants, setLikedRestaurants] = useState(user.data.likedRestaurants);
   const [likedRestaurantName, setLikedRestaurantName] = useState("");
 
-  const [dislikedRestaurants, setDislikedRestaurants] = useState([]);
+  const [dislikedRestaurants, setDislikedRestaurants] = useState(user.data.dislikedRestaurants);
   const [dislikedRestaurantName, setDislikedRestaurantName] = useState("");
 
-  const [visitedRestaurants, setVisitedRestaurants] = useState([]);
+  const [visitedRestaurants, setVisitedRestaurants] = useState(user.data.visitedRestaurants);
   const [visitedRestaurantName, setVisitedRestaurantName] = useState("");
 
   const handleEdit = () => {
-    // console.log("food name", foodName)
-    // let newArray = [foodName].concat(foodGenre)
-    // console.log(newArray)
-    // setFoodGenre(newArray);
-    // console.log("food genre", foodGenre)
-    setLikedRestaurants([...likedRestaurants, likedRestaurantName]);
-    setDislikedRestaurants([...dislikedRestaurants, dislikedRestaurantName]);
-    setVisitedRestaurants([...visitedRestaurants, visitedRestaurantName]);
-    return setDoc(doc(db, "users", user.id), {
+     setDoc(doc(db, "users", user.id), {
       email: user.data.email,
       firstName: firstName,
       lastName: lastName,
@@ -260,17 +222,8 @@ const Profile = () => {
 
             <TouchableOpacity
               onPress={() => {
-                // setFoodGenre([...foodGenre, foodName]);
-                // setLikedRestaurants([...likedRestaurants, likedRestaurantName])
-                // setDislikedRestaurants([...dislikedRestaurants, dislikedRestaurantName])
-                // setVisitedRestaurants([...visitedRestaurants, visitedRestaurantName])
                 handleEdit();
-                // setFoodName("");
-                // setLikedRestaurantName("")
-                // setDislikedRestaurantName("")
-                // setVisitedRestaurantName("")
-                setFirstName("");
-                setLastName("");
+                getUser()
               }}
             >
               <View style={styles.buttonWrapper}>

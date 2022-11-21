@@ -12,7 +12,7 @@ import {
   ImageBackground,
   Platform,
 } from "react-native";
-import { auth } from "../firebase";
+import { auth, getUser } from "../firebase";
 import {getFirestore, doc, setDoc} from "firebase/firestore"
 
 
@@ -25,9 +25,11 @@ const Welcome = () => {
   const [password, setPassword] = useState("");
 
   useEffect(()=>{
+
     const unsubscribe = auth.onAuthStateChanged(user=>{
       if(user){
         navigation.navigate("Home")
+        getUser()
       }
     })
     return unsubscribe // from my research this unsubscribe variable makes it so it stops pinging this listener apparently--- its possible it's not necessary
@@ -41,7 +43,7 @@ const Welcome = () => {
         user = userCredentials.user;
       })
       .then(()=>{
-        setDoc(doc(db, 'users', user.uid),{email:user.email})
+        setDoc(doc(db, 'users', user.uid),{email:user.email, firstName:"", lastName:"", foodGenre:[],affordability:"$", restaurantRating:"4", dietaryRestrictions:"none", likedRestaurants:[], dislikedRestaurants: [], visitedRestaurants:[]})
       })
       .catch((error) => alert(error.message));
   };
