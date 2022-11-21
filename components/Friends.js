@@ -19,6 +19,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import Events from "../components/Events";
 
 const Friends = (props) => {
+  // o: destructure this above
   const { currentGroup } = props
   const navigation = useNavigation();
   const [friends, setFriends] = useState([{name: "Loading...", id: "unique"}]);
@@ -26,11 +27,17 @@ const Friends = (props) => {
   useEffect(()=> {
     const unsub = onSnapshot(collection(db, "users"),  (snapshot)=> {
       let members = []
+
+        // o: what's up with the indentation here?
         snapshot.docs.map(doc=> {
+          // o: please avoid writing code like this... 1) no indentation 2) one line if
+          //  also, is there every a point where userIds is not set on currentGroup?
           if (currentGroup.userIds?.includes(doc.id) && doc.id != auth.currentUser.uid)
           members.push({...doc.data(), id: doc.id})
         })
       setFriends(members)
+
+      // ahem*... remove
       console.log("FRIENDS", friends)
     })
 

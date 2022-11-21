@@ -33,6 +33,8 @@ const Welcome = () => {
     return unsubscribe // from my research this unsubscribe variable makes it so it stops pinging this listener apparently--- its possible it's not necessary
   },[])
 
+  // o: not sure why you are using thenable statements here if you can just
+  //  use async / await... this goes for any other place you are using them
   const handleSignup = async () => {
     let user;
     auth

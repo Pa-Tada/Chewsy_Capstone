@@ -4,6 +4,8 @@ const morgan = require("morgan");
 const app = express();
 module.exports = app;
 
+// o: I am assuming all the server code is moot now right? if so.. remove
+//  ...removing code is very satisfying to me
 
 // logging middleware
 app.use(morgan("dev"));

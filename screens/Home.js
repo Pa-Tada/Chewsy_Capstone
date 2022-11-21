@@ -21,6 +21,8 @@ const Home = () => {
 
   // Oliviarodrigo@gmail.com
   const userInfo = () => {
+    // o: you can use find here
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
     const filteredUsers = allUsers.filter((user)=> user.id===auth.currentUser.uid)
     setUser(filteredUsers[0])
     console.log("USER", user);
@@ -28,6 +30,7 @@ const Home = () => {
 
   useEffect(() => {
      userInfo()
+    //  o: excuse me?
   }, [user?.groupIds]);
 
   const groupLastItem = () => {
@@ -102,6 +105,7 @@ const Home = () => {
       <Footer />
     </SafeAreaView>
   );
+  // o: please remove
   // } else {
   //   return (
   //     <View>

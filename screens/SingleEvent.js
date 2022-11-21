@@ -76,6 +76,7 @@ export default function EventPage() {
             Event Date: {eventDate}
             {"\n"}
           </Text>
+          {/* o: you can use !isShown && ... in these sitations like you did below */}
           {!isShown ? (
             <View>
               <TouchableOpacity
@@ -230,6 +231,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     backgroundColor: "orange",
   },
+  // o: please remove
   // buttonWrapper: {
   //   paddingVertical: 30,
   //   paddingHorizontal: 10,

@@ -14,6 +14,7 @@ import {
   where,
 } from "firebase/firestore";
 
+// o: is it ok for these to be exposed like this?
 const firebaseConfig = {
   apiKey: "AIzaSyAEHjcMAwTGGilDO0R5rEv9UgMjQ9EABl0",
   authDomain: "chewsy-72992.firebaseapp.com",

@@ -77,6 +77,7 @@ const Profile = () => {
   const [visitedRestaurantName, setVisitedRestaurantName] = useState("");
 
   const handleEdit = () => {
+      // o: you can use the shorthand here
      setDoc(doc(db, "users", user.id), {
       email: user.data.email,
       firstName: firstName,

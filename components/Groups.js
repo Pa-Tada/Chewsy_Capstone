@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { auth, db } from "../firebase";
 import {collection,getDocs,onSnapshot,addDoc,deleteDoc,doc, orderBy,serverTimestamp,getDoc,query,where} from "firebase/firestore";
 
+// o: the indentation is not good in this document
 
 const Groups = (props) => {
   const {groupIds} = props
@@ -14,15 +15,21 @@ const Groups = (props) => {
   useEffect(() => {
     const q = query(collection(db, "groups"), orderBy("createdAt", "desc"))
     const unsub = onSnapshot(q,  (snapshot)=> {
+
+    // o: why choose this name? what is the advantage of shaving a few characters off of the name
+    //  ... please remember, that intellisense is your friend
     let grArr = []
       snapshot.docs.map(doc=> {
         if (groupIds?.includes(doc.id))
         grArr.push({...doc.data(), id: doc.id})
       })
     setGroups(grArr)
+
+    // ahem*, please remove
     console.log("GROUPS", groups)
   })
   return unsub
+  // o: let's talk about this dependancy array
   }, [groupIds, setGroups]);
 
   return (

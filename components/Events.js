@@ -5,8 +5,10 @@ import { useNavigation } from "@react-navigation/native";
 import { auth, db } from "../firebase";
 import {collection,getDocs,onSnapshot,addDoc,deleteDoc,doc, orderBy,serverTimestamp,getDoc,query,where} from "firebase/firestore";
 
+// o: the formatting on this page needs some work
 
 const Events = (props) => {
+  // o: destructure this above
   const {groupIds} = props
   const navigation = useNavigation();
   const [events, setEvents] = useState([{name: "Loading...", id: "unique"}]);
@@ -20,10 +22,13 @@ const Events = (props) => {
         evArr.push({...doc.data(), id: doc.id})
       })
       setEvents(evArr)
+      // o: ahem*... remove
     console.log("EVENTS", events)
   })
   return unsub
-  }, [groupIds, setEvents]);
+
+  // o: let's talk about this dependancy array? 🤔
+  }, [groupIds, setEvents]); 
 
 
   if (events?.length){
