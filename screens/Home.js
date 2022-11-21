@@ -93,11 +93,11 @@ const Home = () => {
             />
           </TouchableOpacity>
         </View>
-        <Groups groupIds={user.groupIds}/>
+        <Groups groupIds={user?.groupIds}/>
       </View>
       <View style={styles.eventsWrapper}>
         <Text style={styles.sectionTitle}>Your Events</Text>
-        <Events groupIds={user.groupIds}/>
+        <Events groupIds={user?.groupIds}/>
       </View>
       <Footer />
     </SafeAreaView>

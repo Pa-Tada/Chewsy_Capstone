@@ -57,28 +57,28 @@ const Profile = () => {
 
   console.log("USER WITHIN FORM:", user)
   // console.log(auth.currentUser.email)
-  const [firstName, setFirstName] = useState(user.data.firstName);
-  const [lastName, setLastName] = useState(user.data.lastName);
+  const [firstName, setFirstName] = useState(user?.firstName);
+  const [lastName, setLastName] = useState(user?.lastName);
 
   const [foodName, setFoodName] = useState("");
-  const [foodGenre, setFoodGenre] = useState(user.data.foodGenre);
+  const [foodGenre, setFoodGenre] = useState(user?.foodGenre);
 
-  const [restaurantRating, setRestaurantRating] = useState(user.data.restaurantRating);
-  const [dietaryRestrictions, setDietaryRestrictions] = useState(user.data.dietaryRestrictions);
-  const [affordability, setAffordability] = useState(user.data.affordability); // probably use int here, or string.length
+  const [restaurantRating, setRestaurantRating] = useState(user?.restaurantRating);
+  const [dietaryRestrictions, setDietaryRestrictions] = useState(user?.dietaryRestrictions);
+  const [affordability, setAffordability] = useState(user?.affordability); // probably use int here, or string.length
 
-  const [likedRestaurants, setLikedRestaurants] = useState(user.data.likedRestaurants);
+  const [likedRestaurants, setLikedRestaurants] = useState(user?.likedRestaurants);
   const [likedRestaurantName, setLikedRestaurantName] = useState("");
 
-  const [dislikedRestaurants, setDislikedRestaurants] = useState(user.data.dislikedRestaurants);
+  const [dislikedRestaurants, setDislikedRestaurants] = useState(user?.dislikedRestaurants);
   const [dislikedRestaurantName, setDislikedRestaurantName] = useState("");
 
-  const [visitedRestaurants, setVisitedRestaurants] = useState(user.data.visitedRestaurants);
+  const [visitedRestaurants, setVisitedRestaurants] = useState(user?.visitedRestaurants);
   const [visitedRestaurantName, setVisitedRestaurantName] = useState("");
 
   const handleEdit = () => {
      setDoc(doc(db, "users", user.id), {
-      email: user.data.email,
+      email: user.email,
       firstName: firstName,
       lastName: lastName,
       foodGenre: foodGenre,
