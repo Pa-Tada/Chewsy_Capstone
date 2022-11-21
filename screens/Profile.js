@@ -65,7 +65,7 @@ const Profile = () => {
 
   const [restaurantRating, setRestaurantRating] = useState(user.data.restaurantRating);
   const [dietaryRestrictions, setDietaryRestrictions] = useState(user.data.dietaryRestrictions);
-  const [affordability, setAffordability] = useState(user.data.affordability);
+  const [affordability, setAffordability] = useState(user.data.affordability); // probably use int here, or string.length
 
   const [likedRestaurants, setLikedRestaurants] = useState(user.data.likedRestaurants);
   const [likedRestaurantName, setLikedRestaurantName] = useState("");
