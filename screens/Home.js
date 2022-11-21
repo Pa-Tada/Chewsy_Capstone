@@ -6,6 +6,7 @@ import { Icon, Divider, Input } from "@rneui/themed";
 import { auth, db, currUser, allUsers, allGroups, allEvents } from "../firebase";
 import {collection,getDocs,onSnapshot,addDoc,deleteDoc,doc,orderBy,serverTimestamp,getDoc,query,where} from "firebase/firestore";
 import Footer from "../components/Footer";
+import Groups from "../components/Groups";
 
 const createGroupField = [
   { id: 1, field: "Group Name" },
@@ -15,22 +16,18 @@ const createGroupField = [
 const Home = () => {
   const navigation = useNavigation();
   const [user, setUser] = useState({});
-  const [groups, setGroups] = useState([]);
+  const [groups, setGroups] = useState([{name: "Loading...", id: "unique"}]);
   const [events, setEvents] = useState([]);
   const [groupModalOpen, setGroupModalOpen] = useState(false);
 
-
-  //  Oliviarodrigo@gmail.com
-  //  ADD .orderBy("timestamp", "desc") to all queries to sor
+  // Oliviarodrigo@gmail.com
   const userActivity = () => {
-
     const filteredUsers = allUsers.filter((user)=> user.id===auth.currentUser.uid)
     setUser(filteredUsers[0])
     console.log("USER", user);
 
     let filteredGroups = []
     let filteredEvents = []
-
     user.groupIds?.map((groupId)=> {
        allGroups.filter((group)=> {
         if (group.id==groupId) filteredGroups.push(group)
@@ -39,55 +36,15 @@ const Home = () => {
         if (event.groupId==groupId) filteredEvents.push(event)
       })
     })
-
     setGroups(filteredGroups)
     console.log("GROUPS", groups)
     setEvents(filteredEvents)
     console.log("EVENTS", events)
   };
+
   useEffect(() => {
-    userActivity()
-  }, []);
-
-  // const getUser = async () => {
-
-  //     let grArr = [];
-  //     await user.groupIds?.map((groupId) => {
-  //       const docRef = doc(db, "groups", groupId); //   const gettingGroup = await getDoc(docRef); arr.push({ ...gettingGroup.data(), id: gettingGroup.id });});
-  //       onSnapshot(docRef, (doc) => {
-  //         grArr.push({ ...doc.data(), id: doc.id });
-  //       });
-  //     })
-  //     setGroups(grArr);
-  //     console.log("GROUPS", groups);
-
-  //     // let grArr = [];
-  //     //   const ocRef = doc(db, "groups", "zJo7r2oP9NT0I3dumF6l");
-  //     //   onSnapshot(ocRef, (doc) => {
-  //     //     grArr.push({ ...doc.data(), id: doc.id });
-  //     //   });
-  //     // setGroups(grArr);
-  //     // console.log("GROUPS", groups);
-
-  //     let evArr = [];
-  //     await user.groupIds?.map((groupId) => {
-  //       const colRef = collection(db, "events");
-  //       const gettingEvent = query(colRef, where("groupId", "==", `${groupId}`));
-  //         onSnapshot(gettingEvent, (snapshot) => {
-  //           snapshot.docs.forEach((doc) => {
-  //             evArr.push({ ...doc.data(), id: doc.id });
-  //           });
-  //         });
-  //     })
-  //     setEvents(evArr);
-  //     console.log("EVENTS", events);
-
-  //     const docRef =  doc(db, "users", auth.currentUser.uid); ////const gettingUser = await getDoc(docRef);
-  //     onSnapshot(docRef, (doc) => {
-  //       setUser({ ...doc.data(), id: doc.id }); //setUser({ ...gettingUser.data(), id: gettingUser.id })
-  //     });
-  //     console.log("USER", user);
-  // };
+     userActivity()
+  }, [user.groupIds]);
 
   const groupLastItem = () => {
     return (
@@ -105,7 +62,7 @@ const Home = () => {
     );
   };
 
-  if (user.groupIds?.length > 0){
+  //if (events.length > 0){
   return (
     <SafeAreaView style={styles.container}>
       <Divider />
@@ -139,12 +96,11 @@ const Home = () => {
 
       <View style={styles.groupsWrapper}>
         <View style={styles.titleContainer}>
-          <Text style={styles.sectionTitle}>{user.firstName}'s Groups</Text>
+          <Text style={styles.sectionTitle}>Your Groups</Text>
           <TouchableOpacity
             style={styles.iconWrapper}
             onPress={() => setGroupModalOpen(true)}
           >
-            {/* CREATE GROUP */}
             <Icon
               type="antdesign"
               size="28px"
@@ -153,20 +109,23 @@ const Home = () => {
             />
           </TouchableOpacity>
         </View>
-
+{/* <Groups groupIds={user.groupIds}/> */}
         <View style={styles.groups}>
           <FlatList
-          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
             data={groups}
             keyExtractor={(item) => item.id}
             horizontal
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={styles.list}
-                onPress={() => navigation.navigate("SingleGroup")}
+                onPress={() => navigation.navigate("SingleGroup", {groupId: item.id, currentGroup: item})}
               >
                 <View style={styles.shadow}>
-                  {/* <Image style={styles.img} source={{ uri: item.imgUrl }} /> */}
+                  <Image
+                    style={styles.groupImg}
+                    source={{ uri: item.imgUrl }}
+                  />
                 </View>
                 <Text style={styles.name}>{item.name}</Text>
               </TouchableOpacity>
@@ -175,10 +134,10 @@ const Home = () => {
         </View>
       </View>
       <View style={styles.eventsWrapper}>
-        <Text style={styles.sectionTitle}>{user.firstName}'s Events</Text>
+        <Text style={styles.sectionTitle}>Your Events</Text>
         <View style={styles.events}>
           <FlatList
-          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
             data={events}
             keyExtractor={(item) => item.id}
             horizontal
@@ -203,12 +162,12 @@ const Home = () => {
       <Footer />
     </SafeAreaView>
   );
-} else {
-  return (
-    <Text> Looks like you don't have any plans yet. Create groups to get started! </Text>
-  )
+  // } else {
+  //   return (
+  //     <Text> Looks like you don't have any plans yet. Create groups to get started! </Text>
+  //   )
+  // }
 }
-};
 
 const styles = StyleSheet.create({
   container: {
@@ -253,15 +212,19 @@ const styles = StyleSheet.create({
   },
   groups: {},
   list: {
-    borderWidth: 1,
+    //borderWidth: 1,
     borderRadius: 15,
     marginTop: 24,
     marginRight: 8,
     width: 180,
-    height: 180,
+    height: 200,
     alignItems: "center",
   },
-  img: {},
+  groupImg: {
+    width: 180,
+    height: 180,
+    borderRadius: 15,
+  },
   name: {
     marginTop: 2,
     fontWeight: "bold",
@@ -269,7 +232,7 @@ const styles = StyleSheet.create({
   },
   eventsWrapper: {
     paddingHorizontal: 12,
-    flex: 1.2,
+    flex: 1,
   },
   events: {},
   eventList: {
@@ -278,8 +241,9 @@ const styles = StyleSheet.create({
     width: 180,
     height: 250,
     borderRadius: 15,
+    alignItems: "center",
   },
-  eventImg: {
+eventImg: {
     width: 180,
     height: 180,
     borderRadius: 15,

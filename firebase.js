@@ -1,5 +1,5 @@
 import firebase from "firebase/compat";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, collection,getDocs,onSnapshot,addDoc,deleteDoc,doc,orderBy,serverTimestamp,getDoc,query,where } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAEHjcMAwTGGilDO0R5rEv9UgMjQ9EABl0",
@@ -21,5 +21,34 @@ if (firebase.apps.length === 0) {
 
 const auth = firebase.auth();
 const db = getFirestore();
+  //  ADD .orderBy("timestamp", "desc") to all queries to sort
+const usersRef = collection(db, "users")
+let allUsers;
+onSnapshot(usersRef, (docSnap)=> {
+allUsers = []
+  docSnap.forEach((doc)=> {
+    allUsers.push({ ...doc.data(), id: doc.id }
+    )
+  })
+})
 
-export { auth, db };
+const groupsRef = collection(db, "groups")
+let allGroups;
+onSnapshot(groupsRef, (docSnap)=> {
+allGroups = []
+  docSnap.forEach((doc)=> {
+    allGroups.push({ ...doc.data(), id: doc.id })
+  })})
+
+
+const eventsRef = collection(db, "events")
+let allEvents;
+onSnapshot(eventsRef, (docSnap)=> {
+allEvents = []
+  docSnap.forEach((doc)=> {
+    allEvents.push({ ...doc.data(), id: doc.id })
+  })})
+
+
+
+export { auth, db, allUsers, allGroups, allEvents };
