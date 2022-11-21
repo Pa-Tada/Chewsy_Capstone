@@ -28,7 +28,7 @@ const Home = () => {
 
   useEffect(() => {
      userInfo()
-  }, [user.groupIds]);
+  }, [user?.groupIds]);
 
   const groupLastItem = () => {
     return (
@@ -46,7 +46,7 @@ const Home = () => {
     );
   };
 
-if (user.groupIds?.length){
+// if (user.groupIds?.length){
   return (
     <SafeAreaView style={styles.container}>
       <Divider />
@@ -102,12 +102,16 @@ if (user.groupIds?.length){
       <Footer />
     </SafeAreaView>
   );
-  } else {
-    return (
-      <Text>Looks like you don't have any plans yet. Create groups to get started!</Text>
-    )
+  // } else {
+  //   return (
+  //     <View>
+  //       <Text>Looks like you don't have any plans yet. Create groups to get started!</Text>
+  //     <Footer />
+  //     </View>
+
+  //   )
   }
-}
+// }
 
 const styles = StyleSheet.create({
   container: {
