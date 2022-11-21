@@ -3,7 +3,7 @@ import {StyleSheet,Text,View,TouchableOpacity,FlatList,Image,SafeAreaView,Button
 import { useNavigation } from "@react-navigation/native";
 
 import { auth, db, allUsers, allEvents } from "../firebase";
-import {collection,getDocs,onSnapshot,addDoc,deleteDoc,doc,orderBy,serverTimestamp,getDoc,query,where} from "firebase/firestore";
+import {collection,getDocs,onSnapshot,addDoc,deleteDoc,doc, orderBy,serverTimestamp,getDoc,query,where} from "firebase/firestore";
 
 
 const Groups = (props) => {
@@ -11,42 +11,53 @@ const Groups = (props) => {
   const navigation = useNavigation();
   const [groups, setGroups] = useState([{name: "Loading...", id: "unique"}]);
 
-  const groupsRef = collection(db, "groups")
-  let allGroups;
-  onSnapshot(groupsRef, (docSnap)=> {
-  allGroups = []
-    docSnap.forEach((doc)=> {
-      allGroups.push({ ...doc.data(), id: doc.id })
-    })})
+  // const groupsRef = collection(db, "groups")
+  // let allGroups;
+  // onSnapshot(groupsRef, (docSnap)=> {
+  // allGroups = []
+  //   docSnap.forEach((doc)=> {
+  //     allGroups.push({ ...doc.data(), id: doc.id })
+  //   })})
+  // groupIds?.map((groupId) => {
+  //   let allGroups = []
+  //   onSnapshot(collection(db, "groups"), (docSnap)=> {
+  //     docSnap.docs.map((doc)=> {
+  //       if (doc.id == groupId) allGroups.push({ ...doc.data(), id: doc.id })})
+  //   })
+  // })
 
   useEffect(() => {
-    const getGroups = async() => {
-        let filteredGroups = []
-        groupIds?.map((groupId)=> {
-          allGroups.filter((group)=> {
-            if (group.id==groupId) filteredGroups.push(group)
-          })
-        })
-        // await groupIds?.map((groupId) => {
-        //   const docRef = doc(db, "groups", groupId);
-        //   onSnapshot(docRef, (doc) => {
-        //     filteredGroups.push({ ...doc.data(), id: doc.id });
-        //   });
-        // });
-        setGroups(filteredGroups)
-        console.log("GROUPS", groups)
-    }
-    getGroups()
-  }, [groups.length, groupIds]);
+const unsub = onSnapshot(collection(db, "groups"),  (snapshot)=> {
+  let grArr = []
+ snapshot.docs.map( doc=> {
+    if (groupIds?.includes(doc.id))
+    grArr.push({...doc.data(), id: doc.id})
+  })
+  setGroups(grArr)
+  // console.log("PS", ps)
+})
+    // const getGroups = async() => {
+    //     let filteredGroups = []
+    //     groupIds?.map((groupId)=> {
+    //       allGroups.filter((group)=> {
+    //         if (group.id==groupId) filteredGroups.push(group)
+    //       })
+    //     })
+    //     setGroups(filteredGroups)
+
+    // }
+    // getGroups()
+return unsub
+}, [groupIds]);
 
 
-  if (groups.length){
+  if (groups?.length){
   return (
         <View style={styles.groups}>
           <FlatList
           showsHorizontalScrollIndicator={false}
             data={groups}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item?.id}
             horizontal
             renderItem={({ item }) => (
               <TouchableOpacity
@@ -56,10 +67,10 @@ const Groups = (props) => {
                 <View style={styles.shadow}>
                   <Image
                     style={styles.groupImg}
-                    source={{ uri: item.imgUrl }}
+                    source={{ uri: item?.imgUrl }}
                   />
                 </View>
-                <Text style={styles.name}>{item.name}</Text>
+                <Text style={styles.name}>{item?.name}</Text>
               </TouchableOpacity>
             )}
           />

@@ -16,7 +16,7 @@ const createGroupField = [
 const Home = () => {
   const navigation = useNavigation();
   const [user, setUser] = useState({});
-  const [groups, setGroups] = useState([{name: "Loading...", id: "unique"}]);
+  //const [groups, setGroups] = useState([{name: "Loading...", id: "unique"}]);
   const [events, setEvents] = useState([]);
   const [groupModalOpen, setGroupModalOpen] = useState(false);
 
@@ -26,18 +26,18 @@ const Home = () => {
     setUser(filteredUsers[0])
     console.log("USER", user);
 
-    let filteredGroups = []
+    //let filteredGroups = []
     let filteredEvents = []
     user.groupIds?.map((groupId)=> {
-       allGroups.filter((group)=> {
-        if (group.id==groupId) filteredGroups.push(group)
-      })
+      //  allGroups.filter((group)=> {
+      //   if (group.id==groupId) filteredGroups.push(group)
+      // })
       allEvents.filter((event)=> {
         if (event.groupId==groupId) filteredEvents.push(event)
       })
     })
-    setGroups(filteredGroups)
-    console.log("GROUPS", groups)
+    // setGroups(filteredGroups)
+    // console.log("GROUPS", groups)
     setEvents(filteredEvents)
     console.log("EVENTS", events)
   };
@@ -109,8 +109,8 @@ const Home = () => {
             />
           </TouchableOpacity>
         </View>
-{/* <Groups groupIds={user.groupIds}/> */}
-        <View style={styles.groups}>
+<Groups groupIds={user.groupIds}/>
+        {/* <View style={styles.groups}>
           <FlatList
           showsHorizontalScrollIndicator={false}
             data={groups}
@@ -131,7 +131,7 @@ const Home = () => {
               </TouchableOpacity>
             )}
           />
-        </View>
+        </View> */}
       </View>
       <View style={styles.eventsWrapper}>
         <Text style={styles.sectionTitle}>Your Events</Text>
