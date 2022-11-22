@@ -33,16 +33,16 @@ import Events from "../components/Events";
 import Friends from "../components/Friends";
 
 const addFriendField = [{ id: 1, field: "Email/Username" }];
-const addEventField = [
-  { id: 1, field: "Event Time" },
-  { id: 2, field: "Event Date" },
-];
 
 const SingleGroup = ({ route }) => {
   const { groupId, currentGroup } = route.params;
   const navigation = useNavigation();
   const [modalOpen, setModalOpen] = useState(false);
   const [eventModalOpen, setEventModalOpen] = useState(false);
+
+  useEffect(()=>{
+    onSnapshot(collection(db, "users"),()=>{})
+  })
 
   const lastItem = () => {
     return (
@@ -76,6 +76,23 @@ const SingleGroup = ({ route }) => {
   console.log(user.data.foodGenre);
   const [userFoodGenre, setUserFoodGenre] = useState(user.data.foodGenre);
   const [userFoodGenreName, setUserFoodGenreName] = useState("");
+
+  const handleFoodGenreEdit = () => {
+    setDoc(doc(db, "users", user.id), {
+      imgUrl: user.data.imgUrl,
+      email: user.data.email,
+      firstName: user.data.firstName,
+      lastName: user.data.lastName,
+      groupIds: user.data.groupIds,
+      foodGenre: userFoodGenre,
+      restaurantRating: user.data.restaurantRating,
+      dietaryRestrictions: user.data.dietaryRestrictions,
+      affordability: user.data.affordability,
+      likedRestaurants: user.data.likedRestaurants,
+      dislikedRestaurants: user.data.dislikedRestaurants,
+      visitedRestaurants: user.data.visitedRestaurants,
+    });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -135,18 +152,6 @@ const SingleGroup = ({ route }) => {
                 <Text style={styles.sectionTitle}>Create Event</Text>
 
                 <View style={styles.form}>
-                  {/* <FlatList
-                    ListFooterComponent={eventLastItem}
-                    data={addEventField}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => (
-                      <Input
-                        labelStyle={{ fontWeight: "normal" }}
-                        inputStyle={{ color: "white", fontSize: 14 }}
-                        label={item.field}
-                      />
-                    )}
-                  /> */}
                   <Input
                     labelStyle={{ fontWeight: "normal" }}
                     inputStyle={{ color: "white", fontSize: 14 }}
@@ -161,15 +166,37 @@ const SingleGroup = ({ route }) => {
                     labelStyle={{ fontWeight: "normal" }}
                     inputStyle={{ color: "white", fontSize: 14 }}
                     label="What are you feeling?"
-                    value={userFoodGenre}
+                    value={userFoodGenreName}
+                    onChangeText={setUserFoodGenreName}
                   />
-                    {/* <View style = {}> */}
-                    <FlatList
-                      data={user.data.foodGenre}
-                      renderItem={(foodGenre) => <Text style = {styles.foodListItem}>{foodGenre.item}</Text>}
-                    />
-                    {/* </View> */}
-
+                  <TouchableOpacity
+                    style={styles.buttonWrapper}
+                    onPress={() => {
+                      setUserFoodGenre([...userFoodGenre, userFoodGenreName]);
+                      // handleFoodGenreEdit();
+                      console.log(userFoodGenre)
+                      handleFoodGenreEdit()
+                      setUserFoodGenreName("")
+                      getUser()
+                    }}
+                  >
+                    <Text>Add Food Genre</Text>
+                  </TouchableOpacity>
+                  {/* <View style = {}> */}
+                  <FlatList
+                    data={user.data.foodGenre}
+                    renderItem={(foodGenre) => (
+                      <View style={styles.foodGenres}>
+                        <Text style={styles.foodListItem}>
+                          {foodGenre.item}
+                        </Text>
+                        <TouchableOpacity style={styles.foodButtonWrapper}>
+                          <Text>-</Text>
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                  />
+                  {/* </View> */}
 
                   <TouchableOpacity onPress={() => setEventModalOpen(false)}>
                     <View style={styles.buttonWrapper}>
@@ -216,17 +243,32 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#242526",
   },
-  foodListItem:{
-    color: "white",
-    fontWeight: "normal",
-    paddingLeft:20,
-    paddingTop:5
-  },
   buttonWrapper: {
     paddingVertical: 10,
     paddingHorizontal: 10,
     borderRadius: 60,
     width: 150,
+    backgroundColor: "orange",
+    alignItems: "center",
+    alignSelf: "center",
+  },
+  foodGenres: {
+    flexDirection: "row",
+    justifyContent: "",
+    padding: 5,
+  },
+  foodListItem: {
+    color: "white",
+    fontWeight: "normal",
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 5,
+  },
+  foodButtonWrapper: {
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 80,
+    width: 50,
     backgroundColor: "orange",
     alignItems: "center",
     alignSelf: "center",
