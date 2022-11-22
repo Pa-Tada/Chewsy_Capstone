@@ -10,15 +10,27 @@ import {
   Modal,
   Button,
 } from "react-native";
-import { auth, db, allUsers } from "../firebase";
-import {collection,getDocs,onSnapshot,addDoc,deleteDoc,doc,orderBy,serverTimestamp,getDoc,query,where} from "firebase/firestore";
+import { auth, db, allUsers, user, getUser } from "../firebase";
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  addDoc,
+  deleteDoc,
+  doc,
+  orderBy,
+  serverTimestamp,
+  getDoc,
+  query,
+  where,
+  setDoc,
+} from "firebase/firestore";
 import { Icon, Divider, Input } from "@rneui/themed";
 import Footer from "../components/Footer";
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Events from "../components/Events";
 import Friends from "../components/Friends";
-
 
 const addFriendField = [{ id: 1, field: "Email/Username" }];
 const addEventField = [
@@ -27,11 +39,10 @@ const addEventField = [
 ];
 
 const SingleGroup = ({ route }) => {
-  const { groupId, currentGroup } = route.params
+  const { groupId, currentGroup } = route.params;
   const navigation = useNavigation();
   const [modalOpen, setModalOpen] = useState(false);
   const [eventModalOpen, setEventModalOpen] = useState(false);
-
 
   const lastItem = () => {
     return (
@@ -62,6 +73,9 @@ const SingleGroup = ({ route }) => {
     );
   };
 
+  console.log(user.data.foodGenre);
+  const [userFoodGenre, setUserFoodGenre] = useState(user.data.foodGenre);
+  const [userFoodGenreName, setUserFoodGenreName] = useState("");
 
   return (
     <SafeAreaView style={styles.container}>
@@ -110,7 +124,7 @@ const SingleGroup = ({ route }) => {
             />
           </TouchableOpacity>
         </View>
-        <Friends currentGroup={currentGroup}/>
+        <Friends currentGroup={currentGroup} />
       </View>
       <Modal visible={eventModalOpen} animationType="slide">
         <SafeAreaView style={styles.modalContent}>
@@ -121,7 +135,7 @@ const SingleGroup = ({ route }) => {
                 <Text style={styles.sectionTitle}>Create Event</Text>
 
                 <View style={styles.form}>
-                  <FlatList
+                  {/* <FlatList
                     ListFooterComponent={eventLastItem}
                     data={addEventField}
                     keyExtractor={(item) => item.id}
@@ -132,7 +146,40 @@ const SingleGroup = ({ route }) => {
                         label={item.field}
                       />
                     )}
+                  /> */}
+                  <Input
+                    labelStyle={{ fontWeight: "normal" }}
+                    inputStyle={{ color: "white", fontSize: 14 }}
+                    label="Event Date"
                   />
+                  <Input
+                    labelStyle={{ fontWeight: "normal" }}
+                    inputStyle={{ color: "white", fontSize: 14 }}
+                    label="Event Time"
+                  />
+                  <Input
+                    labelStyle={{ fontWeight: "normal" }}
+                    inputStyle={{ color: "white", fontSize: 14 }}
+                    label="What are you feeling?"
+                    value={userFoodGenre}
+                  />
+                    {/* <View style = {}> */}
+                    <FlatList
+                      data={user.data.foodGenre}
+                      renderItem={(foodGenre) => <Text style = {styles.foodListItem}>{foodGenre.item}</Text>}
+                    />
+                    {/* </View> */}
+
+
+                  <TouchableOpacity onPress={() => setEventModalOpen(false)}>
+                    <View style={styles.buttonWrapper}>
+                      <Text style={styles.button}>Create Event</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <Button
+                    title="Cancel"
+                    onPress={() => setEventModalOpen(false)}
+                  ></Button>
                 </View>
               </View>
               {/* <Footer /> */}
@@ -156,7 +203,7 @@ const SingleGroup = ({ route }) => {
             />
           </TouchableOpacity>
         </View>
-        <Events groupIds={groupId}/>
+        <Events groupIds={groupId} />
       </View>
 
       <Footer />
@@ -168,6 +215,12 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#242526",
+  },
+  foodListItem:{
+    color: "white",
+    fontWeight: "normal",
+    paddingLeft:20,
+    paddingTop:5
   },
   buttonWrapper: {
     paddingVertical: 10,
