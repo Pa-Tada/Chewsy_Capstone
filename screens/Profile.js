@@ -21,11 +21,12 @@ import {
   getDoc,
   doc,
   setDoc,
+  updateDoc
 } from "firebase/firestore";
 import { set } from "react-native-reanimated";
 import { Button } from "@rneui/base";
 
-// Dummy image - need to make dynamic based on logged in user
+
 const firstItem = () => {
   return (
     <View>
@@ -92,7 +93,7 @@ const Profile = () => {
   };
   return (
     <View style={styles.container}>
-      <Divider />
+      <Divider color="orange"/>
       <View style={styles.contents}>
         <Text style={styles.sectionTitle}>Edit Profile</Text>
 

@@ -71,15 +71,15 @@ const getUser = async () => {
 
       if (doc.id === auth.currentUser.uid) {
         user = { ...doc.data(), id: doc.id };
-        console.log("USER:", user);
+        console.log("Firebase.js  USER:", user);
       }
     });
     const docRef = doc(db, "users", auth.currentUser.uid);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
+      console.log("Firebase.js docSnap", docSnap.data());
     } else { // doc.data() will be undefined in this case
-      console.log("No such document!");
+      console.log("Firebase.js No such document!");
     }
   }
 };

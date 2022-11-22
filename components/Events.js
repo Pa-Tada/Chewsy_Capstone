@@ -23,7 +23,7 @@ const Events = (props) => {
     console.log("EVENTS", events)
   })
   return unsub
-  }, [groupIds, setEvents]);
+  }, [groupIds]);
 
 
   if (events?.length){

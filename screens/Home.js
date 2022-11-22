@@ -1,80 +1,118 @@
 import React, { useEffect, useState } from "react";
-import {StyleSheet,Text,View,TouchableOpacity,FlatList,Image,SafeAreaView,Button,Modal} from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+  Image,
+  SafeAreaView,
+  Button,
+  Modal,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Icon, Divider, Input } from "@rneui/themed";
 import { auth, db, allUsers } from "../firebase";
-import {collection,getDocs,onSnapshot,addDoc,deleteDoc,doc,orderBy,serverTimestamp,getDoc,query,where} from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  addDoc,
+  deleteDoc,
+  doc,
+  orderBy,
+  serverTimestamp,
+  getDoc,
+  query,
+  where,
+  setDoc, arrayUnion
+} from "firebase/firestore";
 import Footer from "../components/Footer";
 import Groups from "../components/Groups";
 import Events from "../components/Events";
+import CreateGroup from "../components/CreateGroup";
 
-const createGroupField = [
-  { id: 1, field: "Group Name" },
-  { id: 2, field: "Group Members" },
-];
 
 const Home = () => {
   const navigation = useNavigation();
   const [user, setUser] = useState({});
   const [groupModalOpen, setGroupModalOpen] = useState(false);
+  const [groupName, setGroupName] = useState("");
+  const [member, setMember] = useState("");
+  const [members, setMembers] = useState([]);
 
   // Oliviarodrigo@gmail.com
   const userInfo = () => {
-    const filteredUsers = allUsers.filter((user)=> user.id===auth.currentUser.uid)
-    setUser(filteredUsers[0])
-    console.log("USER", user);
+    const filteredUser = allUsers.find(
+      (user) => user.id === auth.currentUser.uid
+    );
+    setUser(filteredUser);
+    console.log("HOMEPAGE USER", user);
   };
 
   useEffect(() => {
-     userInfo()
-  }, [user?.groupIds]);
+    userInfo();
+  }, [user]); // try putting back in user?.groupIds
 
-  const groupLastItem = () => {
-    return (
-      <View>
-        <TouchableOpacity onPress={() => setGroupModalOpen(false)}>
-          <View style={styles.buttonWrapper}>
-            <Text style={styles.button}>Create Group</Text>
-          </View>
-        </TouchableOpacity>
-        <Button
-          title="Cancel"
-          onPress={() => setGroupModalOpen(false)}
-        ></Button>
-      </View>
-    );
+  const handleSubmit = async () => {
+    setMembers([...members, member])
+    const groupDocRef = await addDoc(doc(db, "groups"), {
+      name: groupName,
+      leaderId: auth.currentUser.uid,
+      createdAt: serverTimestamp(),
+      imgUrl: "https://www.clipartmax.com/png/middle/198-1980729_leadership-orange-icon-mcdonnell-douglas-f-4-phantom-ii.png",
+      userIds: members,
+    });
+    await updateDoc(doc(db, "users", auth.currentUser.uid), {
+      groupIds: arrayUnion(groupDocRef.id)
+    });
+    // await updtae doc forr added user also 
+
+    setGroupName("")
+    setMember("")
+    setGroupModalOpen(false)
   };
 
-// if (user.groupIds?.length){
+  // if (user.groupIds?.length){
   return (
     <SafeAreaView style={styles.container}>
-      <Divider />
+      <Divider color="orange" />
 
-      <Modal visible={groupModalOpen} animationType="slide">
+      <Modal visible={groupModalOpen} animationType="slide" transparent={true}>
+        {/* <CreateGroup/> */}
         <SafeAreaView style={styles.modalContent}>
-          <View style={styles.modalContent}>
-            <View style={styles.container}>
-              <Divider />
-              <View style={styles.contents}>
-                <Text style={styles.sectionTitle}>Create Group</Text>
-                <View style={styles.form}>
-                  <FlatList
-                    ListFooterComponent={groupLastItem}
-                    data={createGroupField}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => (
-                      <Input
-                        labelStyle={{ fontWeight: "normal" }}
-                        inputStyle={{ color: "white", fontSize: 14 }}
-                        label={item.field}
-                      />
-                    )}
-                  />
+          <KeyboardAwareScrollView>
+            <View style={styles.form}>
+              <Input
+                labelStyle={{ fontWeight: "normal" }}
+                inputStyle={{ color: "white", fontSize: 14 }}
+                label="Group Name"
+                value={groupName}
+                onChangeText={(text) => setGroupName(text)}
+              />
+              <Input
+                labelStyle={{ fontWeight: "normal" }}
+                inputStyle={{ color: "white", fontSize: 14 }}
+                label="Group Members"
+                value={members}
+                onChangeText={(text) => setMembers(text)}
+              />
+              <TouchableOpacity onPress={handleSubmit}>
+                <View style={styles.buttonWrapper}>
+                  <Text style={styles.button}>Create Group</Text>
                 </View>
-              </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setGroupModalOpen(false)}
+                style={{ color: "white" }}
+              >
+                <Text style={{ color: "white", textAlign: "center" }}>
+                  Cancel
+                </Text>
+              </TouchableOpacity>
             </View>
-          </View>
+          </KeyboardAwareScrollView>
         </SafeAreaView>
       </Modal>
 
@@ -89,15 +127,15 @@ const Home = () => {
               type="antdesign"
               size="28px"
               name="addusergroup"
-              color="gainsboro"
+              color="white"
             />
           </TouchableOpacity>
         </View>
-        <Groups groupIds={user?.groupIds}/>
+        <Groups groupIds={user?.groupIds} />
       </View>
       <View style={styles.eventsWrapper}>
         <Text style={styles.sectionTitle}>Your Events</Text>
-        <Events groupIds={user?.groupIds}/>
+        <Events groupIds={user?.groupIds} />
       </View>
       <Footer />
     </SafeAreaView>
@@ -110,7 +148,7 @@ const Home = () => {
   //     </View>
 
   //   )
-  }
+};
 // }
 
 const styles = StyleSheet.create({
@@ -126,6 +164,7 @@ const styles = StyleSheet.create({
     backgroundColor: "orange",
     alignItems: "center",
     alignSelf: "center",
+    marginBottom: 15,
   },
   titleContainer: {
     flexDirection: "row",
@@ -136,6 +175,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     color: "white",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "white",
+    textAlign: "center",
   },
   iconWrapper: {
     shadowColor: "black",
@@ -158,16 +203,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     flex: 1,
   },
-  modalToggle: {
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: "#f2f2f2",
-    padding: 10,
-    borderRadius: 10,
-    alignSelf: "center",
-  },
   modalContent: {
-    flex: 1,
+    borderWidth: 0.2,
+    borderTopColor: "orange",
+    backgroundColor: "#181818",
+    height: "50%",
+    marginTop: "auto",
+    alignContent: "center",
+    borderRadius: 15,
+  },
+  button: {
+    fontWeight: "semi-bold",
+    fontSize: 15,
+  },
+  form: {
+    color: "red",
+    marginTop: 15,
+    padding: 10,
   },
 });
 

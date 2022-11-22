@@ -65,7 +65,7 @@ const SingleGroup = ({ route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Divider />
+      <Divider color="orange"/>
       <Modal visible={modalOpen} animationType="slide">
         <SafeAreaView style={styles.modalContent}>
           <View style={styles.modalContent}>
@@ -106,7 +106,7 @@ const SingleGroup = ({ route }) => {
               type="antdesign"
               size="28px"
               name="adduser"
-              color="gainsboro"
+              color="white"
             />
           </TouchableOpacity>
         </View>
@@ -152,7 +152,7 @@ const SingleGroup = ({ route }) => {
               type="material-community"
               size="30px"
               name="calendar-plus"
-              color="gainsboro"
+              color="white"
             />
           </TouchableOpacity>
         </View>
