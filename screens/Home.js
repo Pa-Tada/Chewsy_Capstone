@@ -28,7 +28,7 @@ const Home = () => {
 
   useEffect(() => {
      userInfo()
-  }, [user?.groupIds]);
+  }, [user]);
 
   const groupLastItem = () => {
     return (
