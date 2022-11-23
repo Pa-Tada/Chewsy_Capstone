@@ -56,10 +56,11 @@ const groupDocRef = await addDoc(collection(db, "groups"), {
       groupIds: arrayUnion(groupDocRef.id),
     });
 
+    console.log("USER IN CREATEGROUP BEFORE SET", user)
     await setUser(onSnapshot(doc(db, "users", auth.currentUser.uid), (snapshot)=> {
       return { ...snapshot.data(), id: snapshot.id }
     }))
-    console.log("User in CreateGroup.js", user)
+    console.log("User in CreateGroup AFTER SET", user)
 
    // await Promise.all(
       members.map(async(memberId)=> {
