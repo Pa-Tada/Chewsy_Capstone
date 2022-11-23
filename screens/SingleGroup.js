@@ -40,7 +40,7 @@ const SingleGroup = ({ route }) => {
   const navigation = useNavigation();
   const [modalOpen, setModalOpen] = useState(false);
   const [eventModalOpen, setEventModalOpen] = useState(false);
-  const [userFoodGenre, setUserFoodGenre] = useState(user.data.foodGenre);
+  const [userFoodGenre, setUserFoodGenre] = useState(user.foodGenre);
   const [userFoodGenreName, setUserFoodGenreName] = useState("");
 
   // useEffect(() => {
@@ -84,18 +84,18 @@ const SingleGroup = ({ route }) => {
 
   const handleFoodGenreEdit = () => {
     setDoc(doc(db, "users", user.id), {
-      imgUrl: user.data.imgUrl,
-      email: user.data.email,
-      firstName: user.data.firstName,
-      lastName: user.data.lastName,
-      groupIds: user.data.groupIds,
+      imgUrl: userimgUrl,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      groupIds: user.groupIds,
       foodGenre: userFoodGenre,
-      restaurantRating: user.data.restaurantRating,
-      dietaryRestrictions: user.data.dietaryRestrictions,
-      affordability: user.data.affordability,
-      likedRestaurants: user.data.likedRestaurants,
-      dislikedRestaurants: user.data.dislikedRestaurants,
-      visitedRestaurants: user.data.visitedRestaurants,
+      restaurantRating: user.restaurantRating,
+      dietaryRestrictions: user.dietaryRestrictions,
+      affordability: user.affordability,
+      likedRestaurants: user.likedRestaurants,
+      dislikedRestaurants: user.dislikedRestaurants,
+      visitedRestaurants: user.visitedRestaurants,
     });
   };
 
@@ -189,7 +189,7 @@ const SingleGroup = ({ route }) => {
                   </TouchableOpacity>
                   {/* <View style = {}> */}
                   <FlatList
-                    data={user.data.foodGenre}
+                    data={user.foodGenre}
                     renderItem={(foodGenre) => (
                       <View style={styles.foodGenres}>
                         <Text style={styles.foodListItem}>

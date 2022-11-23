@@ -14,6 +14,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { auth, db, getUser, user } from "../firebase";
 import firebase from "firebase/compat";
+import RNPickerSelect from "react-native-picker-select";
 import {
   getFirestore,
   collection,
@@ -140,8 +141,22 @@ const Profile = () => {
               labelStyle={{ fontWeight: "normal" }}
               inputStyle={{ color: "white", fontSize: 14 }}
               label="Food Genre"
-              value={foodName}
+              // value={foodName}
               onChangeText={(text) => setFoodName(text)}
+            >
+              {foodName}
+            </Input>
+            <RNPickerSelect
+              labelStyle={{ fontWeight: "normal" }}
+              inputStyle={{ color: "white", fontSize: 14 }}
+              label="Food Genre"
+              onValueChange={(value) => setFoodName(value)}
+              items={[
+                { label: "Chinese", value: "Chinese" },
+                { label: "Italian", value: "Italian" },
+                { label: "Thai", value: "Thai" },
+                { label: "American", value: "American" },
+              ]}
             />
 
             <TouchableOpacity
@@ -161,49 +176,22 @@ const Profile = () => {
                 <View key={index} style={styles.foodGenres}>
                   <Text style={styles.foodListItem}>{item}</Text>
                   <TouchableOpacity
-                      style={styles.foodButtonWrapper}
-                      onPress={() => {
-                        console.log(foodGenre);
-                        setFoodGenre(
-                          foodGenre.filter((currentFood) => {
-                            console.log(currentFood);
-                            return currentFood !== item;
-                          })
-                        );
-                      }}
-                    >
-                      <Text>-</Text>
-                    </TouchableOpacity>
+                    style={styles.foodButtonWrapper}
+                    onPress={() => {
+                      console.log(foodGenre);
+                      setFoodGenre(
+                        foodGenre.filter((currentFood) => {
+                          console.log(currentFood);
+                          return currentFood !== item;
+                        })
+                      );
+                    }}
+                  >
+                    <Text>-</Text>
+                  </TouchableOpacity>
                 </View>
-
               ))}
-
             </View>
-
-            {/* <FlatList
-                data={foodGenre}
-                renderItem={(foodGenreItem) => (
-                  <View style={styles.foodGenres}>
-                    <Text style={styles.foodListItem}>
-                      {foodGenreItem.item}
-                    </Text>
-                    <TouchableOpacity
-                      style={styles.foodButtonWrapper}
-                      onPress={() => {
-                        console.log(foodGenre);
-                        setFoodGenre(
-                          foodGenre.filter((currentFood) => {
-                            console.log(currentFood);
-                            return currentFood !== foodGenreItem.item;
-                          })
-                        );
-                      }}
-                    >
-                      <Text>-</Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
-              /> */}
 
             <Input
               labelStyle={{ fontWeight: "normal" }}
@@ -344,7 +332,7 @@ const styles = StyleSheet.create({
     backgroundColor: "orange",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: -15,
+    marginTop: 10,
     marginBottom: 10,
     borderRadius: 10,
   },
