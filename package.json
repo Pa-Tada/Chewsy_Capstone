@@ -14,6 +14,7 @@
     "@expo-google-fonts/inter": "^0.2.2",
     "@expo-google-fonts/pacifico": "^0.2.2",
     "@fontsource/pacifico": "^4.5.9",
+    "@react-native-firebase/app": "^16.4.6",
     "@react-navigation/bottom-tabs": "^6.4.0",
     "@react-navigation/native": "^6.0.13",
     "@react-navigation/native-stack": "^6.9.1",

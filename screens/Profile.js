@@ -12,7 +12,7 @@ import React, { useEffect, useState } from "react";
 import { Icon, Input, Avatar, Divider } from "@rneui/themed";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { auth, db, user, getUser } from "../firebase";
+import { auth, db, getUser, user } from "../firebase";
 import firebase from "firebase/compat";
 import {
   getFirestore,
@@ -54,31 +54,44 @@ const lastItem = () => {
 };
 
 const Profile = () => {
-
-  console.log("USER WITHIN FORM:", user)
+  console.log("USER WITHIN FORM:", user);
   // console.log(auth.currentUser.email)
-  const [firstName, setFirstName] = useState(user.data.firstName);
-  const [lastName, setLastName] = useState(user.data.lastName);
+  useEffect(() => {
+    getUser();
+    console.log("im working");
+  });
+  const [firstName, setFirstName] = useState(user.firstName);
+  const [lastName, setLastName] = useState(user.lastName);
 
   const [foodName, setFoodName] = useState("");
-  const [foodGenre, setFoodGenre] = useState(user.data.foodGenre);
+  const [foodGenre, setFoodGenre] = useState(user.foodGenre);
 
-  const [restaurantRating, setRestaurantRating] = useState(user.data.restaurantRating);
-  const [dietaryRestrictions, setDietaryRestrictions] = useState(user.data.dietaryRestrictions);
-  const [affordability, setAffordability] = useState(user.data.affordability); // probably use int here, or string.length
+  const [restaurantRating, setRestaurantRating] = useState(
+    user.restaurantRating
+  );
+  const [dietaryRestrictions, setDietaryRestrictions] = useState(
+    user.dietaryRestrictions
+  );
+  const [affordability, setAffordability] = useState(user.affordability); // probably use int here, or string.length
 
-  const [likedRestaurants, setLikedRestaurants] = useState(user.data.likedRestaurants);
+  const [likedRestaurants, setLikedRestaurants] = useState(
+    user.likedRestaurants
+  );
   const [likedRestaurantName, setLikedRestaurantName] = useState("");
 
-  const [dislikedRestaurants, setDislikedRestaurants] = useState(user.data.dislikedRestaurants);
+  const [dislikedRestaurants, setDislikedRestaurants] = useState(
+    user.dislikedRestaurants
+  );
   const [dislikedRestaurantName, setDislikedRestaurantName] = useState("");
 
-  const [visitedRestaurants, setVisitedRestaurants] = useState(user.data.visitedRestaurants);
+  const [visitedRestaurants, setVisitedRestaurants] = useState(
+    user.visitedRestaurants
+  );
   const [visitedRestaurantName, setVisitedRestaurantName] = useState("");
 
   const handleEdit = () => {
-     setDoc(doc(db, "users", user.id), {
-      email: user.data.email,
+    setDoc(doc(db, "users", auth.currentUser.uid), {
+      email: user.email,
       firstName: firstName,
       lastName: lastName,
       foodGenre: foodGenre,
@@ -126,19 +139,46 @@ const Profile = () => {
               labelStyle={{ fontWeight: "normal" }}
               inputStyle={{ color: "white", fontSize: 14 }}
               label="Food Genre"
-              value={foodGenre}
+              value={foodName}
               onChangeText={(text) => setFoodName(text)}
             />
             <TouchableOpacity
               onPress={() => {
                 setFoodGenre([...foodGenre, foodName]);
                 setFoodName("");
+                console.log("FOOD GENRE");
               }}
             >
               <View style={styles.buttonWrapper2}>
                 <Text style={styles.button}>+</Text>
               </View>
             </TouchableOpacity>
+            <SafeAreaView>
+              <FlatList
+                data={foodGenre}
+                renderItem={(foodGenreItem) => (
+                  <View style={styles.foodGenres}>
+                    <Text style={styles.foodListItem}>
+                      {foodGenreItem.item}
+                    </Text>
+                    <TouchableOpacity
+                      style={styles.foodButtonWrapper}
+                      onPress={() => {
+                        console.log(foodGenre);
+                        setFoodGenre(
+                          foodGenre.filter((currentFood) => {
+                            console.log(currentFood);
+                            return currentFood !== foodGenreItem.item;
+                          })
+                        );
+                      }}
+                    >
+                      <Text>-</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              />
+            </SafeAreaView>
             <Input
               labelStyle={{ fontWeight: "normal" }}
               inputStyle={{ color: "white", fontSize: 14 }}
@@ -223,7 +263,8 @@ const Profile = () => {
             <TouchableOpacity
               onPress={() => {
                 handleEdit();
-                getUser()
+                getUser();
+                setFoodName("");
               }}
             >
               <View style={styles.buttonWrapper}>
@@ -271,15 +312,36 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
   },
-  buttonWrapper2:{
-    width:40,
-    height:40,
+  buttonWrapper2: {
+    width: 40,
+    height: 40,
     backgroundColor: "orange",
-    alignItems:"center",
-    justifyContent:"center",
-    marginTop:-15,
-    marginBottom:10,
-    borderRadius:10
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: -15,
+    marginBottom: 10,
+    borderRadius: 10,
   },
   button: {},
+  foodGenres: {
+    flexDirection: "row",
+    justifyContent: "",
+    padding: 5,
+  },
+  foodListItem: {
+    color: "white",
+    fontWeight: "normal",
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 5,
+  },
+  foodButtonWrapper: {
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 80,
+    width: 50,
+    backgroundColor: "orange",
+    alignItems: "center",
+    alignSelf: "center",
+  },
 });

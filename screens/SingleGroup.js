@@ -25,6 +25,7 @@ import {
   where,
   setDoc,
 } from "firebase/firestore";
+
 import { Icon, Divider, Input } from "@rneui/themed";
 import Footer from "../components/Footer";
 import { useNavigation } from "@react-navigation/native";
@@ -39,10 +40,18 @@ const SingleGroup = ({ route }) => {
   const navigation = useNavigation();
   const [modalOpen, setModalOpen] = useState(false);
   const [eventModalOpen, setEventModalOpen] = useState(false);
+  const [userFoodGenre, setUserFoodGenre] = useState(user.data.foodGenre);
+  const [userFoodGenreName, setUserFoodGenreName] = useState("");
 
-  useEffect(()=>{
-    onSnapshot(collection(db, "users"),()=>{})
-  })
+  // useEffect(() => {
+  //   const unsubscribe = onSnapshot(
+  //     doc(db, "users", auth.currentUser.uid),
+  //     (doc) => {
+  //       console.log("Current data: ", doc.data());
+  //     }
+  //   );
+  //   return unsubscribe;
+  // }, [userFoodGenre]);
 
   const lastItem = () => {
     return (
@@ -72,10 +81,6 @@ const SingleGroup = ({ route }) => {
       </View>
     );
   };
-
-  console.log(user.data.foodGenre);
-  const [userFoodGenre, setUserFoodGenre] = useState(user.data.foodGenre);
-  const [userFoodGenreName, setUserFoodGenreName] = useState("");
 
   const handleFoodGenreEdit = () => {
     setDoc(doc(db, "users", user.id), {
@@ -174,10 +179,10 @@ const SingleGroup = ({ route }) => {
                     onPress={() => {
                       setUserFoodGenre([...userFoodGenre, userFoodGenreName]);
                       // handleFoodGenreEdit();
-                      console.log(userFoodGenre)
-                      handleFoodGenreEdit()
-                      setUserFoodGenreName("")
-                      getUser()
+                      console.log(userFoodGenre);
+                      handleFoodGenreEdit();
+                      setUserFoodGenreName("");
+                      getUser();
                     }}
                   >
                     <Text>Add Food Genre</Text>
