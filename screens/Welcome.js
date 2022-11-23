@@ -13,8 +13,7 @@ import {
   Platform,
 } from "react-native";
 import { auth, getUser, db } from "../firebase";
-import {getFirestore, doc, setDoc} from "firebase/firestore"
-
+import { getFirestore, doc, setDoc } from "firebase/firestore";
 
 const Welcome = () => {
   const navigation = useNavigation();
@@ -22,16 +21,15 @@ const Welcome = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  useEffect(()=>{
-
-    const unsubscribe = auth.onAuthStateChanged(user=>{
-      if(user){
-        navigation.navigate("Home")
-        getUser()
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        navigation.navigate("Home");
+        getUser();
       }
-    })
-    return unsubscribe // from my research this unsubscribe variable makes it so it stops pinging this listener apparently--- its possible it's not necessary
-  },[])
+    });
+    return unsubscribe; // from my research this unsubscribe variable makes it so it stops pinging this listener apparently--- its possible it's not necessary
+  }, []);
 
   const handleSignup = async () => {
     let user;
@@ -40,8 +38,21 @@ const Welcome = () => {
       .then((userCredentials) => {
         user = userCredentials.user;
       })
-      .then(()=>{
-        setDoc(doc(db, 'users', user.uid),{email:user.email, firstName:"", lastName:"", foodGenre:[],affordability:"$", restaurantRating:"4", dietaryRestrictions:"none", likedRestaurants:[], dislikedRestaurants: [], visitedRestaurants:[], imgUrl:"", groupIds:[]})
+      .then(() => {
+        setDoc(doc(db, "users", user.uid), {
+          email: user.email,
+          firstName: "",
+          lastName: "",
+          foodGenre: [],
+          affordability: "$",
+          restaurantRating: "4",
+          dietaryRestrictions: "none",
+          likedRestaurants: [],
+          dislikedRestaurants: [],
+          visitedRestaurants: [],
+          groupIds: [],
+          imgUrl: "https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png"
+        });
       })
       .catch((error) => alert(error.message));
   };

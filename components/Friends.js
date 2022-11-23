@@ -27,7 +27,7 @@ const Friends = (props) => {
     const unsub = onSnapshot(collection(db, "users"),  (snapshot)=> {
       let members = []
         snapshot.docs.map(doc=> {
-          if (currentGroup.userIds?.includes(doc.id) && doc.id != auth.currentUser.uid)
+          if (currentGroup.userIds?.includes(doc.id)) // && doc.id != auth.currentUser.uid
           members.push({...doc.data(), id: doc.id})
         })
       setFriends(members)
@@ -35,7 +35,7 @@ const Friends = (props) => {
     })
 
     return unsub
-  }, [currentGroup])
+  }, [currentGroup, currentGroup.userIds.length]) //maybe add friends
 
   return (
         <View style={styles.friends}>
