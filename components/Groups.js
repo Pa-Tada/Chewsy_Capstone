@@ -13,17 +13,18 @@ const Groups = (props) => {
 
   useEffect(() => {
     const q = query(collection(db, "groups"), orderBy("createdAt", "desc"))
-    const unsub = onSnapshot(q,  (snapshot)=> {
-    let grArr = []
+    const unsub = onSnapshot(q, (snapshot)=> {
+    let groupArr = []
       snapshot.docs.map(doc=> {
-        if (groupIds?.includes(doc.id))
-        grArr.push({...doc.data(), id: doc.id})
+        if (groupIds?.includes(doc.id)){
+          groupArr.push({...doc.data(), id: doc.id})
+        }
       })
-    setGroups(grArr)
-    console.log("GROUPS", groups)
+    setGroups([...groupArr])
+    console.log("GROUPS ID", groupIds)
   })
   return unsub
-  }, [groupIds]);
+  }, [groupIds?.length]); //, groups.length
 
   return (
         <View style={styles.groups}>

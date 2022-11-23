@@ -35,7 +35,7 @@ const Friends = (props) => {
     })
 
     return unsub
-  }, [currentGroup])
+  }, [currentGroup, currentGroup.userIds.length]) //maybe add friends
 
   return (
         <View style={styles.friends}>

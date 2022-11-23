@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { SearchBar } from '@rneui/themed';
 import {
   StyleSheet,
   Text,
@@ -31,49 +32,34 @@ import {
   arrayUnion,
 } from "firebase/firestore";
 
-//allUsers?.map((user)=> user.email)
-const CreateGroup = (props) => {
-  const { user, setUser, groupModalOpen, setGroupModalOpen } = props;
-  const [groupName, setGroupName] = useState("");
+const AddFriend = (props) => {
+  const { modalOpen, setModalOpen, currentGroup } = props;
   const [member, setMember] = useState("");
-  const [members, setMembers] = useState([auth.currentUser.uid]);
+  const [members, setMembers] = useState([]);
 
   const handleSubmit = async () => {
-    try{
-    //
-    // console.log("GROUP MEMBER", member)
-    setMembers([...members, member]);
-    console.log("GROUP MEMBERS ARRAY", members)
+    try {
+      console.log("Add Friend", member);
+      setMembers([...members, member]);
+      console.log("Add Friends Array", members);
 
-const groupDocRef = await addDoc(collection(db, "groups"), {
-      name: groupName,
-      leaderId: auth.currentUser.uid,
-      createdAt: serverTimestamp(),
-      imgUrl: "https://s3.amazonaws.com/freestock-prod/450/freestock_564895924.jpg",
-      userIds: members,
-    });
-    const updated = await updateDoc(doc(db, "users", auth.currentUser.uid), {
-      groupIds: arrayUnion(groupDocRef.id),
-    });
-
-    await setUser(onSnapshot(doc(db, "users", auth.currentUser.uid), (snapshot)=> {
-      return { ...snapshot.data(), id: snapshot.id }
-    }))
-    console.log("User in CreateGroup.js", user)
-
-   // await Promise.all(
-      members.map(async(memberId)=> {
-        await updateDoc(doc(db, "users", memberId), {
-          groupIds: arrayUnion(groupDocRef.id),
+      // Extract member ids from input first
+       members.map(async (memberId) => {
+        await updateDoc(doc(db, "groups", currentGroup.id), {
+          userIds: arrayUnion(memberId), //enter member id instead of group id
         });
-      })
-    //)
-    setGroupModalOpen(false);
-    setGroupName("");
-    setMember("");
-  } catch (err){
-    console.log("CREATE GROUP ERROR", err)
-  }
+        await updateDoc(doc(db, "users", memberId), {
+          groupIds: arrayUnion(currentGroup.id), //enter member id instead of group id
+        });
+      });
+
+
+      setModalOpen(false);
+      setGroupName("");
+      setMember("");
+    } catch (err) {
+      console.log("Add Members ERROR", err);
+    }
   };
 
   return (
@@ -81,31 +67,20 @@ const groupDocRef = await addDoc(collection(db, "groups"), {
       <KeyboardAwareScrollView>
         <View style={styles.form}>
           <Input
-
+            placeholder="Email/Username"
             labelStyle={{ fontWeight: "bold" }}
             inputStyle={{ color: "white", fontSize: 14 }}
-            label="Add Group Name"
-            value={groupName}
-            onChangeText={(text) => setGroupName(text)}
-          />
-          <Input
-          placeholder="Email/Username"
-            labelStyle={{ fontWeight: "bold" }}
-            inputStyle={{ color: "white", fontSize: 14 }}
-            label="Add Group Members"
+            label="Add Friends"
             value={member}
             onChangeText={(text) => setMember(text)}
           />
-          <TouchableOpacity onPress={() =>
-            handleSubmit()
-
-            }>
+          <TouchableOpacity onPress={() => handleSubmit()}>
             <View style={styles.buttonWrapper}>
-              <Text style={styles.button}>Create Group</Text>
+              <Text style={styles.button}>Submit</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => setGroupModalOpen(false)}
+            onPress={() => setModalOpen(false)}
             style={{ color: "white" }}
           >
             <Text style={{ color: "white", textAlign: "center" }}>Cancel</Text>
@@ -147,4 +122,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateGroup;
+export default AddFriend;

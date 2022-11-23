@@ -14,19 +14,18 @@ const Events = (props) => {
   useEffect(() => {
     const q = query(collection(db, "events"), orderBy("createdAt", "desc"))
     const unsub = onSnapshot(q, (snapshot)=> {
-    let evArr = []
+    let eventArr = []
       snapshot.docs.map(doc=> {
         if (groupIds?.includes(doc.data().groupId || groupIds == doc.data().groupId))
-        evArr.push({...doc.data(), id: doc.id})
+        eventArr.push({...doc.data(), id: doc.id})
       })
-      setEvents(evArr)
+      setEvents(eventArr)
     console.log("EVENTS", events)
   })
   return unsub
-  }, [groupIds]);
+  }, [groupIds]); //maybe add events
 
 
-  if (events?.length){
   return (
     <View style={styles.events}>
     <FlatList
@@ -52,11 +51,7 @@ const Events = (props) => {
     />
   </View>
   );
-} else {
-  return (
-    <Text>Looks like you don't have any plans yet. Create an event to get started!</Text>
-  )
-}
+
 }
 
 const styles = StyleSheet.create({

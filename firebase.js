@@ -14,13 +14,23 @@ import {
   where,
 } from "firebase/firestore";
 
+// const firebaseConfig = {
+//   apiKey: "AIzaSyAEHjcMAwTGGilDO0R5rEv9UgMjQ9EABl0",
+//   authDomain: "chewsy-72992.firebaseapp.com",
+//   projectId: "chewsy-72992",
+//   storageBucket: "chewsy-72992.appspot.com",
+//   messagingSenderId: "335930455123",
+//   appId: "1:335930455123:web:6dc475b489b9a8274442a6",
+// };
+
 const firebaseConfig = {
-  apiKey: "AIzaSyAEHjcMAwTGGilDO0R5rEv9UgMjQ9EABl0",
-  authDomain: "chewsy-72992.firebaseapp.com",
-  projectId: "chewsy-72992",
-  storageBucket: "chewsy-72992.appspot.com",
-  messagingSenderId: "335930455123",
-  appId: "1:335930455123:web:6dc475b489b9a8274442a6",
+  apiKey: "AIzaSyAwJNaV_7u-v-IebeaPaFNPxbT8D1AmUd0",
+  authDomain: "chewsy2-296c9.firebaseapp.com",
+  projectId: "chewsy2-296c9",
+  storageBucket: "chewsy2-296c9.appspot.com",
+  messagingSenderId: "589371967540",
+  appId: "1:589371967540:web:40a7d8e7363fe5cc75a261",
+  measurementId: "G-Y9SMGW9NJT"
 };
 
 // Initialize Firebase
@@ -45,8 +55,8 @@ const colRef = collection(db, "users");
 let allUsers;
 onSnapshot(colRef, (docSnap) => {
   allUsers = [];
-  docSnap.forEach((doc) => {
-    allUsers.push({ ...doc.data(), id: doc.id });
+  docSnap.forEach( (doc) => {
+     allUsers.push({ ...doc.data(), id: doc.id });
   });
 });
 
@@ -71,7 +81,7 @@ const getUser = async () => {
 
       if (doc.id === auth.currentUser.uid) {
         user = { ...doc.data(), id: doc.id };
-        console.log("Firebase.js  USER:", user);
+        //console.log("Firebase.js  USER:", user);
       }
     });
     const docRef = doc(db, "users", auth.currentUser.uid);
@@ -83,6 +93,6 @@ const getUser = async () => {
     }
   }
 };
-//getUser();
+getUser();
 
 export { auth, db, user, getUser, allUsers };
