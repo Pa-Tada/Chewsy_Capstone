@@ -3,7 +3,7 @@ import {StyleSheet,Text,View,TouchableOpacity,FlatList,Image,SafeAreaView,Button
 import { useNavigation } from "@react-navigation/native";
 
 import { Icon, Divider, Input } from "@rneui/themed";
-import { auth, db, allUsers } from "../firebase";
+import { auth, db, allUsers, getUser } from "../firebase";
 import {collection,getDocs,onSnapshot,addDoc,deleteDoc,doc,orderBy,serverTimestamp,getDoc,query,where} from "firebase/firestore";
 import Footer from "../components/Footer";
 import Groups from "../components/Groups";
@@ -28,6 +28,7 @@ const Home = () => {
 
   useEffect(() => {
      userInfo()
+     getUser()
   }, [user]);
 
   const groupLastItem = () => {
@@ -93,11 +94,11 @@ const Home = () => {
             />
           </TouchableOpacity>
         </View>
-        <Groups groupIds={user.groupIds}/>
+        <Groups groupIds={user?.groupIds}/>
       </View>
       <View style={styles.eventsWrapper}>
         <Text style={styles.sectionTitle}>Your Events</Text>
-        <Events groupIds={user.groupIds}/>
+        <Events groupIds={user?.groupIds}/>
       </View>
       <Footer />
     </SafeAreaView>

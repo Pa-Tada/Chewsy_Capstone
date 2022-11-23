@@ -41,7 +41,7 @@ const Welcome = () => {
         user = userCredentials.user;
       })
       .then(()=>{
-        setDoc(doc(db, 'users', user.uid),{email:user.email, firstName:"", lastName:"", foodGenre:[],affordability:"$", restaurantRating:"4", dietaryRestrictions:"none", likedRestaurants:[], dislikedRestaurants: [], visitedRestaurants:[]})
+        setDoc(doc(db, 'users', user.uid),{email:user.email, firstName:"", lastName:"", foodGenre:[],affordability:"$", restaurantRating:"4", dietaryRestrictions:"none", likedRestaurants:[], dislikedRestaurants: [], visitedRestaurants:[], imgUrl:"", groupIds:[]})
       })
       .catch((error) => alert(error.message));
   };
