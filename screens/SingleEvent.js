@@ -397,7 +397,7 @@ export default function EventPage( {route, navigation} ) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Divider />
+      <Divider color="orange"/>
       <View style={styles.contents}>
         <View style={{ justifyContent: "center", alignItems: "center" }}>
           <Text style={styles.eventText}>

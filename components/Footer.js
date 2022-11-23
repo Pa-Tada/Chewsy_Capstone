@@ -54,8 +54,8 @@ export default Footer;
 
 const styles = StyleSheet.create({
   container: {
-    borderTopWidth: 0.4,
-    borderColor: "gray",
+    borderTopWidth: 0.3,
+    borderColor: "orange",
     paddingHorizontal: 40,
     flex: 0.25,
     width: "100%",

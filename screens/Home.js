@@ -1,31 +1,39 @@
 import React, { useEffect, useState } from "react";
-import {StyleSheet,Text,View,TouchableOpacity,FlatList,Image,SafeAreaView,Button,Modal} from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+  Image,
+  SafeAreaView,
+  Button,
+  Modal,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Icon, Divider, Input } from "@rneui/themed";
 import { auth, db, allUsers, getUser } from "../firebase";
 import {collection,getDocs,onSnapshot,addDoc,deleteDoc,doc,orderBy,serverTimestamp,getDoc,query,where} from "firebase/firestore";
 import Footer from "../components/Footer";
 import Groups from "../components/Groups";
 import Events from "../components/Events";
-
-const createGroupField = [
-  { id: 1, field: "Group Name" },
-  { id: 2, field: "Group Members" },
-];
+import CreateGroup from "../components/CreateGroup";
 
 const Home = () => {
   const navigation = useNavigation();
   const [user, setUser] = useState({});
   const [groupModalOpen, setGroupModalOpen] = useState(false);
-
+  const [groupIds, setGroupIds] = useState([]);
   // Oliviarodrigo@gmail.com
   const userInfo = () => {
-    const filteredUsers = allUsers.filter((user)=> user.id===auth.currentUser.uid)
-    setUser(filteredUsers[0])
-    console.log("USER", user);
-  };
+    const filteredUser = allUsers.find(
+      (user) => user.id === auth.currentUser.uid
+    );
 
+    //console.log("HOME USER", filteredUser);
+    setUser(filteredUser);
+  };
   useEffect(() => {
      userInfo()
      getUser()
@@ -47,36 +55,17 @@ const Home = () => {
     );
   };
 
-// if (user.groupIds?.length){
   return (
     <SafeAreaView style={styles.container}>
-      <Divider />
+      <Divider color="orange" />
 
-      <Modal visible={groupModalOpen} animationType="slide">
-        <SafeAreaView style={styles.modalContent}>
-          <View style={styles.modalContent}>
-            <View style={styles.container}>
-              <Divider />
-              <View style={styles.contents}>
-                <Text style={styles.sectionTitle}>Create Group</Text>
-                <View style={styles.form}>
-                  <FlatList
-                    ListFooterComponent={groupLastItem}
-                    data={createGroupField}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => (
-                      <Input
-                        labelStyle={{ fontWeight: "normal" }}
-                        inputStyle={{ color: "white", fontSize: 14 }}
-                        label={item.field}
-                      />
-                    )}
-                  />
-                </View>
-              </View>
-            </View>
-          </View>
-        </SafeAreaView>
+      <Modal visible={groupModalOpen} animationType="slide" transparent={true}>
+        <CreateGroup
+        user={user}
+        setUser={setUser}
+          groupModalOpen={groupModalOpen}
+          setGroupModalOpen={setGroupModalOpen}
+        />
       </Modal>
 
       <View style={styles.groupsWrapper}>
@@ -90,43 +79,41 @@ const Home = () => {
               type="antdesign"
               size="28px"
               name="addusergroup"
-              color="gainsboro"
+              color="white"
             />
           </TouchableOpacity>
         </View>
-        <Groups groupIds={user?.groupIds}/>
+        {user?.groupIds && user.groupIds.length ? (
+          <Groups groupIds={user.groupIds} />
+        ) : (
+          <View style={styles.nodata}>
+            <Text style={styles.nodataText}>
+              Create a group to get started!
+            </Text>
+          </View>
+        )}
       </View>
       <View style={styles.eventsWrapper}>
         <Text style={styles.sectionTitle}>Your Events</Text>
-        <Events groupIds={user?.groupIds}/>
+        {user?.groupIds && user.groupIds.length ? (
+          <Events groupIds={user.groupIds} />
+        ) : (
+          <View style={styles.nodata}>
+            <Text style={styles.nodataText}>
+              Create a group to get started!
+            </Text>
+          </View>
+        )}
       </View>
       <Footer />
     </SafeAreaView>
   );
-  // } else {
-  //   return (
-  //     <View>
-  //       <Text>Looks like you don't have any plans yet. Create groups to get started!</Text>
-  //     <Footer />
-  //     </View>
-
-  //   )
-  }
-// }
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#242526",
-  },
-  buttonWrapper: {
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    borderRadius: 60,
-    width: 150,
-    backgroundColor: "orange",
-    alignItems: "center",
-    alignSelf: "center",
   },
   titleContainer: {
     flexDirection: "row",
@@ -159,16 +146,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     flex: 1,
   },
-  modalToggle: {
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: "#f2f2f2",
-    padding: 10,
-    borderRadius: 10,
-    alignSelf: "center",
+  nodata: {
+    alignItems: "center",
+    paddingTop: 120,
   },
-  modalContent: {
-    flex: 1,
+  nodataText: {
+    color: "white",
+    padding: 10,
+    shadowColor: "black",
+    shadowOffset: { height: 1, width: 1 },
+    shadowOpacity: 0.8,
+    shadowRadius: 1,
   },
 });
 
