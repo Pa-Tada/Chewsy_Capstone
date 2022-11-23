@@ -12,8 +12,9 @@ import React, { useEffect, useState } from "react";
 import { Icon, Input, Avatar, Divider } from "@rneui/themed";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { auth, db, user, getUser } from "../firebase";
+import { auth, db, getUser, user } from "../firebase";
 import firebase from "firebase/compat";
+import RNPickerSelect from "react-native-picker-select";
 import {
   getFirestore,
   collection,
@@ -25,8 +26,9 @@ import {
 } from "firebase/firestore";
 import { set } from "react-native-reanimated";
 import { Button } from "@rneui/base";
+import { ScrollView } from "react-native-gesture-handler";
 
-
+// Dummy image - need to make dynamic based on logged in user
 const firstItem = () => {
   return (
     <View>
@@ -55,30 +57,43 @@ const lastItem = () => {
 };
 
 const Profile = () => {
-
-  console.log("USER WITHIN FORM:", user)
+  console.log("USER WITHIN FORM:", user);
   // console.log(auth.currentUser.email)
-  const [firstName, setFirstName] = useState(user?.firstName);
-  const [lastName, setLastName] = useState(user?.lastName);
+  useEffect(() => {
+    getUser();
+    console.log("im working");
+  });
+  const [firstName, setFirstName] = useState(user.firstName);
+  const [lastName, setLastName] = useState(user.lastName);
 
   const [foodName, setFoodName] = useState("");
-  const [foodGenre, setFoodGenre] = useState(user?.foodGenre);
+  const [foodGenre, setFoodGenre] = useState(user.foodGenre);
 
-  const [restaurantRating, setRestaurantRating] = useState(user?.restaurantRating);
-  const [dietaryRestrictions, setDietaryRestrictions] = useState(user?.dietaryRestrictions);
-  const [affordability, setAffordability] = useState(user?.affordability); // probably use int here, or string.length
+  const [restaurantRating, setRestaurantRating] = useState(
+    user.restaurantRating
+  );
+  const [dietaryRestrictions, setDietaryRestrictions] = useState(
+    user.dietaryRestrictions
+  );
+  const [affordability, setAffordability] = useState(user.affordability); // probably use int here, or string.length
 
-  const [likedRestaurants, setLikedRestaurants] = useState(user?.likedRestaurants);
+  const [likedRestaurants, setLikedRestaurants] = useState(
+    user.likedRestaurants
+  );
   const [likedRestaurantName, setLikedRestaurantName] = useState("");
 
-  const [dislikedRestaurants, setDislikedRestaurants] = useState(user?.dislikedRestaurants);
+  const [dislikedRestaurants, setDislikedRestaurants] = useState(
+    user.dislikedRestaurants
+  );
   const [dislikedRestaurantName, setDislikedRestaurantName] = useState("");
 
-  const [visitedRestaurants, setVisitedRestaurants] = useState(user?.visitedRestaurants);
+  const [visitedRestaurants, setVisitedRestaurants] = useState(
+    user.visitedRestaurants
+  );
   const [visitedRestaurantName, setVisitedRestaurantName] = useState("");
 
   const handleEdit = () => {
-     setDoc(doc(db, "users", user.id), {
+    setDoc(doc(db, "users", auth.currentUser.uid), {
       email: user.email,
       firstName: firstName,
       lastName: lastName,
@@ -127,19 +142,58 @@ const Profile = () => {
               labelStyle={{ fontWeight: "normal" }}
               inputStyle={{ color: "white", fontSize: 14 }}
               label="Food Genre"
-              value={foodGenre}
+              // value={foodName}
               onChangeText={(text) => setFoodName(text)}
+            >
+              {foodName}
+            </Input>
+            <RNPickerSelect
+              labelStyle={{ fontWeight: "normal" }}
+              inputStyle={{ color: "white", fontSize: 14 }}
+              label="Food Genre"
+              onValueChange={(value) => setFoodName(value)}
+              items={[
+                { label: "Chinese", value: "Chinese" },
+                { label: "Italian", value: "Italian" },
+                { label: "Thai", value: "Thai" },
+                { label: "American", value: "American" },
+              ]}
             />
+
             <TouchableOpacity
               onPress={() => {
                 setFoodGenre([...foodGenre, foodName]);
                 setFoodName("");
+                console.log("FOOD GENRE");
               }}
             >
               <View style={styles.buttonWrapper2}>
                 <Text style={styles.button}>+</Text>
               </View>
             </TouchableOpacity>
+
+            <View>
+              {foodGenre.map((item, index) => (
+                <View key={index} style={styles.foodGenres}>
+                  <Text style={styles.foodListItem}>{item}</Text>
+                  <TouchableOpacity
+                    style={styles.foodButtonWrapper}
+                    onPress={() => {
+                      console.log(foodGenre);
+                      setFoodGenre(
+                        foodGenre.filter((currentFood) => {
+                          console.log(currentFood);
+                          return currentFood !== item;
+                        })
+                      );
+                    }}
+                  >
+                    <Text>-</Text>
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </View>
+
             <Input
               labelStyle={{ fontWeight: "normal" }}
               inputStyle={{ color: "white", fontSize: 14 }}
@@ -224,7 +278,8 @@ const Profile = () => {
             <TouchableOpacity
               onPress={() => {
                 handleEdit();
-                getUser()
+                getUser();
+                setFoodName("");
               }}
             >
               <View style={styles.buttonWrapper}>
@@ -272,15 +327,36 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
   },
-  buttonWrapper2:{
-    width:40,
-    height:40,
+  buttonWrapper2: {
+    width: 40,
+    height: 40,
     backgroundColor: "orange",
-    alignItems:"center",
-    justifyContent:"center",
-    marginTop:-15,
-    marginBottom:10,
-    borderRadius:10
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 10,
+    marginBottom: 10,
+    borderRadius: 10,
   },
   button: {},
+  foodGenres: {
+    flexDirection: "row",
+    justifyContent: "",
+    padding: 5,
+  },
+  foodListItem: {
+    color: "white",
+    fontWeight: "normal",
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 5,
+  },
+  foodButtonWrapper: {
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 80,
+    width: 50,
+    backgroundColor: "orange",
+    alignItems: "center",
+    alignSelf: "center",
+  },
 });

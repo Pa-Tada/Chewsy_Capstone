@@ -13,22 +13,8 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Icon, Divider, Input } from "@rneui/themed";
-import { auth, db, allUsers } from "../firebase";
-import {
-  collection,
-  getDocs,
-  onSnapshot,
-  addDoc,
-  deleteDoc,
-  doc,
-  orderBy,
-  serverTimestamp,
-  getDoc,
-  query,
-  where,
-  setDoc,
-  arrayUnion,
-} from "firebase/firestore";
+import { auth, db, allUsers, getUser } from "../firebase";
+import {collection,getDocs,onSnapshot,addDoc,deleteDoc,doc,orderBy,serverTimestamp,getDoc,query,where} from "firebase/firestore";
 import Footer from "../components/Footer";
 import Groups from "../components/Groups";
 import Events from "../components/Events";
@@ -49,8 +35,25 @@ const Home = () => {
     setUser(filteredUser);
   };
   useEffect(() => {
-    userInfo();
-  }, [user]); // try putting back in user?.groupIds
+     userInfo()
+     getUser()
+  }, [user]);
+
+  const groupLastItem = () => {
+    return (
+      <View>
+        <TouchableOpacity onPress={() => setGroupModalOpen(false)}>
+          <View style={styles.buttonWrapper}>
+            <Text style={styles.button}>Create Group</Text>
+          </View>
+        </TouchableOpacity>
+        <Button
+          title="Cancel"
+          onPress={() => setGroupModalOpen(false)}
+        ></Button>
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>

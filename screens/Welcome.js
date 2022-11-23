@@ -38,6 +38,7 @@ const Welcome = () => {
       .then((userCredentials) => {
         user = userCredentials.user;
       })
+<<<<<<< HEAD
       .then(() => {
         setDoc(doc(db, "users", user.uid), {
           email: user.email,
@@ -53,6 +54,10 @@ const Welcome = () => {
           groupIds: [],
           imgUrl: "https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png"
         });
+=======
+      .then(()=>{
+        setDoc(doc(db, 'users', user.uid),{email:user.email, firstName:"", lastName:"", foodGenre:[],affordability:"$", restaurantRating:"4", dietaryRestrictions:"none", likedRestaurants:[], dislikedRestaurants: [], visitedRestaurants:[], imgUrl:"", groupIds:[]})
+>>>>>>> main
       })
       .catch((error) => alert(error.message));
   };

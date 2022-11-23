@@ -25,6 +25,7 @@ import {
   where,
   setDoc,
 } from "firebase/firestore";
+
 import { Icon, Divider, Input } from "@rneui/themed";
 import Footer from "../components/Footer";
 import { useNavigation } from "@react-navigation/native";
@@ -33,16 +34,25 @@ import Events from "../components/Events";
 import Friends from "../components/Friends";
 import AddFriend from "../components/AddFriend";
 
-const addEventField = [
-  { id: 1, field: "Event Time" },
-  { id: 2, field: "Event Date" },
-];
+const addFriendField = [{ id: 1, field: "Email/Username" }];
 
 const SingleGroup = ({ route }) => {
   const { groupId, currentGroup } = route.params;
   const navigation = useNavigation();
   const [modalOpen, setModalOpen] = useState(false);
   const [eventModalOpen, setEventModalOpen] = useState(false);
+  const [userFoodGenre, setUserFoodGenre] = useState(user.foodGenre);
+  const [userFoodGenreName, setUserFoodGenreName] = useState("");
+
+  // useEffect(() => {
+  //   const unsubscribe = onSnapshot(
+  //     doc(db, "users", auth.currentUser.uid),
+  //     (doc) => {
+  //       console.log("Current data: ", doc.data());
+  //     }
+  //   );
+  //   return unsubscribe;
+  // }, [userFoodGenre]);
 
 
   const eventLastItem = () => {
@@ -61,9 +71,22 @@ const SingleGroup = ({ route }) => {
     );
   };
 
-  console.log(user.foodGenre);
-  const [userFoodGenre, setUserFoodGenre] = useState(user.foodGenre);
-  const [userFoodGenreName, setUserFoodGenreName] = useState("");
+  const handleFoodGenreEdit = () => {
+    setDoc(doc(db, "users", user.id), {
+      imgUrl: userimgUrl,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      groupIds: user.groupIds,
+      foodGenre: userFoodGenre,
+      restaurantRating: user.restaurantRating,
+      dietaryRestrictions: user.dietaryRestrictions,
+      affordability: user.affordability,
+      likedRestaurants: user.likedRestaurants,
+      dislikedRestaurants: user.dislikedRestaurants,
+      visitedRestaurants: user.visitedRestaurants,
+    });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -112,15 +135,37 @@ const SingleGroup = ({ route }) => {
                     labelStyle={{ fontWeight: "normal" }}
                     inputStyle={{ color: "white", fontSize: 14 }}
                     label="What are you feeling?"
-                    value={userFoodGenre}
+                    value={userFoodGenreName}
+                    onChangeText={setUserFoodGenreName}
                   />
-                    {/* <View style = {}> */}
-                    <FlatList
-                      data={user.foodGenre}
-                      renderItem={(foodGenre) => <Text style = {styles.foodListItem}>{foodGenre.item}</Text>}
-                    />
-                    {/* </View> */}
-
+                  <TouchableOpacity
+                    style={styles.buttonWrapper}
+                    onPress={() => {
+                      setUserFoodGenre([...userFoodGenre, userFoodGenreName]);
+                      // handleFoodGenreEdit();
+                      console.log(userFoodGenre);
+                      handleFoodGenreEdit();
+                      setUserFoodGenreName("");
+                      getUser();
+                    }}
+                  >
+                    <Text>Add Food Genre</Text>
+                  </TouchableOpacity>
+                  {/* <View style = {}> */}
+                  <FlatList
+                    data={user.foodGenre}
+                    renderItem={(foodGenre) => (
+                      <View style={styles.foodGenres}>
+                        <Text style={styles.foodListItem}>
+                          {foodGenre.item}
+                        </Text>
+                        <TouchableOpacity style={styles.foodButtonWrapper}>
+                          <Text>-</Text>
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                  />
+                  {/* </View> */}
 
                   <TouchableOpacity onPress={() => setEventModalOpen(false)}>
                     <View style={styles.buttonWrapper}>
@@ -167,17 +212,32 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#242526",
   },
-  foodListItem:{
-    color: "white",
-    fontWeight: "normal",
-    paddingLeft:20,
-    paddingTop:5
-  },
   buttonWrapper: {
     paddingVertical: 10,
     paddingHorizontal: 10,
     borderRadius: 60,
     width: 150,
+    backgroundColor: "orange",
+    alignItems: "center",
+    alignSelf: "center",
+  },
+  foodGenres: {
+    flexDirection: "row",
+    justifyContent: "",
+    padding: 5,
+  },
+  foodListItem: {
+    color: "white",
+    fontWeight: "normal",
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 5,
+  },
+  foodButtonWrapper: {
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 80,
+    width: 50,
     backgroundColor: "orange",
     alignItems: "center",
     alignSelf: "center",

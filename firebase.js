@@ -33,6 +33,16 @@ const firebaseConfig = {
   measurementId: "G-Y9SMGW9NJT"
 };
 
+// const firebaseConfig = { // chewsy 2
+//   apiKey: "AIzaSyAwJNaV_7u-v-IebeaPaFNPxbT8D1AmUd0",
+//   authDomain: "chewsy2-296c9.firebaseapp.com",
+//   projectId: "chewsy2-296c9",
+//   storageBucket: "chewsy2-296c9.appspot.com",
+//   messagingSenderId: "589371967540",
+//   appId: "1:589371967540:web:40a7d8e7363fe5cc75a261",
+//   measurementId: "G-Y9SMGW9NJT"
+// };
+
 // Initialize Firebase
 let app;
 
@@ -76,22 +86,28 @@ onSnapshot(colRef, (docSnap) => {
 let user;
 const getUser = async () => {
   if (auth.currentUser) {
-    const querySnapshot = await getDocs(colRef);
-    querySnapshot.forEach((doc) => { // doc.data() is never undefined for query doc snapshots // console.log(doc.id, " => ", doc.data());
+    // const querySnapshot = await getDocs(collection(db, "users"));
+    // querySnapshot.forEach((doc) => {
+    //   // doc.data() is never undefined for query doc snapshots
+    //   // console.log(doc.id, " => ", doc.data());
+    //   // r
 
-      if (doc.id === auth.currentUser.uid) {
-        user = { ...doc.data(), id: doc.id };
-        //console.log("Firebase.js  USER:", user);
-      }
-    });
+    //   if (doc.data().email === auth.currentUser.email) {
+    //     user = { data: doc.data(), id: doc.id };
+    //     console.log("USER:", user);
+    //   } // try switching this to id
+    // });
     const docRef = doc(db, "users", auth.currentUser.uid);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      console.log("Firebase.js docSnap", docSnap.data());
-    } else { // doc.data() will be undefined in this case
-      console.log("Firebase.js No such document!");
+      console.log("Document data:", docSnap.data());
+      user = docSnap.data()
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
     }
   }
+
 };
 getUser();
 

@@ -1,15 +1,36 @@
 import React, { useEffect, useState } from "react";
-import {StyleSheet,Text,View,TouchableOpacity,FlatList,Image,SafeAreaView,Button,Modal} from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+  Image,
+  SafeAreaView,
+  Button,
+  Modal,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { auth, db } from "../firebase";
-import {collection,getDocs,onSnapshot,addDoc,deleteDoc,doc, orderBy,serverTimestamp,getDoc,query,where} from "firebase/firestore";
-
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  addDoc,
+  deleteDoc,
+  doc,
+  orderBy,
+  serverTimestamp,
+  getDoc,
+  query,
+  where,
+} from "firebase/firestore";
 
 const Events = (props) => {
-  const {groupIds} = props
+  const { groupIds } = props;
   const navigation = useNavigation();
-  const [events, setEvents] = useState([{name: "Loading...", id: "unique"}]);
+  const [events, setEvents] = useState([{ name: "Loading...", id: "unique" }]);
 
   useEffect(() => {
     const q = query(collection(db, "events"), orderBy("createdAt", "desc"))
@@ -26,33 +47,38 @@ const Events = (props) => {
   }, [groupIds]); //maybe add events
 
 
-  return (
-    <View style={styles.events}>
-    <FlatList
-    showsHorizontalScrollIndicator={false}
-      data={events}
-      keyExtractor={(item) => item.id}
-      horizontal
-      renderItem={({ item }) => (
-        <TouchableOpacity
-          style={styles.eventList}
-          onPress={() => navigation.navigate("SingleEvent")}
-        >
-          <View style={styles.shadow}>
-            <Image
-              style={styles.eventImg}
-              source={{ uri: item.restImgUrl }}
-            />
-          </View>
-          <Text style={styles.eventName}>{item.restName}</Text>
-          <Text style={styles.eventLoc}>{item.restLoc}</Text>
-        </TouchableOpacity>
-      )}
-    />
-  </View>
-  );
-
-}
+    return (
+      <View style={styles.events}>
+        <FlatList
+          showsHorizontalScrollIndicator={false}
+          data={events}
+          keyExtractor={(item) => item.id}
+          horizontal
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={styles.eventList}
+              onPress={() =>
+                navigation.navigate("SingleEvent", {
+                  eventId: item.id,
+                  currentEvent: item,
+                  groupId: item.groupId,
+                })
+              }
+            >
+              <View style={styles.shadow}>
+                <Image
+                  style={styles.eventImg}
+                  source={{ uri: item.restImgUrl }}
+                />
+              </View>
+              <Text style={styles.eventName}>{item.restName}</Text>
+              <Text style={styles.eventLoc}>{item.restLoc}</Text>
+            </TouchableOpacity>
+          )}
+        />
+      </View>
+    );
+};
 
 const styles = StyleSheet.create({
   shadow: {
@@ -70,7 +96,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     alignItems: "center",
   },
-eventImg: {
+  eventImg: {
     width: 180,
     height: 180,
     borderRadius: 15,
@@ -85,7 +111,6 @@ eventImg: {
     color: "darkgray",
     fontSize: 12,
   },
-
 });
 
 export default Events;
