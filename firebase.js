@@ -49,7 +49,7 @@ const auth = firebase.auth();
 const db = getFirestore();
 
 // collection ref
-const colRef = collection(db, "users");
+const colRef = query(collection(db, "users"), orderBy("email"))
 
 // getting all users // might delete later
 let allUsers;

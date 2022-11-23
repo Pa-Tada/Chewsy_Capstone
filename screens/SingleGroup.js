@@ -74,7 +74,7 @@ const SingleGroup = ({ route }) => {
 
       <View style={styles.friendsWrapper}>
         <View style={styles.titleContainer}>
-          <Text style={styles.sectionTitle}>Friends In Group</Text>
+          <Text style={styles.sectionTitle}>Group Members</Text>
           <TouchableOpacity
             style={styles.iconWrapper}
             onPress={() => setModalOpen(true)}
