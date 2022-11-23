@@ -24,6 +24,7 @@ import {
 } from "firebase/firestore";
 import { set } from "react-native-reanimated";
 import { Button } from "@rneui/base";
+import { ScrollView } from "react-native-gesture-handler";
 
 // Dummy image - need to make dynamic based on logged in user
 const firstItem = () => {
@@ -142,6 +143,7 @@ const Profile = () => {
               value={foodName}
               onChangeText={(text) => setFoodName(text)}
             />
+
             <TouchableOpacity
               onPress={() => {
                 setFoodGenre([...foodGenre, foodName]);
@@ -153,8 +155,32 @@ const Profile = () => {
                 <Text style={styles.button}>+</Text>
               </View>
             </TouchableOpacity>
-            <SafeAreaView>
-              <FlatList
+
+            <View>
+              {foodGenre.map((item, index) => (
+                <View key={index} style={styles.foodGenres}>
+                  <Text style={styles.foodListItem}>{item}</Text>
+                  <TouchableOpacity
+                      style={styles.foodButtonWrapper}
+                      onPress={() => {
+                        console.log(foodGenre);
+                        setFoodGenre(
+                          foodGenre.filter((currentFood) => {
+                            console.log(currentFood);
+                            return currentFood !== item;
+                          })
+                        );
+                      }}
+                    >
+                      <Text>-</Text>
+                    </TouchableOpacity>
+                </View>
+
+              ))}
+
+            </View>
+
+            {/* <FlatList
                 data={foodGenre}
                 renderItem={(foodGenreItem) => (
                   <View style={styles.foodGenres}>
@@ -177,8 +203,8 @@ const Profile = () => {
                     </TouchableOpacity>
                   </View>
                 )}
-              />
-            </SafeAreaView>
+              /> */}
+
             <Input
               labelStyle={{ fontWeight: "normal" }}
               inputStyle={{ color: "white", fontSize: 14 }}
