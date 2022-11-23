@@ -26,6 +26,7 @@ import {
 import { set } from "react-native-reanimated";
 import { Button } from "@rneui/base";
 import { ScrollView } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
 
 // Dummy image - need to make dynamic based on logged in user
 const firstItem = () => {
@@ -56,6 +57,7 @@ const lastItem = () => {
 };
 
 const Profile = () => {
+  const navigation = useNavigation();
   console.log("USER WITHIN FORM:", user);
   // console.log(auth.currentUser.email)
   useEffect(() => {
@@ -279,6 +281,7 @@ const Profile = () => {
                 handleEdit();
                 getUser();
                 setFoodName("");
+                navigation.navigate("Home")
               }}
             >
               <View style={styles.buttonWrapper}>
@@ -288,7 +291,7 @@ const Profile = () => {
           </KeyboardAwareScrollView>
         </View>
       </View>
-      <Footer />
+      {/* <Footer /> */}
     </View>
   );
 };
@@ -319,6 +322,7 @@ const styles = StyleSheet.create({
   },
   buttonWrapper: {
     paddingVertical: 10,
+    marginBottom:30,
     paddingHorizontal: 10,
     borderRadius: 60,
     width: 150,

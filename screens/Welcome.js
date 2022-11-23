@@ -26,7 +26,7 @@ const Welcome = () => {
 
     const unsubscribe = auth.onAuthStateChanged(user=>{
       if(user){
-        navigation.navigate("Home")
+        // navigation.navigate("Home")
         getUser()
       }
     })
@@ -43,6 +43,10 @@ const Welcome = () => {
       .then(()=>{
         setDoc(doc(db, 'users', user.uid),{email:user.email, firstName:"", lastName:"", foodGenre:[],affordability:"$", restaurantRating:"4", dietaryRestrictions:"none", likedRestaurants:[], dislikedRestaurants: [], visitedRestaurants:[], imgUrl:"", groupIds:[]})
       })
+      .then(()=>{
+        getUser()
+        navigation.navigate("Profile")
+      })
       .catch((error) => alert(error.message));
   };
 
@@ -51,6 +55,9 @@ const Welcome = () => {
       .signInWithEmailAndPassword(email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
+      })
+      .then(()=>{
+        navigation.navigate("Profile")
       })
       .catch((error) => alert(error.message));
   };
