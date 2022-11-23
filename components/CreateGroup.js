@@ -52,7 +52,8 @@ const groupDocRef = await addDoc(collection(db, "groups"), {
       imgUrl: "https://s3.amazonaws.com/freestock-prod/450/freestock_564895924.jpg",
       userIds: members,
     });
-    const updated = await updateDoc(doc(db, "users", auth.currentUser.uid), {
+
+    await updateDoc(doc(db, "users", auth.currentUser.uid), {
       groupIds: arrayUnion(groupDocRef.id),
     });
 
@@ -60,7 +61,7 @@ const groupDocRef = await addDoc(collection(db, "groups"), {
     await setUser(onSnapshot(doc(db, "users", auth.currentUser.uid), (snapshot)=> {
       return { ...snapshot.data(), id: snapshot.id }
     }))
-    console.log("User in CreateGroup AFTER SET", user)
+    console.log("USER IN CREATEGROUP AFTER SET", user)
 
    // await Promise.all(
       members.map(async(memberId)=> {
