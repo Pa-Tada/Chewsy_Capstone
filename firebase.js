@@ -50,7 +50,7 @@ const db = getFirestore();
 // collection ref
 const colRef = query(collection(db, "users"), orderBy("email"))
 
-// getting all users // might delete later
+// getting all users
 let allUsers;
 onSnapshot(colRef, (docSnap) => {
   allUsers = [];
@@ -58,16 +58,6 @@ onSnapshot(colRef, (docSnap) => {
      allUsers.push({ ...doc.data(), id: doc.id });
   });
 });
-
-// get collection data
-// getDocs(colRef).then((snapshot) => {
-//   // console.log("snapshot docs:", snapshot.docs)
-//   let users = [];
-//   snapshot.docs.forEach((doc) => {
-//     users.push({ ...doc.data(), id: doc.id });
-//   });
-//   // console.log(users)
-// });
 
 
 
@@ -86,15 +76,16 @@ const getUser = async () => {
     //     console.log("USER:", user);
     //   } // try switching this to id
     // });
-    const docRef = doc(db, "users", auth.currentUser.uid);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-      user = docSnap.data()
-    } else {
-      // doc.data() will be undefined in this case
-      console.log("No such document!");
-    }
+  //   const docRef = doc(db, "users", auth.currentUser.uid);
+  //  const docSnap = await getDoc(docRef);
+  //   if (docSnap.exists()) {
+  //     user = {...docSnap.data(), id: docSnap.id}
+      onSnapshot(doc(db, "users", auth.currentUser.uid), (snapshot) => {
+         user= { ...snapshot.data(), id: snapshot.id };
+      })
+    // } else {
+    //   console.log("No such document!");
+    // }
   }
 
 };

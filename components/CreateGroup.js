@@ -13,7 +13,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Icon, Divider, Input } from "@rneui/themed";
-import { auth, db, allUsers } from "../firebase";
+import { auth, db, user, getUser, allUsers } from "../firebase";
 import {
   collection,
   getDocs,
@@ -38,44 +38,59 @@ const CreateGroup = (props) => {
   const [member, setMember] = useState("");
   const [members, setMembers] = useState([auth.currentUser.uid]);
 
+  const userInfo = () => {
+    const filteredUser = allUsers.find(
+      (user) => user.id === auth.currentUser.uid
+    );
+    setUser(filteredUser);
+  };
+  useEffect(() => {
+    userInfo();
+    getUser();
+  }, [user]);
+
   const handleSubmit = async () => {
-    try{
+    try {
+      console.log("GROUP MEMBER", member);
+      setMembers(members.push(member));
+      //setMembers([...members, member]);
+      console.log("GROUP MEMBERS ARRAY", members);
+      console.log("USER IN CREATEGROUP AFTER SET", user);
 
-    console.log("GROUP MEMBER", member)
-    setMembers([...members, member]);
-    console.log("GROUP MEMBERS ARRAY", members)
+      const groupDocRef = await addDoc(collection(db, "groups"), {
+        name: groupName,
+        leaderId: auth.currentUser.uid,
+        createdAt: serverTimestamp(),
+        imgUrl:
+          "https://s3.amazonaws.com/freestock-prod/450/freestock_564895924.jpg",
+        userIds: members,
+      });
 
-const groupDocRef = await addDoc(collection(db, "groups"), {
-      name: groupName,
-      leaderId: auth.currentUser.uid,
-      createdAt: serverTimestamp(),
-      imgUrl: "https://s3.amazonaws.com/freestock-prod/450/freestock_564895924.jpg",
-      userIds: members,
-    });
+      // await updateDoc(doc(db, "users", auth.currentUser.uid), {
+      //   groupIds: arrayUnion(groupDocRef.id),
+      // });
 
-    await updateDoc(doc(db, "users", auth.currentUser.uid), {
-      groupIds: arrayUnion(groupDocRef.id),
-    });
+      await Promise.all(
+        members.map(async (memberId) => {
+          await updateDoc(doc(db, "users", memberId), {
+            groupIds: arrayUnion(groupDocRef.id),
+          });
+        })
+      );
 
-    console.log("USER IN CREATEGROUP BEFORE SET", user)
-    await setUser(onSnapshot(doc(db, "users", auth.currentUser.uid), (snapshot)=> {
-      return { ...snapshot.data(), id: snapshot.id }
-    }))
-    console.log("USER IN CREATEGROUP AFTER SET", user)
+      //-------ESSENTIAL--------
+      await setUser(
+        onSnapshot(doc(db, "users", auth.currentUser.uid), (snapshot) => {
+          return { ...snapshot.data(), id: snapshot.id };
+        })
+      );
 
-   // await Promise.all(
-      members.map(async(memberId)=> {
-        await updateDoc(doc(db, "users", memberId), {
-          groupIds: arrayUnion(groupDocRef.id),
-        });
-      })
-    //)
-    setGroupModalOpen(false);
-    setGroupName("");
-    setMember("");
-  } catch (err){
-    console.log("CreateGroup.js error creating", err)
-  }
+      setGroupModalOpen(false);
+      setGroupName("");
+      setMember("");
+    } catch (err) {
+      console.log("CreateGroup.js error creating", err);
+    }
   };
 
   return (
@@ -83,7 +98,6 @@ const groupDocRef = await addDoc(collection(db, "groups"), {
       <KeyboardAwareScrollView>
         <View style={styles.form}>
           <Input
-
             labelStyle={{ fontWeight: "bold" }}
             inputStyle={{ color: "white", fontSize: 14 }}
             label="Add Group Name"
@@ -91,17 +105,14 @@ const groupDocRef = await addDoc(collection(db, "groups"), {
             onChangeText={(text) => setGroupName(text)}
           />
           <Input
-          placeholder="Email/Username"
+            placeholder="Email/Username"
             labelStyle={{ fontWeight: "bold" }}
             inputStyle={{ color: "white", fontSize: 14 }}
             label="Add Group Members"
             value={member}
             onChangeText={(text) => setMember(text)}
           />
-          <TouchableOpacity onPress={() =>
-            handleSubmit()
-
-            }>
+          <TouchableOpacity onPress={() => handleSubmit()}>
             <View style={styles.buttonWrapper}>
               <Text style={styles.button}>Create Group</Text>
             </View>

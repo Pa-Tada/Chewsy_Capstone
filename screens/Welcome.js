@@ -48,8 +48,10 @@ const Welcome = () => {
           restaurantRating: "4",
           dietaryRestrictions: "none",
           groupIds: [],
-          imgUrl: "https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png"
+          imgUrl:
+            "https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png",
         });
+        getUser()
       })
       .catch((error) => alert(error.message));
   };

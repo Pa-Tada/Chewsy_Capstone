@@ -22,39 +22,11 @@ import {
   getDoc,
   doc,
   setDoc,
-  updateDoc
+  updateDoc,
 } from "firebase/firestore";
 import { set } from "react-native-reanimated";
 import { Button } from "@rneui/base";
 import { ScrollView } from "react-native-gesture-handler";
-
-// Dummy image - need to make dynamic based on logged in user
-const firstItem = () => {
-  return (
-    <View>
-      <TouchableOpacity>
-        <Avatar
-          rounded
-          containerStyle={{ alignSelf: "center", paddingBottom: 10 }}
-          size="large"
-          source={{
-            uri: "https://c8.alamy.com/comp/2HYCH09/larry-david-attending-the-natural-resources-defense-councils-stand-up!-event-at-the-wallis-annenberg-center-for-the-performing-arts-2HYCH09.jpg",
-          }}
-        />
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-const lastItem = () => {
-  return (
-    <TouchableOpacity>
-      <View style={styles.buttonWrapper}>
-        <Text style={styles.button}>Submit</Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
 
 const Profile = () => {
   console.log("Profile.js USER WITHIN FORM:", user);
@@ -76,21 +48,6 @@ const Profile = () => {
   );
   const [affordability, setAffordability] = useState(user.affordability); // probably use int here, or string.length
 
-  const [likedRestaurants, setLikedRestaurants] = useState(
-    user.likedRestaurants
-  );
-  const [likedRestaurantName, setLikedRestaurantName] = useState("");
-
-  const [dislikedRestaurants, setDislikedRestaurants] = useState(
-    user.dislikedRestaurants
-  );
-  const [dislikedRestaurantName, setDislikedRestaurantName] = useState("");
-
-  const [visitedRestaurants, setVisitedRestaurants] = useState(
-    user.visitedRestaurants
-  );
-  const [visitedRestaurantName, setVisitedRestaurantName] = useState("");
-
   const handleEdit = () => {
     setDoc(doc(db, "users", auth.currentUser.uid), {
       email: user.email,
@@ -100,14 +57,11 @@ const Profile = () => {
       restaurantRating: restaurantRating,
       dietaryRestrictions: dietaryRestrictions,
       affordability: affordability,
-      likedRestaurants: likedRestaurants,
-      dislikedRestaurants: dislikedRestaurants,
-      visitedRestaurants: visitedRestaurants,
     });
   };
   return (
     <View style={styles.container}>
-      <Divider color="orange"/>
+      <Divider color="orange" />
       <View style={styles.contents}>
         <Text style={styles.sectionTitle}>Edit Profile</Text>
 
@@ -213,66 +167,6 @@ const Profile = () => {
               value={affordability}
               onChangeText={(text) => setAffordability(text)}
             />
-            <Input
-              labelStyle={{ fontWeight: "normal" }}
-              inputStyle={{ color: "white", fontSize: 14 }}
-              label="Restaurants You've Liked"
-              value={likedRestaurants}
-              onChangeText={(text) => setLikedRestaurantName(text)}
-            />
-            <TouchableOpacity
-              onPress={() => {
-                setLikedRestaurants([...likedRestaurants, likedRestaurantName]);
-                setLikedRestaurantName("");
-              }}
-            >
-              <View style={styles.buttonWrapper2}>
-                <Text style={styles.button}>+</Text>
-              </View>
-            </TouchableOpacity>
-
-            <Input
-              labelStyle={{ fontWeight: "normal" }}
-              inputStyle={{ color: "white", fontSize: 14 }}
-              label="Restaurants You've Disliked"
-              value={dislikedRestaurants}
-              onChangeText={(text) => setDislikedRestaurantName(text)}
-            />
-            <TouchableOpacity
-              onPress={() => {
-                setDislikedRestaurants([
-                  ...dislikedRestaurants,
-                  dislikedRestaurantName,
-                ]);
-                setDislikedRestaurantName("");
-              }}
-            >
-              <View style={styles.buttonWrapper2}>
-                <Text style={styles.button}>+</Text>
-              </View>
-            </TouchableOpacity>
-
-            <Input
-              labelStyle={{ fontWeight: "normal" }}
-              inputStyle={{ color: "white", fontSize: 14 }}
-              label="Visisted Restaurants"
-              value={visitedRestaurants}
-              onChangeText={(text) => setVisitedRestaurantName(text)}
-            />
-            <TouchableOpacity
-              onPress={() => {
-                setVisitedRestaurants([
-                  ...visitedRestaurants,
-                  visitedRestaurantName,
-                ]);
-                setVisitedRestaurantName("");
-              }}
-            >
-              <View style={styles.buttonWrapper2}>
-                <Text style={styles.button}>+</Text>
-              </View>
-            </TouchableOpacity>
-
             <TouchableOpacity
               onPress={() => {
                 handleEdit();
