@@ -33,24 +33,20 @@ const Events = (props) => {
   const [events, setEvents] = useState([{ name: "Loading...", id: "unique" }]);
 
   useEffect(() => {
-    const q = query(collection(db, "events"), orderBy("createdAt", "desc"));
-    const unsub = onSnapshot(q, (snapshot) => {
-      let evArr = [];
-      snapshot.docs.map((doc) => {
-        if (
-          groupIds?.includes(
-            doc.data().groupId || groupIds == doc.data().groupId
-          )
-        )
-          evArr.push({ ...doc.data(), id: doc.id });
-      });
-      setEvents(evArr);
-      console.log("EVENTS", events);
-    });
-    return unsub;
-  }, [groupIds, setEvents]);
+    const q = query(collection(db, "events"), orderBy("createdAt", "desc"))
+    const unsub = onSnapshot(q, (snapshot)=> {
+    let eventArr = []
+      snapshot.docs.map(doc=> {
+        if (groupIds?.includes(doc.data().groupId || groupIds == doc.data().groupId))
+        eventArr.push({...doc.data(), id: doc.id})
+      })
+      setEvents(eventArr)
+    console.log("EVENTS", events)
+  })
+  return unsub
+  }, [groupIds]); //maybe add events
 
-  if (events?.length) {
+
     return (
       <View style={styles.events}>
         <FlatList
@@ -82,13 +78,6 @@ const Events = (props) => {
         />
       </View>
     );
-  } else {
-    return (
-      <Text>
-        Looks like you don't have any plans yet. Create an event to get started!
-      </Text>
-    );
-  }
 };
 
 const styles = StyleSheet.create({

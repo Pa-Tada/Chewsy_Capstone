@@ -22,6 +22,7 @@ import {
   getDoc,
   doc,
   setDoc,
+  updateDoc
 } from "firebase/firestore";
 import { set } from "react-native-reanimated";
 import { Button } from "@rneui/base";
@@ -107,7 +108,7 @@ const Profile = () => {
   };
   return (
     <View style={styles.container}>
-      <Divider />
+      <Divider color="orange"/>
       <View style={styles.contents}>
         <Text style={styles.sectionTitle}>Edit Profile</Text>
 

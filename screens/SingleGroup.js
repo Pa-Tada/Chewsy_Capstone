@@ -32,6 +32,7 @@ import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Events from "../components/Events";
 import Friends from "../components/Friends";
+import AddFriend from "../components/AddFriend";
 
 const addFriendField = [{ id: 1, field: "Email/Username" }];
 
@@ -53,18 +54,6 @@ const SingleGroup = ({ route }) => {
   //   return unsubscribe;
   // }, [userFoodGenre]);
 
-  const lastItem = () => {
-    return (
-      <View>
-        <TouchableOpacity onPress={() => setModalOpen(false)}>
-          <View style={styles.buttonWrapper}>
-            <Text style={styles.button}>Submit</Text>
-          </View>
-        </TouchableOpacity>
-        <Button title="Cancel" onPress={() => setModalOpen(false)}></Button>
-      </View>
-    );
-  };
 
   const eventLastItem = () => {
     return (
@@ -101,39 +90,14 @@ const SingleGroup = ({ route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Divider />
-      <Modal visible={modalOpen} animationType="slide">
-        <SafeAreaView style={styles.modalContent}>
-          <View style={styles.modalContent}>
-            <View style={styles.container}>
-              <Divider />
-              <View style={styles.contents}>
-                <Text style={styles.sectionTitle}>Add Friends</Text>
-
-                <View style={styles.form}>
-                  <FlatList
-                    ListFooterComponent={lastItem}
-                    data={addFriendField}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => (
-                      <Input
-                        labelStyle={{ fontWeight: "normal" }}
-                        inputStyle={{ color: "white", fontSize: 14 }}
-                        label={item.field}
-                      />
-                    )}
-                  />
-                </View>
-              </View>
-              {/* <Footer /> */}
-            </View>
-          </View>
-        </SafeAreaView>
+      <Divider color="orange"/>
+      <Modal visible={modalOpen} animationType="slide" transparent={true}>
+        <AddFriend modalOpen={modalOpen} setModalOpen={setModalOpen} currentGroup={currentGroup}/>
       </Modal>
 
       <View style={styles.friendsWrapper}>
         <View style={styles.titleContainer}>
-          <Text style={styles.sectionTitle}>Friends In Group</Text>
+          <Text style={styles.sectionTitle}>Group Members</Text>
           <TouchableOpacity
             style={styles.iconWrapper}
             onPress={() => setModalOpen(true)}
@@ -142,7 +106,7 @@ const SingleGroup = ({ route }) => {
               type="antdesign"
               size="28px"
               name="adduser"
-              color="gainsboro"
+              color="white"
             />
           </TouchableOpacity>
         </View>
@@ -231,7 +195,7 @@ const SingleGroup = ({ route }) => {
               type="material-community"
               size="30px"
               name="calendar-plus"
-              color="gainsboro"
+              color="white"
             />
           </TouchableOpacity>
         </View>
