@@ -40,8 +40,8 @@ const CreateGroup = (props) => {
 
   const handleSubmit = async () => {
     try{
-    //
-    // console.log("GROUP MEMBER", member)
+
+    console.log("GROUP MEMBER", member)
     setMembers([...members, member]);
     console.log("GROUP MEMBERS ARRAY", members)
 
@@ -74,7 +74,7 @@ const groupDocRef = await addDoc(collection(db, "groups"), {
     setGroupName("");
     setMember("");
   } catch (err){
-    console.log("CREATE GROUP ERROR", err)
+    console.log("CreateGroup.js error creating", err)
   }
   };
 

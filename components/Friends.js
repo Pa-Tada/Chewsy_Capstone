@@ -31,7 +31,7 @@ const Friends = (props) => {
           members.push({...doc.data(), id: doc.id})
         })
       setFriends(members)
-      console.log("FRIENDS", friends)
+      console.log("Friends.js friends", friends)
     })
 
     return unsub

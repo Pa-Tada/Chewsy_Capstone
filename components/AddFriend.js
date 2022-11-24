@@ -90,7 +90,7 @@ const AddFriend = (props) => {
       setGroupName("");
       setMember("");
     } catch (err) {
-      console.log("Add Members ERROR", err);
+      console.log("AddFriend.js error creating", err);
     }
   };
 

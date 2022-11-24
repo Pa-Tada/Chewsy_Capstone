@@ -57,11 +57,10 @@ const lastItem = () => {
 };
 
 const Profile = () => {
-  console.log("USER WITHIN FORM:", user);
+  console.log("Profile.js USER WITHIN FORM:", user);
   // console.log(auth.currentUser.email)
   useEffect(() => {
     getUser();
-    console.log("im working");
   });
   const [firstName, setFirstName] = useState(user.firstName);
   const [lastName, setLastName] = useState(user.lastName);
@@ -164,7 +163,6 @@ const Profile = () => {
               onPress={() => {
                 setFoodGenre([...foodGenre, foodName]);
                 setFoodName("");
-                console.log("FOOD GENRE");
               }}
             >
               <View style={styles.buttonWrapper2}>
@@ -179,10 +177,10 @@ const Profile = () => {
                   <TouchableOpacity
                     style={styles.foodButtonWrapper}
                     onPress={() => {
-                      console.log(foodGenre);
+                      console.log("Profile.js", foodGenre);
                       setFoodGenre(
                         foodGenre.filter((currentFood) => {
-                          console.log(currentFood);
+                          console.log("Profile.js currentFood", currentFood);
                           return currentFood !== item;
                         })
                       );

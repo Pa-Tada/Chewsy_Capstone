@@ -21,7 +21,7 @@ const Groups = (props) => {
         }
       })
     setGroups([...groupArr])
-    console.log("GROUPS ID", groupIds)
+    console.log("Groups.js groupIds", groupIds)
   })
   return unsub
   }, [groupIds?.length]); //, groups.length

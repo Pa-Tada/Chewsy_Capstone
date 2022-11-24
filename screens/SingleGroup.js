@@ -55,22 +55,6 @@ const SingleGroup = ({ route }) => {
   // }, [userFoodGenre]);
 
 
-  const eventLastItem = () => {
-    return (
-      <View>
-        <TouchableOpacity onPress={() => setEventModalOpen(false)}>
-          <View style={styles.buttonWrapper}>
-            <Text style={styles.button}>Create Event</Text>
-          </View>
-        </TouchableOpacity>
-        <Button
-          title="Cancel"
-          onPress={() => setEventModalOpen(false)}
-        ></Button>
-      </View>
-    );
-  };
-
   const handleFoodGenreEdit = () => {
     setDoc(doc(db, "users", user.id), {
       imgUrl: userimgUrl,
