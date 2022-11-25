@@ -34,6 +34,8 @@ import Events from "../components/Events";
 import Friends from "../components/Friends";
 import AddFriend from "../components/AddFriend";
 
+import DateTimePicker from "@react-native-community/datetimepicker";
+
 const addFriendField = [{ id: 1, field: "Email/Username" }];
 
 const SingleGroup = ({ route }) => {
@@ -41,8 +43,36 @@ const SingleGroup = ({ route }) => {
   const navigation = useNavigation();
   const [modalOpen, setModalOpen] = useState(false);
   const [eventModalOpen, setEventModalOpen] = useState(false);
+
   const [userFoodGenre, setUserFoodGenre] = useState(user.foodGenre);
   const [userFoodGenreName, setUserFoodGenreName] = useState("");
+
+  const [date, setDate] = useState(new Date());
+
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setShow(false);
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    if (Platform.OS === "android") {
+      setShow(true);
+      // for iOS, add a button that closes the picker
+    }
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode("date");
+  };
+
+  const showTimepicker = () => {
+    showMode("time");
+  };
 
   // useEffect(() => {
   //   const unsubscribe = onSnapshot(
@@ -53,7 +83,6 @@ const SingleGroup = ({ route }) => {
   //   );
   //   return unsubscribe;
   // }, [userFoodGenre]);
-
 
   const eventLastItem = () => {
     return (
@@ -72,20 +101,31 @@ const SingleGroup = ({ route }) => {
   };
 
   const handleFoodGenreEdit = () => {
-    console.log(user)
+    console.log(user);
     setDoc(doc(db, "users", auth.currentUser.uid), {
-      imgUrl: user.imgUrl,
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
-      groupIds: user.groupIds,
       foodGenre: userFoodGenre,
       restaurantRating: user.restaurantRating,
       dietaryRestrictions: user.dietaryRestrictions,
       affordability: user.affordability,
-      likedRestaurants: user.likedRestaurants,
-      dislikedRestaurants: user.dislikedRestaurants,
-      visitedRestaurants: user.visitedRestaurants,
+      imgUrl: user.imgUrl,
+      groupIds: user.groupIds,
+    });
+  };
+
+  const createEvent = async () => {
+    console.log('group id:', groupId)
+    console.log('date:', date)
+    await addDoc(collection(db, "events"), {
+      createdAt: date,
+      groupId: groupId,
+      restImageUrl:
+        "https://images.unsplash.com/photo-1540224769541-7e6e20a42330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=776&q=80",
+      restLoc: "",
+      restName: "",
+      submissions: 1,
     });
   };
 
@@ -96,9 +136,13 @@ const SingleGroup = ({ route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Divider color="orange"/>
+      <Divider color="orange" />
       <Modal visible={modalOpen} animationType="slide" transparent={true}>
-        <AddFriend modalOpen={modalOpen} setModalOpen={setModalOpen} currentGroup={currentGroup}/>
+        <AddFriend
+          modalOpen={modalOpen}
+          setModalOpen={setModalOpen}
+          currentGroup={currentGroup}
+        />
       </Modal>
 
       <View style={styles.friendsWrapper}>
@@ -108,12 +152,7 @@ const SingleGroup = ({ route }) => {
             style={styles.iconWrapper}
             onPress={() => setModalOpen(true)}
           >
-            <Icon
-              type="antdesign"
-              size="28px"
-              name="adduser"
-              color="white"
-            />
+            <Icon type="antdesign" size="28px" name="adduser" color="white" />
           </TouchableOpacity>
         </View>
         <Friends currentGroup={currentGroup} />
@@ -127,7 +166,7 @@ const SingleGroup = ({ route }) => {
                 <Text style={styles.sectionTitle}>Create Event</Text>
 
                 <View style={styles.form}>
-                  <Input
+                  {/* <Input
                     labelStyle={{ fontWeight: "normal" }}
                     inputStyle={{ color: "white", fontSize: 14 }}
                     label="Event Date"
@@ -136,7 +175,41 @@ const SingleGroup = ({ route }) => {
                     labelStyle={{ fontWeight: "normal" }}
                     inputStyle={{ color: "white", fontSize: 14 }}
                     label="Event Time"
-                  />
+                  /> */}
+
+                  <View>
+                    <Text
+                      style={{
+                        color: "white",
+                        fontSize: "14",
+                        alignSelf: "center",
+                      }}
+                    >
+                      Your Event Will take place on {date.toLocaleString()}
+                    </Text>
+                    <TouchableOpacity
+                      style={styles.buttonWrapper}
+                      onPress={showDatepicker}
+                    >
+                      <Text>Select Date</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.buttonWrapper}
+                      onPress={showTimepicker}
+                    >
+                      <Text>Select Time</Text>
+                    </TouchableOpacity>
+
+                    <DateTimePicker
+                      style={{ color: "white" }}
+                      testID="dateTimePicker"
+                      value={date}
+                      mode={mode}
+                      is24Hour={true}
+                      onChange={onChange}
+                    />
+                  </View>
+
                   <Input
                     labelStyle={{ fontWeight: "normal" }}
                     inputStyle={{ color: "white", fontSize: 14 }}
@@ -165,16 +238,18 @@ const SingleGroup = ({ route }) => {
                         <Text style={styles.foodListItem}>
                           {foodGenre.item}
                         </Text>
-                        <TouchableOpacity style={styles.foodButtonWrapper}
-                        onPress={() => {
-                          console.log(foodGenre.item);
-                          setUserFoodGenre(
-                            userFoodGenre.filter((currentFood) => {
-                              console.log("current food:",currentFood);
-                              return currentFood !== foodGenre.item;
-                            })
-                          );
-                        }}>
+                        <TouchableOpacity
+                          style={styles.foodButtonWrapper}
+                          onPress={() => {
+                            console.log(foodGenre.item);
+                            setUserFoodGenre(
+                              userFoodGenre.filter((currentFood) => {
+                                console.log("current food:", currentFood);
+                                return currentFood !== foodGenre.item;
+                              })
+                            );
+                          }}
+                        >
                           <Text>-</Text>
                         </TouchableOpacity>
                       </View>
@@ -182,20 +257,22 @@ const SingleGroup = ({ route }) => {
                   />
                   {/* </View> */}
 
-                  <TouchableOpacity onPress={() => setEventModalOpen(false)}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      handleFoodGenreEdit();
+                      createEvent();
+                      setEventModalOpen(false);
+                    }}
+                  >
                     <View style={styles.buttonWrapper}>
                       <Text style={styles.button}>Create Event</Text>
                     </View>
                   </TouchableOpacity>
                   <Button
                     title="Cancel"
-                    onPress={() =>{
-                      setEventModalOpen(false)
-                      handleFoodGenreEdit()
-
-                    }
-
-                      }
+                    onPress={() => {
+                      setEventModalOpen(false);
+                    }}
                   ></Button>
                 </View>
               </View>
@@ -236,6 +313,8 @@ export const styles = StyleSheet.create({
   buttonWrapper: {
     paddingVertical: 10,
     paddingHorizontal: 10,
+    marginBottom: 10,
+    marginTop: 10,
     borderRadius: 60,
     width: 150,
     backgroundColor: "orange",
