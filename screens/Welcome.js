@@ -24,7 +24,7 @@ const Welcome = () => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        navigation.navigate("Home");
+        // navigation.navigate("Home");
         getUser();
       }
     });
@@ -44,14 +44,21 @@ const Welcome = () => {
           firstName: "",
           lastName: "",
           foodGenre: [],
-          affordability: "$",
-          restaurantRating: "4",
+          affordability: 1,
+          restaurantRating: 4,
           dietaryRestrictions: "none",
           groupIds: [],
           imgUrl:
             "https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png",
         });
         getUser()
+      })
+      .then(()=>{
+        return getUser()
+      })
+      .then(()=>{
+
+        navigation.navigate("Profile")
       })
       .catch((error) => alert(error.message));
   };
@@ -61,6 +68,9 @@ const Welcome = () => {
       .signInWithEmailAndPassword(email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
+      })
+      .then(()=>{
+        navigation.navigate("Home")
       })
       .catch((error) => alert(error.message));
   };

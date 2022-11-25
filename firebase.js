@@ -17,12 +17,13 @@ import {
 
 // ------------- PRIMARY --------------
 // const firebaseConfig = {
-//   apiKey: "AIzaSyAEHjcMAwTGGilDO0R5rEv9UgMjQ9EABl0",
-//   authDomain: "chewsy-72992.firebaseapp.com",
-//   projectId: "chewsy-72992",
-//   storageBucket: "chewsy-72992.appspot.com",
-//   messagingSenderId: "335930455123",
-//   appId: "1:335930455123:web:6dc475b489b9a8274442a6",
+//   apiKey: "AIzaSyAwJNaV_7u-v-IebeaPaFNPxbT8D1AmUd0",
+//   authDomain: "chewsy2-296c9.firebaseapp.com",
+//   projectId: "chewsy2-296c9",
+//   storageBucket: "chewsy2-296c9.appspot.com",
+//   messagingSenderId: "589371967540",
+//   appId: "1:589371967540:web:40a7d8e7363fe5cc75a261",
+//   measurementId: "G-Y9SMGW9NJT"
 // };
 
 // ------------- BACKUP --------------

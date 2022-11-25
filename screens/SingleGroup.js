@@ -76,8 +76,9 @@ const SingleGroup = ({ route }) => {
   }, [currentGroup, currentGroup.userIds.length]);
 
   const handleFoodGenreEdit = () => {
-    setDoc(doc(db, "users", user.id), {
-      imgUrl: userimgUrl,
+    console.log(user)
+    setDoc(doc(db, "users", auth.currentUser.uid), {
+      imgUrl: user.imgUrl,
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
@@ -88,6 +89,11 @@ const SingleGroup = ({ route }) => {
       affordability: user.affordability,
     });
   };
+
+  useEffect(() => {
+    getUser();
+    console.log("im working");
+  });
 
   return (
     <SafeAreaView style={styles.container}>
@@ -161,13 +167,22 @@ const SingleGroup = ({ route }) => {
                   </TouchableOpacity>
                   {/* <View style = {}> */}
                   <FlatList
-                    data={user.foodGenre}
+                    data={userFoodGenre}
                     renderItem={(foodGenre) => (
                       <View style={styles.foodGenres}>
                         <Text style={styles.foodListItem}>
                           {foodGenre.item}
                         </Text>
-                        <TouchableOpacity style={styles.foodButtonWrapper}>
+                        <TouchableOpacity style={styles.foodButtonWrapper}
+                        onPress={() => {
+                          console.log(foodGenre.item);
+                          setUserFoodGenre(
+                            userFoodGenre.filter((currentFood) => {
+                              console.log("current food:",currentFood);
+                              return currentFood !== foodGenre.item;
+                            })
+                          );
+                        }}>
                           <Text>-</Text>
                         </TouchableOpacity>
                       </View>
@@ -182,7 +197,13 @@ const SingleGroup = ({ route }) => {
                   </TouchableOpacity>
                   <Button
                     title="Cancel"
-                    onPress={() => setEventModalOpen(false)}
+                    onPress={() =>{
+                      setEventModalOpen(false)
+                      handleFoodGenreEdit()
+
+                    }
+
+                      }
                   ></Button>
                 </View>
               </View>
