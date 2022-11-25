@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { MultipleSelectList } from "react-native-dropdown-select-list";
-
 import {
   StyleSheet,
   Text,
@@ -71,15 +70,9 @@ const AddFriend = (props) => {
 
   const handleSubmit = async () => {
     console.log("SELECTS", allSelected);
-
-    try {
       //console.log("Modal BEFORE SETGROUP", group);
-      // console.log("Add Friend", member);
-      //setMembers(members.push(member)); //setMembers([...members, member]);
+    try {
 
-      // console.log("Add Friends Array", members);
-
-      // Extract member ids from input first
       await Promise.all(
         allSelected.map(async (selected) => {
           await updateDoc(doc(db, "groups", currentGroup.id), {
@@ -100,7 +93,6 @@ const AddFriend = (props) => {
       //console.log("Modal After SETGROUP", group);
 
       setModalOpen(false);
-      //setMember("");
     } catch (err) {
       console.log("AddFriend.js error creating", err);
     }

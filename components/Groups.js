@@ -24,7 +24,7 @@ const Groups = (props) => {
     console.log("Groups.js groupIds", groupIds)
   })
   return unsub
-  }, [groupIds?.length]); //, groups.length
+  }, [groupIds?.length]); 
 
   return (
         <View style={styles.groups}>

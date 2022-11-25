@@ -35,7 +35,6 @@ import { MultipleSelectList } from "react-native-dropdown-select-list";
 const CreateGroup = (props) => {
   const { user, setUser, groupModalOpen, setGroupModalOpen } = props;
   const [groupName, setGroupName] = useState("");
-
   const [allSelected, setAllSelected] = useState([]);
   const [data, setData] = useState([]);
 
@@ -87,8 +86,8 @@ const CreateGroup = (props) => {
         })
       );
 
+              //-------ESSENTIAL--------
       await setUser(
-        //-------ESSENTIAL--------
         onSnapshot(doc(db, "users", auth.currentUser.uid), (snapshot) => {
           return { ...snapshot.data(), id: snapshot.id };
         })
