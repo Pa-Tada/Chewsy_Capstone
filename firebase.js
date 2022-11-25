@@ -14,7 +14,6 @@ import {
   where,
 } from "firebase/firestore";
 
-
 // ------------- PRIMARY --------------
 // const firebaseConfig = {
 //   apiKey: "AIzaSyAwJNaV_7u-v-IebeaPaFNPxbT8D1AmUd0",
@@ -27,14 +26,15 @@ import {
 // };
 
 // ------------- BACKUP --------------
-const firebaseConfig = { // chewsy 2
+const firebaseConfig = {
+  // chewsy 2
   apiKey: "AIzaSyAwJNaV_7u-v-IebeaPaFNPxbT8D1AmUd0",
   authDomain: "chewsy2-296c9.firebaseapp.com",
   projectId: "chewsy2-296c9",
   storageBucket: "chewsy2-296c9.appspot.com",
   messagingSenderId: "589371967540",
   appId: "1:589371967540:web:40a7d8e7363fe5cc75a261",
-  measurementId: "G-Y9SMGW9NJT"
+  measurementId: "G-Y9SMGW9NJT",
 };
 
 // Initialize Firebase
@@ -51,46 +51,29 @@ const auth = firebase.auth();
 const db = getFirestore();
 
 // collection ref
-const colRef = query(collection(db, "users"), orderBy("email"))
+const colRef = query(collection(db, "users"), orderBy("email"));
 
 // getting all users
 let allUsers;
 onSnapshot(colRef, (docSnap) => {
   allUsers = [];
-  docSnap.forEach( (doc) => {
-     allUsers.push({ ...doc.data(), id: doc.id });
+  docSnap.forEach((doc) => {
+    allUsers.push({ ...doc.data(), id: doc.id });
   });
 });
-
-
 
 // get current user data
 let user;
 const getUser = async () => {
   if (auth.currentUser) {
-    // const querySnapshot = await getDocs(collection(db, "users"));
-    // querySnapshot.forEach((doc) => {
-    //   // doc.data() is never undefined for query doc snapshots
-    //   // console.log(doc.id, " => ", doc.data());
-    //   // r
-
-    //   if (doc.data().email === auth.currentUser.email) {
-    //     user = { data: doc.data(), id: doc.id };
-    //     console.log("USER:", user);
-    //   } // try switching this to id
-    // });
-  //   const docRef = doc(db, "users", auth.currentUser.uid);
-  //  const docSnap = await getDoc(docRef);
-  //   if (docSnap.exists()) {
-  //     user = {...docSnap.data(), id: docSnap.id}
-      onSnapshot(doc(db, "users", auth.currentUser.uid), (snapshot) => {
-         user= { ...snapshot.data(), id: snapshot.id };
-      })
-    // } else {
-    //   console.log("No such document!");
-    // }
+    const docRef = doc(db, "users", auth.currentUser.uid);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      user = { ...docSnap.data(), id: docSnap.id };
+    } else {
+      console.log("No such document!");
+    }
   }
-
 };
 getUser();
 
