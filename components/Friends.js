@@ -21,7 +21,7 @@ import Events from "../components/Events";
 const Friends = (props) => {
   const { currentGroup, friends, setFriends } = props
   const navigation = useNavigation();
-  
+
   // const [friends, setFriends] = useState([{name: "Loading...", id: "unique"}]);
 
   // useEffect(()=> {

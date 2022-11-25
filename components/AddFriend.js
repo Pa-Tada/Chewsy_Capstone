@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { SearchBar } from "@rneui/themed";
+import { MultipleSelectList } from "react-native-dropdown-select-list";
+
 import {
   StyleSheet,
   Text,
@@ -42,30 +43,19 @@ const AddFriend = (props) => {
     friends,
     setFriends,
   } = props;
-  const [member, setMember] = useState("");
-  const [members, setMembers] = useState([]);
+  const [allSelected, setAllSelected] = useState([]);
+  const [data, setData] = useState([]);
 
-  // const [data, setData] = useState([]);
-  // const [query, setQuery] = useState("");
-  // const [heroes, setHeroes] = useState([]);
+  useEffect(() => {
+    const getAllUsers = () => {
+      let userLimted = allUsers.map((user) => {
+        return { key: user.id, value: user.email };
+      });
+      setData(userLimted);
+    };
+    getAllUsers();
+  }, []);
 
-  // useEffect(() => {
-  //   const getAllUsers = () => {
-  //     // let allUsers;
-  //     // onSnapshot(collection(db, "users"), (docSnap) => {
-  //     //   allUsers = [];
-  //     //   docSnap.forEach((doc) => {
-  //     //     allUsers.push({ ...doc.data(), id: doc.id });
-  //     //   });
-  //     // });
-  //     setData(allUsers);
-  //     setHeroes(allUsers.slice());
-  //     // setGroup(currentGroup);
-  //   };
-  //   getAllUsers();
-  // }, [data]);
-
- 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "users"), (snapshot) => {
       let members = [];
@@ -76,25 +66,26 @@ const AddFriend = (props) => {
       });
       setFriends(members);
     });
-    //console.log("SingleGroup.js friends", friends)
     return unsub;
   }, [group]);
 
   const handleSubmit = async () => {
+    console.log("SELECTS", allSelected);
+
     try {
-      console.log("Modal BEFORE SETGROUP", group);
+      //console.log("Modal BEFORE SETGROUP", group);
       // console.log("Add Friend", member);
-      setMembers(members.push(member));  //setMembers([...members, member]);
+      //setMembers(members.push(member)); //setMembers([...members, member]);
 
       // console.log("Add Friends Array", members);
 
       // Extract member ids from input first
       await Promise.all(
-        members.map(async (memberId) => {
+        allSelected.map(async (selected) => {
           await updateDoc(doc(db, "groups", currentGroup.id), {
-            userIds: arrayUnion(memberId),
+            userIds: arrayUnion(selected),
           });
-          await updateDoc(doc(db, "users", memberId), {
+          await updateDoc(doc(db, "users", selected), {
             groupIds: arrayUnion(currentGroup.id),
           });
         })
@@ -106,10 +97,10 @@ const AddFriend = (props) => {
       //     return { ...snapshot.data(), id: snapshot.id };
       //   })
       // );
-      console.log("Modal After SETGROUP", group);
+      //console.log("Modal After SETGROUP", group);
 
       setModalOpen(false);
-      setMember("");
+      //setMember("");
     } catch (err) {
       console.log("AddFriend.js error creating", err);
     }
@@ -118,34 +109,20 @@ const AddFriend = (props) => {
   return (
     <View style={styles.modalContent}>
       <View style={styles.form}>
-        <Input
-          placeholder="Email/Username"
-          labelStyle={{ fontWeight: "bold" }}
-          inputStyle={{ color: "white", fontSize: 14 }}
-          label="Add Friends"
-          value={member}
-          onChangeText={(text) => setMember(text)}
-        />
-        {/* <SearchBar
-        onChangeText={updateQuery}
-        value={query}
-        placeholder="Type Here..."
-      />
-        <KeyboardAwareScrollView>
-
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            data={heroes}
-            extraData={query}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <View>
-                <Text style={styles.flatList}>{filterNames(item.email)}</Text>
-              </View>
-            )}
+        <View style={styles.selectionList}>
+          <MultipleSelectList
+            save="key"
+            setSelected={(val) => setAllSelected(val)}
+            data={data}
+            placeholder="Find Friends"
+            boxStyles={{color: "white" }}
+            dropdownStyles={{color: "white" }}
+            inputStyles={{color: "white" }}
+            dropdownItemStyles={{color:"white"}}
+            dropdownTextStyles={{color:"white"}}
+            maxHeight={300}
           />
-        </KeyboardAwareScrollView> */}
-
+        </View>
         <View style={styles.allButtons}>
           <TouchableOpacity onPress={() => handleSubmit()}>
             <View style={styles.buttonWrapper}>
@@ -175,6 +152,13 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     paddingTop: 15,
   },
+  form: {
+    padding: 10,
+  },
+  selectionList: {
+    paddingHorizontal: 15,
+    color: "white"
+  },
   allButtons: {
     paddingTop: 7,
     paddingBottom: 12,
@@ -192,28 +176,6 @@ const styles = StyleSheet.create({
   button: {
     fontWeight: "bold",
     fontSize: 15,
-  },
-  form: {
-    //alignSelf: "center",
-    marginTop: 15,
-    padding: 10,
-  },
-  list: {
-    marginTop: 24,
-    marginRight: 8,
-    width: 150,
-    height: 300,
-    borderRadius: 50,
-    alignItems: "center",
-  },
-  flatList: {
-    paddingLeft: 15,
-    marginTop: 15,
-    paddingBottom: 15,
-    fontSize: 20,
-    borderBottomColor: "#26a69a",
-    borderBottomWidth: 1,
-    color: "white",
   },
 });
 

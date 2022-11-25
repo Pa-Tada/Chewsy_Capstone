@@ -30,13 +30,24 @@ import {
   setDoc,
   arrayUnion,
 } from "firebase/firestore";
-
+import { MultipleSelectList } from "react-native-dropdown-select-list";
 
 const CreateGroup = (props) => {
   const { user, setUser, groupModalOpen, setGroupModalOpen } = props;
   const [groupName, setGroupName] = useState("");
-  const [member, setMember] = useState("");
-  const [members, setMembers] = useState([auth.currentUser.uid]);
+
+  const [allSelected, setAllSelected] = useState([]);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const getAllUsers = () => {
+      let userLimted = allUsers.map((user) => {
+        return { key: user.id, value: user.email };
+      });
+      setData(userLimted);
+    };
+    getAllUsers();
+  }, []);
 
   const userInfo = () => {
     const filteredUser = allUsers.find(
@@ -51,11 +62,9 @@ const CreateGroup = (props) => {
 
   const handleSubmit = async () => {
     try {
-      console.log("GROUP MEMBER", member);
-      setMembers(members.push(member));
-      //setMembers([...members, member]);
-      console.log("GROUP MEMBERS ARRAY", members);
-      console.log("USER IN CREATEGROUP BEFORE SET", user);
+      console.log("SELECTS", allSelected)
+      let addLeader = allSelected.push(auth.currentUser.uid)
+      console.log("WITH LEADER", allSelected);
 
       const groupDocRef = await addDoc(collection(db, "groups"), {
         name: groupName,
@@ -63,7 +72,7 @@ const CreateGroup = (props) => {
         createdAt: serverTimestamp(),
         imgUrl:
           "https://s3.amazonaws.com/freestock-prod/450/freestock_564895924.jpg",
-        userIds: members,
+        userIds: allSelected,
       });
 
       // await updateDoc(doc(db, "users", auth.currentUser.uid), {
@@ -71,14 +80,15 @@ const CreateGroup = (props) => {
       // });
 
       await Promise.all(
-        members.map(async (memberId) => {
+        allSelected.map(async (memberId) => {
           await updateDoc(doc(db, "users", memberId), {
             groupIds: arrayUnion(groupDocRef.id),
           });
         })
       );
 
-      await setUser(      //-------ESSENTIAL--------
+      await setUser(
+        //-------ESSENTIAL--------
         onSnapshot(doc(db, "users", auth.currentUser.uid), (snapshot) => {
           return { ...snapshot.data(), id: snapshot.id };
         })
@@ -86,7 +96,6 @@ const CreateGroup = (props) => {
 
       setGroupModalOpen(false);
       setGroupName("");
-      setMember("");
     } catch (err) {
       console.log("CreateGroup.js error creating", err);
     }
@@ -103,25 +112,36 @@ const CreateGroup = (props) => {
             value={groupName}
             onChangeText={(text) => setGroupName(text)}
           />
-          <Input
-            placeholder="Email/Username"
-            labelStyle={{ fontWeight: "bold" }}
-            inputStyle={{ color: "white", fontSize: 14 }}
-            label="Add Group Members"
-            value={member}
-            onChangeText={(text) => setMember(text)}
-          />
-          <TouchableOpacity onPress={() => handleSubmit()}>
-            <View style={styles.buttonWrapper}>
-              <Text style={styles.button}>Create Group</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setGroupModalOpen(false)}
-            style={{ color: "white" }}
-          >
-            <Text style={{ color: "white", textAlign: "center" }}>Cancel</Text>
-          </TouchableOpacity>
+          <View style={styles.selectionList}>
+            <MultipleSelectList
+
+              save="key"
+              setSelected={(val) => setAllSelected(val)}
+              data={data}
+              placeholder="Find Friends"
+              boxStyles={{ color: "white" }}
+              dropdownStyles={{ color: "white" }}
+              inputStyles={{ color: "white" }}
+              dropdownItemStyles={{ color: "white" }}
+              dropdownTextStyles={{ color: "white" }}
+              maxHeight={220}
+            />
+          </View>
+          <View style={styles.allButtons}>
+            <TouchableOpacity onPress={() => handleSubmit()}>
+              <View style={styles.buttonWrapper}>
+                <Text style={styles.button}>Create Group</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setGroupModalOpen(false)}
+              style={{ color: "white" }}
+            >
+              <Text style={{ color: "white", textAlign: "center" }}>
+                Cancel
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </KeyboardAwareScrollView>
     </View>
@@ -133,11 +153,18 @@ const styles = StyleSheet.create({
     borderWidth: 0.2,
     borderTopColor: "orange",
     backgroundColor: "#181818",
-    height: "50%",
+    height: "60%",
     marginTop: "auto",
     alignContent: "center",
     borderRadius: 15,
     paddingTop: 15,
+  },
+  form: {
+    padding: 10,
+  },
+  selectionList: {
+    paddingHorizontal: 15,
+    color: "white",
   },
   buttonWrapper: {
     paddingVertical: 10,
@@ -152,10 +179,6 @@ const styles = StyleSheet.create({
   button: {
     fontWeight: "bold",
     fontSize: 15,
-  },
-  form: {
-    marginTop: 15,
-    padding: 10,
   },
 });
 
