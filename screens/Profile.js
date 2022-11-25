@@ -22,7 +22,7 @@ import {
   getDoc,
   doc,
   setDoc,
-  updateDoc
+  updateDoc,
 } from "firebase/firestore";
 import { set } from "react-native-reanimated";
 import { Button } from "@rneui/base";
@@ -39,7 +39,7 @@ const firstItem = () => {
           containerStyle={{ alignSelf: "center", paddingBottom: 10 }}
           size="large"
           source={{
-            uri: "https://c8.alamy.com/comp/2HYCH09/larry-david-attending-the-natural-resources-defense-councils-stand-up!-event-at-the-wallis-annenberg-center-for-the-performing-arts-2HYCH09.jpg",
+            uri: `${imgUrl}`,
           }}
         />
       </TouchableOpacity>
@@ -61,12 +61,14 @@ const Profile = () => {
   const navigation = useNavigation();
   console.log("USER WITHIN FORM:", user);
   // console.log(auth.currentUser.email)
-  useEffect(() => {
-    getUser();
-    console.log("im working");
-  });
+  // useEffect(() => {
+  //   getUser();
+  //   console.log("im working");
+  // });
   const [firstName, setFirstName] = useState(user.firstName);
   const [lastName, setLastName] = useState(user.lastName);
+
+  const [imgUrl, setImgUrl] = useState(user.imgUrl);
 
   const [foodName, setFoodName] = useState("");
   const [foodGenre, setFoodGenre] = useState(user.foodGenre);
@@ -103,14 +105,13 @@ const Profile = () => {
       restaurantRating: restaurantRating,
       dietaryRestrictions: dietaryRestrictions,
       affordability: affordability,
-      likedRestaurants: likedRestaurants,
-      dislikedRestaurants: dislikedRestaurants,
-      visitedRestaurants: visitedRestaurants,
+      imgUrl: imgUrl,
+      groupIds: user.groupIds,
     });
   };
   return (
     <View style={styles.container}>
-      <Divider color="orange"/>
+      <Divider color="orange" />
       <View style={styles.contents}>
         <Text style={styles.sectionTitle}>Edit Profile</Text>
 
@@ -122,7 +123,7 @@ const Profile = () => {
                 containerStyle={{ alignSelf: "center", paddingBottom: 10 }}
                 size="large"
                 source={{
-                  uri: "https://c8.alamy.com/comp/2HYCH09/larry-david-attending-the-natural-resources-defense-councils-stand-up!-event-at-the-wallis-annenberg-center-for-the-performing-arts-2HYCH09.jpg",
+                  uri: `${imgUrl}`,
                 }}
               />
             </TouchableOpacity>
@@ -140,7 +141,7 @@ const Profile = () => {
               value={lastName}
               onChangeText={(text) => setLastName(text)}
             />
-            <Input
+            {/* <Input
               labelStyle={{ fontWeight: "normal" }}
               inputStyle={{ color: "white", fontSize: 14 }}
               label="Food Genre"
@@ -148,17 +149,34 @@ const Profile = () => {
               onChangeText={(text) => setFoodName(text)}
             >
               {foodName}
-            </Input>
+            </Input> */}
             <RNPickerSelect
-              labelStyle={{ fontWeight: "normal" }}
-              inputStyle={{ color: "white", fontSize: 14 }}
+              // labelStyle={{ fontWeight: "normal" }}
+              style={pickerSelectStyles}
               label="Food Genre"
               onValueChange={(value) => setFoodName(value)}
+              // onDonePress = {setFoodGenre([...foodGenre, foodName])}
+              placeholder={{ label: "What are you feeling?", value: null }}
               items={[
-                { label: "Chinese", value: "Chinese" },
-                { label: "Italian", value: "Italian" },
-                { label: "Thai", value: "Thai" },
-                { label: "American", value: "American" },
+                { label: "American", value: "newamerican" },
+                { label: "Breakfast & Brunch", value: "breakfast_brunch" },
+                { label: "Burgers", value: "burgers" },
+                { label: "Caribbean", value: "caribbean" },
+                { label: "Chinese", value: "chinese" },
+                { label: "Cuban", value: "cuban" },
+                { label: "French", value: "french" },
+                { label: "Halal", value: "halal" },
+                { label: "Indian", value: "indpak" },
+                { label: "Italian", value: "italian" },
+                { label: "Mediterranean", value: "mediterranean" },
+                { label: "Mexican", value: "mexican" },
+                { label: "Middle Eastern", value: "mideastern" },
+                { label: "Pizza", value: "pizza" },
+                { label: "Sandwiches", value: "sandwiches" },
+                { label: "Sushi", value: "sushi" },
+                { label: "Thai", value: "thai" },
+                { label: "Vegan", value: "vegan" },
+                { label: "Vegetarian", value: "vegetarian" },
               ]}
             />
 
@@ -170,7 +188,7 @@ const Profile = () => {
               }}
             >
               <View style={styles.buttonWrapper2}>
-                <Text style={styles.button}>+</Text>
+                <Text style={styles.button}>Add food</Text>
               </View>
             </TouchableOpacity>
 
@@ -196,12 +214,49 @@ const Profile = () => {
               ))}
             </View>
 
-            <Input
+            {/* <Input
               labelStyle={{ fontWeight: "normal" }}
               inputStyle={{ color: "white", fontSize: 14 }}
               label="Restaurant Rating (Out of 5)"
               value={restaurantRating}
               onChangeText={(text) => setRestaurantRating(text)}
+            /> */}
+            <RNPickerSelect
+              // labelStyle={{ fontWeight: "normal" }}
+              style={pickerSelectStyles}
+              label="Affordability"
+              onValueChange={(value) => setRestaurantRating(value)}
+              // onDonePress = {setFoodGenre([...foodGenre, foodName])}
+              placeholder={{ label: "Minimum rating?", value: 4 }}
+              items={[
+                { label: "*", value: 1 },
+                { label: "**", value: 2 },
+                { label: "***", value: 3 },
+                { label: "****", value: 4 },
+                { label: "*****", value: 5 },
+              ]}
+            />
+
+            {/* <Input
+              labelStyle={{ fontWeight: "normal" }}
+              inputStyle={{ color: "white", fontSize: 14 }}
+              label="Affordability (max: 4 dolalr signs)"
+              value={affordability}
+              onChangeText={(text) => setAffordability(text)}
+            /> */}
+            <RNPickerSelect
+              // labelStyle={{ fontWeight: "normal" }}
+              style={pickerSelectStyles}
+              label="Affordability"
+              onValueChange={(value) => setAffordability(value.length)}
+              // onDonePress = {setFoodGenre([...foodGenre, foodName])}
+              placeholder={{ label: "Price?", value: "$" }}
+              items={[
+                { label: "$", value: "$" },
+                { label: "$$", value: "$$" },
+                { label: "$$$", value: "$$$" },
+                { label: "$$$$", value: "$$$$" },
+              ]}
             />
             <Input
               labelStyle={{ fontWeight: "normal" }}
@@ -213,11 +268,11 @@ const Profile = () => {
             <Input
               labelStyle={{ fontWeight: "normal" }}
               inputStyle={{ color: "white", fontSize: 14 }}
-              label="Affordability (max: 4 dolalr signs)"
-              value={affordability}
-              onChangeText={(text) => setAffordability(text)}
+              label="Profile Picture Url"
+              value={imgUrl}
+              onChangeText={(text) => setImgUrl(text)}
             />
-            <Input
+            {/* <Input
               labelStyle={{ fontWeight: "normal" }}
               inputStyle={{ color: "white", fontSize: 14 }}
               label="Restaurants You've Liked"
@@ -275,14 +330,14 @@ const Profile = () => {
               <View style={styles.buttonWrapper2}>
                 <Text style={styles.button}>+</Text>
               </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <TouchableOpacity
               onPress={() => {
                 handleEdit();
                 getUser();
                 setFoodName("");
-                navigation.navigate("Home")
+                navigation.navigate("Home");
               }}
             >
               <View style={styles.buttonWrapper}>
@@ -298,6 +353,20 @@ const Profile = () => {
 };
 
 export default Profile;
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 4,
+    color: "white",
+    paddingRight: 30, // to ensure the text is never behind the icon
+    marginTop: 10,
+    marginBottom: 10,
+  },
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -323,7 +392,8 @@ const styles = StyleSheet.create({
   },
   buttonWrapper: {
     paddingVertical: 10,
-    marginBottom:30,
+    marginBottom: 30,
+    marginTop: 30,
     paddingHorizontal: 10,
     borderRadius: 60,
     width: 150,
@@ -332,7 +402,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   buttonWrapper2: {
-    width: 40,
+    width: 100,
     height: 40,
     backgroundColor: "orange",
     alignItems: "center",

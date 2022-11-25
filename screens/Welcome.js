@@ -44,17 +44,18 @@ const Welcome = () => {
           firstName: "",
           lastName: "",
           foodGenre: [],
-          affordability: "$",
-          restaurantRating: "4",
+          affordability: 1,
+          restaurantRating: 4,
           dietaryRestrictions: "none",
-          likedRestaurants: [],
-          dislikedRestaurants: [],
-          visitedRestaurants: [],
           groupIds: [],
           imgUrl: "https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png"
         });
       })
       .then(()=>{
+        return getUser()
+      })
+      .then(()=>{
+
         navigation.navigate("Profile")
       })
       .catch((error) => alert(error.message));
