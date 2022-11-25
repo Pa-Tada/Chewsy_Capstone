@@ -42,7 +42,8 @@
     "react-native-vector-icons": "^9.2.0",
     "react-redux": "^8.0.5",
     "reanimated-bottom-sheet": "^1.0.0-alpha.22",
-    "sequelize": "^6.25.5"
+    "sequelize": "^6.25.5",
+    "@react-native-community/slider": "4.2.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
