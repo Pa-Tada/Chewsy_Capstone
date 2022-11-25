@@ -19,23 +19,23 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import Events from "../components/Events";
 
 const Friends = (props) => {
-  const { currentGroup } = props
+  const { currentGroup, friends, setFriends } = props
   const navigation = useNavigation();
-  const [friends, setFriends] = useState([{name: "Loading...", id: "unique"}]);
+  
+  // const [friends, setFriends] = useState([{name: "Loading...", id: "unique"}]);
 
-  useEffect(()=> {
-    const unsub = onSnapshot(collection(db, "users"),  (snapshot)=> {
-      let members = []
-        snapshot.docs.map(doc=> {
-          if (currentGroup.userIds?.includes(doc.id)) // && doc.id != auth.currentUser.uid
-          members.push({...doc.data(), id: doc.id})
-        })
-      setFriends(members)
-      console.log("Friends.js friends", friends)
-    })
-
-    return unsub
-  }, [currentGroup, currentGroup.userIds.length]) //maybe add friends
+  // useEffect(()=> {
+  //   const unsub = onSnapshot(collection(db, "users"),  (snapshot)=> {
+  //     let members = []
+  //       snapshot.docs.map(doc=> {
+  //         if (currentGroup.userIds?.includes(doc.id)) // && doc.id != auth.currentUser.uid
+  //         members.push({...doc.data(), id: doc.id})
+  //       })
+  //     setFriends(members)
+  //     console.log("Friends.js friends", friends)
+  //   })
+  //   return unsub
+  // }, [currentGroup, currentGroup.userIds.length])
 
   return (
         <View style={styles.friends}>

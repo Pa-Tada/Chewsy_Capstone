@@ -33,61 +33,82 @@ import {
 } from "firebase/firestore";
 
 const AddFriend = (props) => {
-  const { modalOpen, setModalOpen, currentGroup } = props;
+  const {
+    modalOpen,
+    setModalOpen,
+    currentGroup,
+    group,
+    setGroup,
+    friends,
+    setFriends,
+  } = props;
   const [member, setMember] = useState("");
   const [members, setMembers] = useState([]);
-  const [data, setData] = useState([]);
-  const [query, setQuery] = useState("");
-  const [heroes, setHeroes] = useState([]);
 
+  // const [data, setData] = useState([]);
+  // const [query, setQuery] = useState("");
+  // const [heroes, setHeroes] = useState([]);
+
+  // useEffect(() => {
+  //   const getAllUsers = () => {
+  //     // let allUsers;
+  //     // onSnapshot(collection(db, "users"), (docSnap) => {
+  //     //   allUsers = [];
+  //     //   docSnap.forEach((doc) => {
+  //     //     allUsers.push({ ...doc.data(), id: doc.id });
+  //     //   });
+  //     // });
+  //     setData(allUsers);
+  //     setHeroes(allUsers.slice());
+  //     // setGroup(currentGroup);
+  //   };
+  //   getAllUsers();
+  // }, [data]);
+
+ 
   useEffect(() => {
-    const getAllUsers = () => {
-      // let allUsers;
-      // onSnapshot(collection(db, "users"), (docSnap) => {
-      //   allUsers = [];
-      //   docSnap.forEach((doc) => {
-      //     allUsers.push({ ...doc.data(), id: doc.id });
-      //   });
-      // });
-      setData(allUsers);
-      setHeroes(allUsers.slice());
-    };
-    getAllUsers();
-  }, [data]);
-
-  const updateQuery = (input) => {
-    setHeroes(data.slice())
-    setQuery(input);
-  };
-
-  const filterNames = (hero) => {
-    let search = query.toLowerCase();
-    if (hero.startsWith(search, 0)) {
-      return hero;
-    } else {
-      heroes.splice(heroes.indexOf(hero), 1);
-      return null;
-    }
-  };
+    const unsub = onSnapshot(collection(db, "users"), (snapshot) => {
+      let members = [];
+      snapshot.docs.map((doc) => {
+        if (group.userIds?.includes(doc.id))
+          // && doc.id != auth.currentUser.uid
+          members.push({ ...doc.data(), id: doc.id });
+      });
+      setFriends(members);
+    });
+    //console.log("SingleGroup.js friends", friends)
+    return unsub;
+  }, [group]);
 
   const handleSubmit = async () => {
     try {
-      console.log("Add Friend", member);
-      setMembers([...members, member]);
-      console.log("Add Friends Array", members);
+      console.log("Modal BEFORE SETGROUP", group);
+      // console.log("Add Friend", member);
+      setMembers(members.push(member));  //setMembers([...members, member]);
+
+      // console.log("Add Friends Array", members);
 
       // Extract member ids from input first
-      members.map(async (memberId) => {
-        await updateDoc(doc(db, "groups", currentGroup.id), {
-          userIds: arrayUnion(memberId), //enter member id instead of group id
-        });
-        await updateDoc(doc(db, "users", memberId), {
-          groupIds: arrayUnion(currentGroup.id), //enter member id instead of group id
-        });
-      });
+      await Promise.all(
+        members.map(async (memberId) => {
+          await updateDoc(doc(db, "groups", currentGroup.id), {
+            userIds: arrayUnion(memberId),
+          });
+          await updateDoc(doc(db, "users", memberId), {
+            groupIds: arrayUnion(currentGroup.id),
+          });
+        })
+      );
+
+      // await setGroup(
+      //   onSnapshot(doc(db, "groups", group.id), (snapshot) => {
+      //     console.log("SNAPSHOT", snapshot);
+      //     return { ...snapshot.data(), id: snapshot.id };
+      //   })
+      // );
+      console.log("Modal After SETGROUP", group);
 
       setModalOpen(false);
-      setGroupName("");
       setMember("");
     } catch (err) {
       console.log("AddFriend.js error creating", err);
@@ -96,17 +117,16 @@ const AddFriend = (props) => {
 
   return (
     <View style={styles.modalContent}>
-
       <View style={styles.form}>
-                  <Input
-            placeholder="Email/Username"
-            labelStyle={{ fontWeight: "bold" }}
-            inputStyle={{ color: "white", fontSize: 14 }}
-            label="Add Friends"
-            value={member}
-            onChangeText={(text) => setMember(text)}
-          />
-      {/* <SearchBar
+        <Input
+          placeholder="Email/Username"
+          labelStyle={{ fontWeight: "bold" }}
+          inputStyle={{ color: "white", fontSize: 14 }}
+          label="Add Friends"
+          value={member}
+          onChangeText={(text) => setMember(text)}
+        />
+        {/* <SearchBar
         onChangeText={updateQuery}
         value={query}
         placeholder="Type Here..."
@@ -125,6 +145,7 @@ const AddFriend = (props) => {
             )}
           />
         </KeyboardAwareScrollView> */}
+
         <View style={styles.allButtons}>
           <TouchableOpacity onPress={() => handleSubmit()}>
             <View style={styles.buttonWrapper}>

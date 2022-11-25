@@ -37,7 +37,7 @@ const Groups = (props) => {
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={styles.list}
-                onPress={() => navigation.navigate("SingleGroup", {groupId: item.id, currentGroup: item})}
+                onPress={() => navigation.navigate("SingleGroup", {groupId: item.id, currentGroup: item, groups: groups})}
               >
                 <View style={styles.shadow}>
                   <Image

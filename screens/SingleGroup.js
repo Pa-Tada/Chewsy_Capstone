@@ -34,26 +34,46 @@ import Events from "../components/Events";
 import Friends from "../components/Friends";
 import AddFriend from "../components/AddFriend";
 
-const addFriendField = [{ id: 1, field: "Email/Username" }];
-
 const SingleGroup = ({ route }) => {
-  const { groupId, currentGroup } = route.params;
+  const { groupId, currentGroup, groups } = route.params;
   const navigation = useNavigation();
   const [modalOpen, setModalOpen] = useState(false);
   const [eventModalOpen, setEventModalOpen] = useState(false);
   const [userFoodGenre, setUserFoodGenre] = useState(user.foodGenre);
   const [userFoodGenreName, setUserFoodGenreName] = useState("");
+  const [group, setGroup] = useState(currentGroup);
 
-  // useEffect(() => {
-  //   const unsubscribe = onSnapshot(
-  //     doc(db, "users", auth.currentUser.uid),
-  //     (doc) => {
-  //       console.log("Current data: ", doc.data());
-  //     }
-  //   );
-  //   return unsubscribe;
-  // }, [userFoodGenre]);
+  const [friends, setFriends] = useState([
+    { name: "Loading...", id: "unique" },
+  ]);
 
+
+  useEffect(() => {
+    const groupInfo =
+      onSnapshot(collection(db, "groups"), (snapshot) => {
+        snapshot.docs.map((doc) => {
+          if (groupId == doc.id) {
+            setGroup({ ...doc.data(), id: doc.id });
+          }
+        });
+      });
+      console.log("SingleGroup.js GROUP", group);
+    return groupInfo
+  }, [currentGroup, currentGroup.userIds.length]);
+
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, "users"), (snapshot) => {
+      let members = [];
+      snapshot.docs.map((doc) => {
+        if (currentGroup.userIds?.includes(doc.id))
+          // && doc.id != auth.currentUser.uid
+          members.push({ ...doc.data(), id: doc.id });
+      });
+      setFriends(members);
+    });
+    //console.log("SingleGroup.js friends", friends)
+    return unsub;
+  }, [currentGroup, currentGroup.userIds.length]);
 
   const handleFoodGenreEdit = () => {
     setDoc(doc(db, "users", user.id), {
@@ -66,17 +86,22 @@ const SingleGroup = ({ route }) => {
       restaurantRating: user.restaurantRating,
       dietaryRestrictions: user.dietaryRestrictions,
       affordability: user.affordability,
-      likedRestaurants: user.likedRestaurants,
-      dislikedRestaurants: user.dislikedRestaurants,
-      visitedRestaurants: user.visitedRestaurants,
     });
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Divider color="orange"/>
+      <Divider color="orange" />
       <Modal visible={modalOpen} animationType="slide" transparent={true}>
-        <AddFriend modalOpen={modalOpen} setModalOpen={setModalOpen} currentGroup={currentGroup}/>
+        <AddFriend
+          modalOpen={modalOpen}
+          setModalOpen={setModalOpen}
+          currentGroup={currentGroup}
+          friends={friends}
+          setFriends={setFriends}
+          group={group}
+          setGroup={setGroup}
+        />
       </Modal>
 
       <View style={styles.friendsWrapper}>
@@ -86,15 +111,14 @@ const SingleGroup = ({ route }) => {
             style={styles.iconWrapper}
             onPress={() => setModalOpen(true)}
           >
-            <Icon
-              type="antdesign"
-              size="28px"
-              name="adduser"
-              color="white"
-            />
+            <Icon type="antdesign" size="28px" name="adduser" color="white" />
           </TouchableOpacity>
         </View>
-        <Friends currentGroup={currentGroup} />
+        <Friends
+          currentGroup={currentGroup}
+          friends={friends}
+          setFriends={setFriends}
+        />
       </View>
       <Modal visible={eventModalOpen} animationType="slide">
         <SafeAreaView style={styles.modalContent}>

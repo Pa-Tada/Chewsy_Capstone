@@ -31,7 +31,7 @@ import {
   arrayUnion,
 } from "firebase/firestore";
 
-//allUsers?.map((user)=> user.email)
+
 const CreateGroup = (props) => {
   const { user, setUser, groupModalOpen, setGroupModalOpen } = props;
   const [groupName, setGroupName] = useState("");
@@ -55,7 +55,7 @@ const CreateGroup = (props) => {
       setMembers(members.push(member));
       //setMembers([...members, member]);
       console.log("GROUP MEMBERS ARRAY", members);
-      console.log("USER IN CREATEGROUP AFTER SET", user);
+      console.log("USER IN CREATEGROUP BEFORE SET", user);
 
       const groupDocRef = await addDoc(collection(db, "groups"), {
         name: groupName,
@@ -78,8 +78,7 @@ const CreateGroup = (props) => {
         })
       );
 
-      //-------ESSENTIAL--------
-      await setUser(
+      await setUser(      //-------ESSENTIAL--------
         onSnapshot(doc(db, "users", auth.currentUser.uid), (snapshot) => {
           return { ...snapshot.data(), id: snapshot.id };
         })
