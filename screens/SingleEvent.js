@@ -329,7 +329,6 @@ export default function EventPage({ route, navigation }) {
   };
 
   useEffect(() => {
-    console.log("im working");
     getUsersInGroup();
   }, []);
 
@@ -362,7 +361,6 @@ export default function EventPage({ route, navigation }) {
   };
 
   useEffect(() => {
-    console.log("im also working");
     getSelectedGenre();
   }, [users]);
 

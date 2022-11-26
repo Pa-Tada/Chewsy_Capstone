@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useReducer } from "react";
 import {
   StyleSheet,
   Text,
@@ -14,16 +14,30 @@ import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Icon, Divider, Input } from "@rneui/themed";
 import { auth, db, allUsers, getUser } from "../firebase";
-import {collection,getDocs,onSnapshot,addDoc,deleteDoc,doc,orderBy,serverTimestamp,getDoc,query,where} from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  addDoc,
+  deleteDoc,
+  doc,
+  orderBy,
+  serverTimestamp,
+  getDoc,
+  query,
+  where,
+} from "firebase/firestore";
 import Footer from "../components/Footer";
 import Groups from "../components/Groups";
 import Events from "../components/Events";
 import CreateGroup from "../components/CreateGroup";
 
-const Home = () => {
+const Home = ({ route }) => {
   const navigation = useNavigation();
   const [user, setUser] = useState({});
   const [groupModalOpen, setGroupModalOpen] = useState(false);
+  const [groupIds, setGroupIds] = useState([]);
+  const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
 
   const userInfo = () => {
@@ -31,13 +45,39 @@ const Home = () => {
       (user) => user.id === auth.currentUser.uid
     );
     setUser(filteredUser);
+    setGroupIds(user?.groupIds);
+
+    if (route.params?.deletedGroupId) {
+      setGroupIds(groupIds.filter((id) => id != route.params.deletedGroupId))
+      console.log("HOME USER AFTER DELETED", user);
+      forceUpdate()
+    }
     console.log("Home.js USER", user);
   };
   useEffect(() => {
-     userInfo()
-    getUser()
-  }, [user]);
+    userInfo();
+    getUser();
+  }, [user, route.params?.deletedGroupId]);
 
+  // useEffect(() => {
+  //   const reset = () => {
+  //     if (route.params?.deletedGroupId) {
+  //       setUser((prevState) => {
+  //         const removed = prevState.groupIds.splice(prevState.groupIds.indexOf(route.params.deletedGroupId), 1);
+  //         console.log("HOME REMOVED GROUPID AFTER DELETED", removed);
+  //         return {...prevState};
+  //       })
+  //       // setGroupIds((prevState) => {
+  //       //   const removed = prevState.splice(prevState.indexOf(route.params.deletedGroupId), 1);
+  //       //   console.log("HOME REMOVED GROUPID AFTER DELETED", groupIds);
+  //       //   return [...prevState];
+  //       // })
+  //      // setGroupIds(user.groupIds.filter((id) => id != route.params.deletedGroupId));
+  //       console.log("HOME USER AFTER DELETED", user);
+  //     }
+  //   };
+  //   return reset;
+  // }, [route.params?.deletedGroupId]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -45,8 +85,8 @@ const Home = () => {
 
       <Modal visible={groupModalOpen} animationType="slide" transparent={true}>
         <CreateGroup
-        user={user}
-        setUser={setUser}
+          user={user}
+          setUser={setUser}
           groupModalOpen={groupModalOpen}
           setGroupModalOpen={setGroupModalOpen}
         />
@@ -68,7 +108,7 @@ const Home = () => {
           </TouchableOpacity>
         </View>
         {user?.groupIds && user.groupIds.length ? (
-          <Groups groupIds={user.groupIds} />
+          <Groups groupIds={groupIds} setUser={setUser} user={user} />
         ) : (
           <View style={styles.nodata}>
             <Text style={styles.nodataText}>
@@ -80,7 +120,7 @@ const Home = () => {
       <View style={styles.eventsWrapper}>
         <Text style={styles.sectionTitle}>Your Events</Text>
         {user?.groupIds && user.groupIds.length ? (
-          <Events groupIds={user.groupIds} />
+          <Events groupIds={groupIds} />
         ) : (
           <View style={styles.nodata}>
             <Text style={styles.nodataText}>

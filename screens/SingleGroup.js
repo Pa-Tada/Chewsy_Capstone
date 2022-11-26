@@ -48,17 +48,17 @@ const SingleGroup = ({ route }) => {
   ]);
 
 
+
   useEffect(() => {
-    const groupInfo =
-      onSnapshot(collection(db, "groups"), (snapshot) => {
-        snapshot.docs.map((doc) => {
-          if (groupId == doc.id) {
-            setGroup({ ...doc.data(), id: doc.id });
-          }
-        });
+    const groupInfo = onSnapshot(collection(db, "groups"), (snapshot) => {
+      snapshot.docs.map((doc) => {
+        if (groupId == doc.id) {
+          setGroup({ ...doc.data(), id: doc.id });
+        }
       });
-      console.log("SingleGroup.js GROUP", group);
-    return groupInfo
+    });
+    console.log("SingleGroup.js GROUP", group);
+    return groupInfo;
   }, [currentGroup, currentGroup.userIds.length]);
 
   useEffect(() => {
@@ -76,7 +76,7 @@ const SingleGroup = ({ route }) => {
   }, [currentGroup, currentGroup.userIds.length]);
 
   const handleFoodGenreEdit = () => {
-    console.log(user)
+    console.log(user);
     setDoc(doc(db, "users", auth.currentUser.uid), {
       imgUrl: user.imgUrl,
       email: user.email,
@@ -92,7 +92,6 @@ const SingleGroup = ({ route }) => {
 
   useEffect(() => {
     getUser();
-    console.log("im working");
   });
 
   return (
@@ -124,6 +123,7 @@ const SingleGroup = ({ route }) => {
           currentGroup={currentGroup}
           friends={friends}
           setFriends={setFriends}
+          groups={groups} setGroup={setGroup}
         />
       </View>
       <Modal visible={eventModalOpen} animationType="slide">
@@ -173,16 +173,18 @@ const SingleGroup = ({ route }) => {
                         <Text style={styles.foodListItem}>
                           {foodGenre.item}
                         </Text>
-                        <TouchableOpacity style={styles.foodButtonWrapper}
-                        onPress={() => {
-                          console.log(foodGenre.item);
-                          setUserFoodGenre(
-                            userFoodGenre.filter((currentFood) => {
-                              console.log("current food:",currentFood);
-                              return currentFood !== foodGenre.item;
-                            })
-                          );
-                        }}>
+                        <TouchableOpacity
+                          style={styles.foodButtonWrapper}
+                          onPress={() => {
+                            console.log(foodGenre.item);
+                            setUserFoodGenre(
+                              userFoodGenre.filter((currentFood) => {
+                                console.log("current food:", currentFood);
+                                return currentFood !== foodGenre.item;
+                              })
+                            );
+                          }}
+                        >
                           <Text>-</Text>
                         </TouchableOpacity>
                       </View>
@@ -197,13 +199,10 @@ const SingleGroup = ({ route }) => {
                   </TouchableOpacity>
                   <Button
                     title="Cancel"
-                    onPress={() =>{
-                      setEventModalOpen(false)
-                      handleFoodGenreEdit()
-
-                    }
-
-                      }
+                    onPress={() => {
+                      setEventModalOpen(false);
+                      handleFoodGenreEdit();
+                    }}
                   ></Button>
                 </View>
               </View>
@@ -215,7 +214,7 @@ const SingleGroup = ({ route }) => {
 
       <View style={styles.eventsWrapper}>
         <View style={styles.titleContainer}>
-          <Text style={styles.sectionTitle}>Group Events</Text>
+          <Text style={styles.sectionTitle}>{currentGroup.name} Events</Text>
           <TouchableOpacity
             style={styles.iconWrapper}
             onPress={() => setEventModalOpen(true)}

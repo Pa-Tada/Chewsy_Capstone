@@ -41,7 +41,7 @@ const Events = (props) => {
         eventArr.push({...doc.data(), id: doc.id})
       })
       setEvents(eventArr)
-    console.log("Events.js events", events)
+    //console.log("Events.js events", events)
   })
   return unsub
   }, [groupIds]); //maybe add events

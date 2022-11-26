@@ -15,16 +15,6 @@ import Profile from "./screens/Profile";
 
 
 
-// const tabNavigation= ()=> {
-
-// <Tab.Navigator>
-// <Tab.Screen options={{tabBarIcon: ()=> (<Icon type="antdesign" name="home" color='white'/>)}} name="Home" component={Home}/>
-// <Tab.Screen options={{tabBarIcon: ()=> ( <Icon type="antdesign" name="form" color='white'/>)}} name="Profile" component={Profile}/>
-// <Tab.Screen options={{tabBarIcon: ()=> (<Icon type="antdesign" name="calendar" color='white' />)}} name="PendingInvites" component={PendingInvites}/>
-// <Tab.Screen options={{tabBarIcon: ()=> (<Icon type="antdesign" name="logout" color='white' />)}} name="Welcome" component={Welcome}/>
-// </Tab.Navigator>
-// }
-
 export default function App() {
   const Stack = createNativeStackNavigator();
 
