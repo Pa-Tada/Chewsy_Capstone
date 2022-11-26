@@ -24,36 +24,20 @@ const Home = () => {
   const navigation = useNavigation();
   const [user, setUser] = useState({});
   const [groupModalOpen, setGroupModalOpen] = useState(false);
-  const [groupIds, setGroupIds] = useState([]);
-  // Oliviarodrigo@gmail.com
+
+
   const userInfo = () => {
     const filteredUser = allUsers.find(
       (user) => user.id === auth.currentUser.uid
     );
-
-    //console.log("HOME USER", filteredUser);
     setUser(filteredUser);
+    console.log("Home.js USER", user);
   };
   useEffect(() => {
      userInfo()
-     getUser()
+    getUser()
   }, [user]);
 
-  const groupLastItem = () => {
-    return (
-      <View>
-        <TouchableOpacity onPress={() => setGroupModalOpen(false)}>
-          <View style={styles.buttonWrapper}>
-            <Text style={styles.button}>Create Group</Text>
-          </View>
-        </TouchableOpacity>
-        <Button
-          title="Cancel"
-          onPress={() => setGroupModalOpen(false)}
-        ></Button>
-      </View>
-    );
-  };
 
   return (
     <SafeAreaView style={styles.container}>

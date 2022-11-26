@@ -366,8 +366,8 @@ export default function EventPage({ route, navigation }) {
     getSelectedGenre();
   }, [users]);
 
-  console.log("Cuisine Type", cuisineType);
-  console.log("GroupId", groupId);
+  console.log("SingleEvent.js Cuisine Type", cuisineType);
+  console.log("SingleEvent.js GroupId", groupId);
 
   const getRestaurantData = async () => {
     try {
