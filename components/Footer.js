@@ -12,7 +12,6 @@ const Footer = (props) => {
         style={styles.iconWrapper}
         onPress={() => navigation.navigate("Home")}
       >
-        {/* Link to HOMEPAGE: maybe substitute later with <Image style={styles.icon} source={{ uri: PROFILE IMAGE }}/> */}
         <Icon type="antdesign" name="home" color="white" style={styles.icon} />
       </TouchableOpacity>
 
@@ -20,12 +19,13 @@ const Footer = (props) => {
         style={styles.iconWrapper}
         onPress={() => navigation.navigate("Profile")}
       >
-        {/* PROFILE LONG FORM */}
         <Icon type="antdesign" name="form" color="white" style={styles.icon} />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.iconWrapper}>
-        {/* PENDING INVITATIONS */}
+      <TouchableOpacity
+        style={styles.iconWrapper}
+        onPress={() => navigation.navigate("PendingInvites")}
+      >
         <Icon
           type="antdesign"
           name="calendar"

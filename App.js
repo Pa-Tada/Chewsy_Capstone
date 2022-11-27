@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { Provider } from "react-redux";
-//import store from "./redux/store.js"
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -11,9 +9,8 @@ import SingleEvent from "./screens/SingleEvent";
 //import AppLoading from "expo-app-loading";
 //import useFonts from "./hooks/useFonts";
 import Profile from "./screens/Profile";
+import PendingInvites from "./screens/PendingInvites";
 //import AppLoading from "expo-splash-screen"
-
-
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -37,7 +34,6 @@ export default function App() {
   return (
     <NavigationContainer>
       <SafeAreaProvider>
-
         <Stack.Navigator
           screenOptions={{
             headerStyle: {
@@ -51,7 +47,6 @@ export default function App() {
             },
           }}
         >
-
           <Stack.Screen
             name="Welcome"
             component={Welcome}
@@ -60,27 +55,27 @@ export default function App() {
           <Stack.Screen
             name="Home"
             component={Home}
-
             options={{ title: "Chewsy", headerBackVisible: false }}
-
           />
           <Stack.Screen
             name="SingleGroup"
             component={SingleGroup}
-
             options={{ title: "Chewsy", headerBackVisible: false }}
           />
           <Stack.Screen
             name="SingleEvent"
             component={SingleEvent}
-
             options={{ title: "Chewsy", headerBackVisible: false }}
           />
           <Stack.Screen
             name="Profile"
             component={Profile}
             options={{ title: "Chewsy", headerBackVisible: false }}
-
+          />
+          <Stack.Screen
+            name="PendingInvites"
+            component={PendingInvites}
+            options={{ title: "Chewsy", headerBackVisible: false }}
           />
         </Stack.Navigator>
       </SafeAreaProvider>

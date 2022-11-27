@@ -70,9 +70,7 @@ const AddFriend = (props) => {
 
   const handleSubmit = async () => {
     console.log("SELECTS", allSelected);
-      //console.log("Modal BEFORE SETGROUP", group);
     try {
-
       await Promise.all(
         allSelected.map(async (selected) => {
           await updateDoc(doc(db, "groups", currentGroup.id), {
@@ -83,15 +81,6 @@ const AddFriend = (props) => {
           });
         })
       );
-
-      // await setGroup(
-      //   onSnapshot(doc(db, "groups", group.id), (snapshot) => {
-      //     console.log("SNAPSHOT", snapshot);
-      //     return { ...snapshot.data(), id: snapshot.id };
-      //   })
-      // );
-      //console.log("Modal After SETGROUP", group);
-
       setModalOpen(false);
     } catch (err) {
       console.log("AddFriend.js error creating", err);

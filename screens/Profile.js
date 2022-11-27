@@ -10,8 +10,6 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import React, { useEffect, useState } from "react";
 import { Icon, Input, Avatar, Divider } from "@rneui/themed";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import { auth, db, getUser, user } from "../firebase";
 import firebase from "firebase/compat";
 import RNPickerSelect from "react-native-picker-select";
