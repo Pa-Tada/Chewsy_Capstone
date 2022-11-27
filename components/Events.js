@@ -78,7 +78,7 @@ const Events = (props) => {
                   source={{ uri: item.restImageUrl }}
                 />
               </View>
-              <Text style={styles.eventName}>Your Event on {new Date(item.createdAt.seconds *1000).toLocaleDateString('en-US')}</Text>
+              <Text style={styles.eventName}>Your Event at {new Date(item.createdAt.seconds *1000).toLocaleTimeString('en-US')} {new Date(item.createdAt.seconds *1000).toLocaleDateString('en-US')}</Text>
               <Text style={styles.eventLoc}>{item.restLoc}</Text>
             </TouchableOpacity>
           )}
