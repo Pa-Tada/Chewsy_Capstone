@@ -59,6 +59,11 @@ const Events = (props) => {
               style={styles.eventList}
               onPress={() =>{
                 console.log("ITEM:",item.createdAt);
+                console.log("ITEM DATE:", new Date(1669511280 *1000))
+                console.log(new Date(item.createdAt.seconds *1000))
+                let timestemp = new Date(item.createdAt.seconds *1000).toLocaleDateString('en-US');
+                console.log(timestemp)
+
                 // navigation.navigate("SingleEvent", {
                 //   eventId: item.id,
                 //   currentEvent: item,
@@ -73,7 +78,7 @@ const Events = (props) => {
                   source={{ uri: item.restImageUrl }}
                 />
               </View>
-              <Text style={styles.eventName}></Text>
+              <Text style={styles.eventName}>Your Event on {new Date(item.createdAt.seconds *1000).toLocaleDateString('en-US')}</Text>
               <Text style={styles.eventLoc}>{item.restLoc}</Text>
             </TouchableOpacity>
           )}
