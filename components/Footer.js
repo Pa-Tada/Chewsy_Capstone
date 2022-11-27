@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { Icon } from "@rneui/themed";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
+import { auth, db, allUsers } from "../firebase";
 
 const Footer = (props) => {
   const navigation = useNavigation();
@@ -36,9 +37,16 @@ const Footer = (props) => {
 
       <TouchableOpacity
         style={styles.iconWrapper}
-        onPress={() => navigation.navigate("Welcome")}
+        onPress={async() => {
+          try{
+            await auth.signOut()
+            console.log("Signout successful")
+            navigation.navigate("Welcome")
+          } catch (err){
+            console.log("Signout error", err)
+          }
+          }}
       >
-        {/* LOG OUT */}
         <Icon
           type="antdesign"
           name="logout"

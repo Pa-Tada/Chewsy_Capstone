@@ -11,6 +11,7 @@ import {
   TextInput,
   ImageBackground,
   Platform,
+  Alert,
 } from "react-native";
 import { auth, getUser, db } from "../firebase";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
@@ -51,16 +52,29 @@ const Welcome = () => {
           imgUrl:
             "https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png",
         });
-        getUser()
+        getUser();
       })
-      .then(()=>{
-        return getUser()
+      .then(() => {
+        return getUser();
       })
-      .then(()=>{
-
-        navigation.navigate("Profile")
+      .then(() => {
+        setEmail("");
+        setPassword("");
+        navigation.navigate("Profile");
       })
-      .catch((error) => alert(error.message));
+      .catch((error) => {
+        if (error.message.includes("email-already-in-use")) {
+          console.log("ENTIRE ERROR", error.message);
+          Alert.alert("This email already exists", "Please use another email.");
+        } else if (error.message.includes("network-request-failed")) {
+          Alert.alert(
+            "Network error",
+            "Try again later or check your internet connection."
+          );
+        } else {
+          Alert.alert("Unknown Error", "Try again later.");
+        }
+      });
   };
 
   const handleLogin = () => {
@@ -69,10 +83,29 @@ const Welcome = () => {
       .then((userCredentials) => {
         const user = userCredentials.user;
       })
-      .then(()=>{
-        navigation.navigate("Home")
+      .then(() => {
+        setEmail("");
+        setPassword("");
+        navigation.navigate("Home");
       })
-      .catch((error) => alert(error.message));
+      .catch((error) => {
+        console.log("ENTIRE ERROR", error.message);
+
+        if (error.message.includes("user-not-found")) {
+          Alert.alert("User Not Found", "Please sign up.");
+        } else if (error.message.includes("invalid-email")) {
+          Alert.alert("Invalid Email", "Try again.");
+        } else if (error.message.includes("wrong-password")) {
+          Alert.alert("Wrong Password", "Try again.");
+        } else if (error.message.includes("network-request-failed")) {
+          Alert.alert(
+            "Network error",
+            "Try again later or check your internet connection."
+          );
+        } else {
+          Alert.alert("Unknown Error", "Try again later.");
+        }
+      });
   };
 
   return (

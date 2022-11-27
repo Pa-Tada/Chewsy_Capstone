@@ -37,8 +37,8 @@ const Friends = (props) => {
   const { currentGroup, groups, setGroup, friends, setFriends } = props;
   const navigation = useNavigation();
 
-  const handleDelete = async (memberId, index) => {
-    Alert.alert("Delete", "Are you sure you want to delete this member?", [
+  const handleDelete = async (memberId, index, firstName) => {
+    Alert.alert("Delete", `Are you sure you want to delete ${firstName}?`, [
       {
         text: "Cancel",
         onPress: () => {
@@ -49,19 +49,34 @@ const Friends = (props) => {
       {
         text: "OK",
         onPress: async () => {
-          console.log("OK Deleting memberId", memberId);
+          console.log("OK Deleting memberId", firstName, memberId);
 
+//--------------------REMOVE GROUP FROM USER---------------------
           await updateDoc(doc(db, "users", memberId), {
             groupIds: arrayRemove(currentGroup.id),
           });
 
+//-------------REMOVE USER FROM GROUP'S EVENTS' SUBMISSIONS------------
+          const q = query(
+            collection(db, "events"),
+            where("groupId", "==", `${currentGroup.id}`)
+          );
+          console.log("FRIENDS.JS QUERIED EVENT", query);
+          onSnapshot(q, (snapshot)=> {
+            snapshot.docs.map(async (snap)=> {
+              await updateDoc(doc(db, "events", snap.id), {
+                submissions: arrayRemove(memberId),
+              });
+            })})
+
+//--------------------REMOVE USER FROM FRIENDS STATE---------------------
           // await setFriends((prevState) => {
           //   const removed = prevState.splice(index, 1);
           //   return [...prevState];
           // });
-          await setFriends(friends.filter((friend) => friend.id != memberId))
+          await setFriends(friends.filter((friend) => friend.id != memberId));
 
-
+//--------------------REMOVE USER FROM GROUP (IF REMOVING SELF, NAVIGATE HOME)---------------------
           if (memberId == auth.currentUser.uid) {
             let nextLeader = friends[0].id;
             await updateDoc(doc(db, "groups", currentGroup.id), {
@@ -74,7 +89,6 @@ const Friends = (props) => {
               userIds: arrayRemove(memberId),
             });
           }
-
         },
       },
     ]);
@@ -95,7 +109,7 @@ const Friends = (props) => {
             {auth.currentUser.uid == currentGroup.leaderId ? (
               <TouchableOpacity
                 style={styles.iconWrapper}
-                onPress={() => handleDelete(item.id, index)}
+                onPress={() => handleDelete(item.id, index, item.firstName)}
               >
                 <Icon
                   type="material-community"
@@ -107,7 +121,7 @@ const Friends = (props) => {
             ) : auth.currentUser.uid == item.id ? (
               <TouchableOpacity
                 style={styles.iconWrapper}
-                onPress={() => handleDelete(item.id, index)}
+                onPress={() => handleDelete(item.id, index, item.firstName)}
               >
                 <Icon
                   type="material-community"

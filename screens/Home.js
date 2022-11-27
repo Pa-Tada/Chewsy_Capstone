@@ -46,6 +46,7 @@ const Home = ({ route }) => {
 //       console.log("HOME DELETED ID", store)
 //     }
 //   }, [route.params?.deletedGroupId]);
+
   return (
     <SafeAreaView style={styles.container}>
       <Divider color="orange" />
