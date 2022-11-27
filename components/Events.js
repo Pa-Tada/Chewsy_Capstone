@@ -41,7 +41,7 @@ const Events = (props) => {
         eventArr.push({...doc.data(), id: doc.id})
       })
       setEvents(eventArr)
-    console.log("EVENTS", events)
+    console.log("Events.js events", events)
   })
   return unsub
   }, [groupIds]); //maybe add events
@@ -57,21 +57,23 @@ const Events = (props) => {
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.eventList}
-              onPress={() =>
-                navigation.navigate("SingleEvent", {
-                  eventId: item.id,
-                  currentEvent: item,
-                  groupId: item.groupId,
-                })
+              onPress={() =>{
+                console.log("ITEM:",item.createdAt);
+                // navigation.navigate("SingleEvent", {
+                //   eventId: item.id,
+                //   currentEvent: item,
+                //   groupId: item.groupId,
+                // })
+              }
               }
             >
               <View style={styles.shadow}>
                 <Image
                   style={styles.eventImg}
-                  source={{ uri: item.restImgUrl }}
+                  source={{ uri: item.restImageUrl }}
                 />
               </View>
-              <Text style={styles.eventName}>{item.restName}</Text>
+              <Text style={styles.eventName}></Text>
               <Text style={styles.eventLoc}>{item.restLoc}</Text>
             </TouchableOpacity>
           )}

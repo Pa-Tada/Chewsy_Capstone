@@ -29,33 +29,6 @@ import { Button } from "@rneui/base";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 
-// Dummy image - need to make dynamic based on logged in user
-const firstItem = () => {
-  return (
-    <View>
-      <TouchableOpacity>
-        <Avatar
-          rounded
-          containerStyle={{ alignSelf: "center", paddingBottom: 10 }}
-          size="large"
-          source={{
-            uri: `${imgUrl}`,
-          }}
-        />
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-const lastItem = () => {
-  return (
-    <TouchableOpacity>
-      <View style={styles.buttonWrapper}>
-        <Text style={styles.button}>Submit</Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
 
 const Profile = () => {
   const navigation = useNavigation();
@@ -64,7 +37,8 @@ const Profile = () => {
   // useEffect(() => {
   //   getUser();
   //   console.log("im working");
-  // });
+  // }, []);
+
   const [firstName, setFirstName] = useState(user.firstName);
   const [lastName, setLastName] = useState(user.lastName);
 
@@ -80,21 +54,6 @@ const Profile = () => {
     user.dietaryRestrictions
   );
   const [affordability, setAffordability] = useState(user.affordability); // probably use int here, or string.length
-
-  const [likedRestaurants, setLikedRestaurants] = useState(
-    user.likedRestaurants
-  );
-  const [likedRestaurantName, setLikedRestaurantName] = useState("");
-
-  const [dislikedRestaurants, setDislikedRestaurants] = useState(
-    user.dislikedRestaurants
-  );
-  const [dislikedRestaurantName, setDislikedRestaurantName] = useState("");
-
-  const [visitedRestaurants, setVisitedRestaurants] = useState(
-    user.visitedRestaurants
-  );
-  const [visitedRestaurantName, setVisitedRestaurantName] = useState("");
 
   const handleEdit = () => {
     setDoc(doc(db, "users", auth.currentUser.uid), {
@@ -186,7 +145,6 @@ const Profile = () => {
               onPress={() => {
                 setFoodGenre([...foodGenre, foodName]);
                 setFoodName("");
-                console.log("FOOD GENRE");
               }}
             >
               <View style={styles.buttonWrapper2}>
@@ -201,10 +159,10 @@ const Profile = () => {
                   <TouchableOpacity
                     style={styles.foodButtonWrapper}
                     onPress={() => {
-                      console.log(foodGenre);
+                      console.log("Profile.js", foodGenre);
                       setFoodGenre(
                         foodGenre.filter((currentFood) => {
-                          console.log(currentFood);
+                          console.log("Profile.js currentFood", currentFood);
                           return currentFood !== item;
                         })
                       );

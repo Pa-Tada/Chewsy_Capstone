@@ -34,18 +34,19 @@ import Events from "../components/Events";
 import Friends from "../components/Friends";
 import AddFriend from "../components/AddFriend";
 
-import DateTimePicker from "@react-native-community/datetimepicker";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
 
 const addFriendField = [{ id: 1, field: "Email/Username" }];
 
 const SingleGroup = ({ route }) => {
-  const { groupId, currentGroup } = route.params;
+  const { groupId, currentGroup, groups } = route.params;
   const navigation = useNavigation();
   const [modalOpen, setModalOpen] = useState(false);
   const [eventModalOpen, setEventModalOpen] = useState(false);
 
   const [userFoodGenre, setUserFoodGenre] = useState(user.foodGenre);
   const [userFoodGenreName, setUserFoodGenreName] = useState("");
+  const [group, setGroup] = useState(currentGroup);
 
   const [date, setDate] = useState(new Date());
 
@@ -74,31 +75,36 @@ const SingleGroup = ({ route }) => {
     showMode("time");
   };
 
-  // useEffect(() => {
-  //   const unsubscribe = onSnapshot(
-  //     doc(db, "users", auth.currentUser.uid),
-  //     (doc) => {
-  //       console.log("Current data: ", doc.data());
-  //     }
-  //   );
-  //   return unsubscribe;
-  // }, [userFoodGenre]);
+  const [friends, setFriends] = useState([
+    { name: "Loading...", id: "unique" },
+  ]);
 
-  const eventLastItem = () => {
-    return (
-      <View>
-        <TouchableOpacity onPress={() => setEventModalOpen(false)}>
-          <View style={styles.buttonWrapper}>
-            <Text style={styles.button}>Create Event</Text>
-          </View>
-        </TouchableOpacity>
-        <Button
-          title="Cancel"
-          onPress={() => setEventModalOpen(false)}
-        ></Button>
-      </View>
-    );
-  };
+  useEffect(() => {
+    const groupInfo =
+      onSnapshot(collection(db, "groups"), (snapshot) => {
+        snapshot.docs.map((doc) => {
+          if (groupId == doc.id) {
+            setGroup({ ...doc.data(), id: doc.id });
+          }
+        });
+      });
+      console.log("SingleGroup.js GROUP", group);
+    return groupInfo
+  }, [currentGroup, currentGroup.userIds.length]);
+
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, "users"), (snapshot) => {
+      let members = [];
+      snapshot.docs.map((doc) => {
+        if (currentGroup.userIds?.includes(doc.id))
+          // && doc.id != auth.currentUser.uid
+          members.push({ ...doc.data(), id: doc.id });
+      });
+      setFriends(members);
+    });
+    //console.log("SingleGroup.js friends", friends)
+    return unsub;
+  }, [currentGroup, currentGroup.userIds.length]);
 
   const handleFoodGenreEdit = () => {
     console.log(user);
@@ -142,12 +148,16 @@ const SingleGroup = ({ route }) => {
           modalOpen={modalOpen}
           setModalOpen={setModalOpen}
           currentGroup={currentGroup}
+          friends={friends}
+          setFriends={setFriends}
+          group={group}
+          setGroup={setGroup}
         />
       </Modal>
 
       <View style={styles.friendsWrapper}>
         <View style={styles.titleContainer}>
-          <Text style={styles.sectionTitle}>Group Members</Text>
+          <Text style={styles.sectionTitle}>{currentGroup.name} Members</Text>
           <TouchableOpacity
             style={styles.iconWrapper}
             onPress={() => setModalOpen(true)}
@@ -155,7 +165,11 @@ const SingleGroup = ({ route }) => {
             <Icon type="antdesign" size="28px" name="adduser" color="white" />
           </TouchableOpacity>
         </View>
-        <Friends currentGroup={currentGroup} />
+        <Friends
+          currentGroup={currentGroup}
+          friends={friends}
+          setFriends={setFriends}
+        />
       </View>
       <Modal visible={eventModalOpen} animationType="slide">
         <SafeAreaView style={styles.modalContent}>
@@ -177,17 +191,18 @@ const SingleGroup = ({ route }) => {
                     label="Event Time"
                   /> */}
 
-                  <View>
+                  <View style = {{display:'flex', alignItems:'center'}}>
                     <Text
                       style={{
-                        color: "white",
-                        fontSize: "14",
+                        color: "orange",
+                        fontSize: "16",
                         alignSelf: "center",
+                        marginTop: 15
                       }}
                     >
                       Your Event Will take place on {date.toLocaleString()}
                     </Text>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                       style={styles.buttonWrapper}
                       onPress={showDatepicker}
                     >
@@ -198,15 +213,18 @@ const SingleGroup = ({ route }) => {
                       onPress={showTimepicker}
                     >
                       <Text>Select Time</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
-                    <DateTimePicker
-                      style={{ color: "white" }}
+                    <RNDateTimePicker
+                      style={{ marginTop: 10, marginBottom:10}}
                       testID="dateTimePicker"
                       value={date}
-                      mode={mode}
+                      mode="datetime"
+                      minuteInterval={15}
                       is24Hour={true}
                       onChange={onChange}
+                      display = "spinner"
+                      textColor="orange" // change this to change text color
                     />
                   </View>
 

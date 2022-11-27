@@ -21,10 +21,10 @@ const Groups = (props) => {
         }
       })
     setGroups([...groupArr])
-    console.log("GROUPS ID", groupIds)
+    console.log("Groups.js groupIds", groupIds)
   })
   return unsub
-  }, [groupIds?.length]); //, groups.length
+  }, [groupIds?.length]); 
 
   return (
         <View style={styles.groups}>
@@ -37,7 +37,7 @@ const Groups = (props) => {
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={styles.list}
-                onPress={() => navigation.navigate("SingleGroup", {groupId: item.id, currentGroup: item})}
+                onPress={() => navigation.navigate("SingleGroup", {groupId: item.id, currentGroup: item, groups: groups})}
               >
                 <View style={styles.shadow}>
                   <Image

@@ -62,8 +62,6 @@
 //     getRestaurantData();
 //   }, []);
 
-
-
 //   return (
 //     <SafeAreaView style={styles.container}>
 //       <Divider />
@@ -280,12 +278,13 @@ import {
   where,
 } from "firebase/firestore";
 import { Divider } from "@rneui/themed";
+import Slider from "@react-native-community/slider";
+import RNPickerSelect from "react-native-picker-select";
 
-export default function EventPage( {route, navigation} ) {
+export default function EventPage({ route, navigation }) {
   const [restaurantData, setRestaurantData] = useState([]);
   const [isShown, setIsShown] = useState(false);
-  const { groupId, currentGroup } = route?.params
-
+  const { groupId, currentGroup } = route?.params;
 
   /*
   Sorry Orlando, I'll delete this before the final review, just wanted to keep the logic here so we can easily reference it
@@ -316,10 +315,7 @@ export default function EventPage( {route, navigation} ) {
   const getUsersInGroup = async () => {
     try {
       const userRef = collection(db, "users");
-      const q = query(
-        userRef,
-        where("groupIds", "array-contains", groupId),
-      );
+      const q = query(userRef, where("groupIds", "array-contains", groupId));
 
       const userSnapshot = await getDocs(q);
       const usersArr = [];
@@ -333,7 +329,7 @@ export default function EventPage( {route, navigation} ) {
   };
 
   useEffect(() => {
-    console.log("im working")
+    console.log("im working");
     getUsersInGroup();
   }, []);
 
@@ -354,29 +350,28 @@ export default function EventPage( {route, navigation} ) {
         return acc;
       }, {});
 
-      const sortedGenres =  Object.entries(totalCount).sort(
+      const sortedGenres = Object.entries(totalCount).sort(
         (a, b) => b[1] - a[1]
       );
       const mostPopularGenre = sortedGenres[0][0];
       setCuisineType(mostPopularGenre);
-      console.log("cuisine type within function:", cuisineType)
+      console.log("cuisine type within function:", cuisineType);
     } catch (err) {
       console.log(err);
     }
   };
 
   useEffect(() => {
-    console.log("im also working")
+    console.log("im also working");
     getSelectedGenre();
   }, [users]);
 
-  console.log("Cuisine Type", cuisineType);
-  console.log("GroupId", groupId);
+  console.log("SingleEvent.js Cuisine Type", cuisineType);
+  console.log("SingleEvent.js GroupId", groupId);
 
   const getRestaurantData = async () => {
     try {
-
-      console.log("cuisine type within api call:", cuisineType)
+      console.log("cuisine type within api call:", cuisineType);
       const { data } = await axios.get(
         `https://api.yelp.com/v3/businesses/search?term=restaurant&location=${eventLocation}&price=${budget}&radius=${radius}&categories=${cuisineType}&sortby=rating&limit=1`,
         {
@@ -397,7 +392,7 @@ export default function EventPage( {route, navigation} ) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Divider color="orange"/>
+      <Divider color="orange" />
       <View style={styles.contents}>
         <View style={{ justifyContent: "center", alignItems: "center" }}>
           <Text style={styles.eventText}>
@@ -409,17 +404,43 @@ export default function EventPage( {route, navigation} ) {
           </Text>
           {!isShown ? (
             <View>
+              <Text style={styles.eventText}>
+                Choice Radius: {(radius / 1609).toFixed(2)} Miles
+              </Text>
+              <Slider
+                style={{ width: 200, height: 40 }}
+                minimumValue={0}
+                maximumValue={16090}
+                minimumTrackTintColor="#FFFFFF"
+                maximumTrackTintColor="#000000"
+                onValueChange={(value) => setRadius(Math.floor(value))}
+              />
+              <Text style={styles.eventText}>Select a Borough</Text>
+              <RNPickerSelect
+                style={styles.eventText}
+                labelStyle={{ fontWeight: "normal" }}
+                inputStyle={{ color: "white", fontSize: 14 }}
+                label="Location"
+                onValueChange={(value) => setEventLocation(value)}
+                items={[
+                  { label: "Queens", value: "Queens, NY" },
+                  { label: "Brooklyn", value: "Brooklyn" },
+                  { label: "Bronx", value: "Bronx" },
+                  { label: "Manhattan", value: "Manhattan, NY" },
+                  { label: "Staten Island", value: "Staten Island, NY" },
+                ]}
+              />
+
               <TouchableOpacity
                 style={styles.roundButton1}
-                onPress={() =>{
-                  console.log("cuisine type on press",cuisineType)
+                onPress={() => {
+                  console.log("cuisine type on press", cuisineType);
                   // await getRestaurantData(cuisineType)
-                   setIsShown(!isShown)
-                  Alert.alert("Your restaurant is ready!")
-                }
-                }
+                  setIsShown(!isShown);
+                  Alert.alert("Your restaurant is ready!");
+                }}
               >
-                <Text style={{ fontSize: 42 }}>Chewse</Text>
+                <Text style={{ fontSize: 32 }}>Chewse</Text>
               </TouchableOpacity>
               <Text> </Text>
             </View>
