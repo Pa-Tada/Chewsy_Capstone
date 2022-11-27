@@ -92,6 +92,7 @@ const SingleGroup = ({ route }) => {
 
   useEffect(() => {
     getUser();
+    console.log("im working");
   });
 
   return (

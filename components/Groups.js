@@ -7,29 +7,12 @@ import {collection,getDocs,onSnapshot,addDoc,deleteDoc,doc, orderBy,serverTimest
 
 
 const Groups = (props) => {
-  const { groupIds, setUser, user} = props
+  const {groupIds, setUser, user} = props
   const navigation = useNavigation();
   const [groups, setGroups] = useState([{name: "Loading...", id: "unique"}]);
 
-
-  // const [groupIds, setGroupIds] = useState([]);
-
-  const userInfo = () => {
-    const filteredUser = allUsers.find(
-      (user) => user.id === auth.currentUser.uid
-    );
-    setUser(filteredUser);
-    //setGroupIds(user?.groupIds);
-    console.log("Groups.js USER", user);
-  };
   useEffect(() => {
-    userInfo();
-    getUser()
-  }, [user]);
-
-
-  useEffect(() => {
-    console.log("GROUPS.JS GROUPIDs", groupIds);
+    console.log("GROUPS.JS GROUPID", groupIds);
     const q = query(collection(db, "groups"), orderBy("createdAt", "desc"))
     const unsub = onSnapshot(q, (snapshot)=> {
     let groupArr = []
@@ -38,8 +21,8 @@ const Groups = (props) => {
           groupArr.push({...doc.data(), id: doc.id})
         }
       })
-    setGroups(groupArr)
-    console.log("GROUPS.JS GROUPID AFTER SET", groupIds);
+    setGroups([...groupArr])
+    console.log("GROUPS.JS GROUPID", groupIds);
   })
   return unsub
   }, [groupIds?.length]);

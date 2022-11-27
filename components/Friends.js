@@ -35,7 +35,6 @@ import Events from "../components/Events";
 
 const Friends = (props) => {
   const { currentGroup, groups, setGroup, friends, setFriends } = props;
-   const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
   const navigation = useNavigation();
 
   const handleDelete = async (memberId, index) => {
@@ -61,7 +60,7 @@ const Friends = (props) => {
           //   return [...prevState];
           // });
           await setFriends(friends.filter((friend) => friend.id != memberId))
-          forceUpdate()
+
 
           if (memberId == auth.currentUser.uid) {
             let nextLeader = friends[0].id;
@@ -76,8 +75,6 @@ const Friends = (props) => {
             });
           }
 
-          //let shortGroup = await groups.filter((group) => group.id != currentGroup.id);
-          //console.log("Friends.js GROUPS", shortGroup.length);
         },
       },
     ]);
