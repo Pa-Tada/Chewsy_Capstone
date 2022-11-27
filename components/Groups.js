@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useReducer } from "react";
-import {StyleSheet,Text,View,TouchableOpacity,FlatList,Image,SafeAreaView,Button,Modal} from "react-native";
+import {StyleSheet,Text,View,TouchableOpacity,FlatList,Image,SafeAreaView,Button,Modal, ViewToken} from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
 import { auth, db, getUser, allUsers } from "../firebase";
 import {collection,getDocs,onSnapshot,addDoc,deleteDoc,doc, orderBy,serverTimestamp,getDoc,query,where} from "firebase/firestore";
+import Animated, { useSharedValue, withTiming, useAnimatedStyle } from "react-native-reanimated";
 
 
 const Groups = (props) => {
@@ -12,7 +12,7 @@ const Groups = (props) => {
   const [groups, setGroups] = useState([{name: "Loading...", id: "unique"}]);
 
   useEffect(() => {
-    console.log("GROUPS.JS GROUPID", groupIds);
+    //console.log("GROUPS.JS GROUPID", groupIds);
     const q = query(collection(db, "groups"), orderBy("createdAt", "desc"))
     const unsub = onSnapshot(q, (snapshot)=> {
     let groupArr = []
@@ -22,14 +22,20 @@ const Groups = (props) => {
         }
       })
     setGroups([...groupArr])
-    console.log("GROUPS.JS GROUPID", groupIds);
+    //console.log("GROUPS.JS GROUPID", groupIds);
   })
   return unsub
   }, [groupIds?.length]);
 
+
+//const viewableItems= useSharedValue([])
+
   return (
         <View style={styles.groups}>
           <FlatList
+          // onViewableItemsChanged={({vItems})=> {
+          //   viewableItems.value=vItems
+          // }}
           extraData={groups}
           showsHorizontalScrollIndicator={false}
             data={groups}
@@ -55,12 +61,6 @@ const Groups = (props) => {
 }
 
 const styles = StyleSheet.create({
-  shadow: {
-    shadowColor: "black",
-    shadowOffset: { height: -1, width: 1 },
-    shadowOpacity: 0.8,
-    shadowRadius: 1,
-  },
   groups: {},
   list: {
     borderRadius: 15,
@@ -69,6 +69,12 @@ const styles = StyleSheet.create({
     width: 180,
     height: 200,
     alignItems: "center",
+  },
+  shadow: {
+    shadowColor: "black",
+    shadowOffset: { height: -1, width: 1 },
+    shadowOpacity: 0.8,
+    shadowRadius: 1,
   },
   groupImg: {
     width: 180,
