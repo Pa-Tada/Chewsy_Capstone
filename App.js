@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { Provider } from "react-redux";
-//import store from "./redux/store.js"
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -11,19 +9,8 @@ import SingleEvent from "./screens/SingleEvent";
 //import AppLoading from "expo-app-loading";
 //import useFonts from "./hooks/useFonts";
 import Profile from "./screens/Profile";
+import PendingInvites from "./screens/PendingInvites";
 //import AppLoading from "expo-splash-screen"
-
-
-
-// const tabNavigation= ()=> {
-
-// <Tab.Navigator>
-// <Tab.Screen options={{tabBarIcon: ()=> (<Icon type="antdesign" name="home" color='white'/>)}} name="Home" component={Home}/>
-// <Tab.Screen options={{tabBarIcon: ()=> ( <Icon type="antdesign" name="form" color='white'/>)}} name="Profile" component={Profile}/>
-// <Tab.Screen options={{tabBarIcon: ()=> (<Icon type="antdesign" name="calendar" color='white' />)}} name="PendingInvites" component={PendingInvites}/>
-// <Tab.Screen options={{tabBarIcon: ()=> (<Icon type="antdesign" name="logout" color='white' />)}} name="Welcome" component={Welcome}/>
-// </Tab.Navigator>
-// }
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -47,11 +34,10 @@ export default function App() {
   return (
     <NavigationContainer>
       <SafeAreaProvider>
-
         <Stack.Navigator
           screenOptions={{
             headerStyle: {
-              backgroundColor: "#242526",
+              backgroundColor: "#1b1b1b",
             },
             headerTintColor: "orange",
             headerTitleStyle: {
@@ -61,7 +47,6 @@ export default function App() {
             },
           }}
         >
-
           <Stack.Screen
             name="Welcome"
             component={Welcome}
@@ -70,27 +55,27 @@ export default function App() {
           <Stack.Screen
             name="Home"
             component={Home}
-
             options={{ title: "Chewsy", headerBackVisible: false }}
-
           />
           <Stack.Screen
             name="SingleGroup"
             component={SingleGroup}
-
             options={{ title: "Chewsy", headerBackVisible: false }}
           />
           <Stack.Screen
             name="SingleEvent"
             component={SingleEvent}
-
             options={{ title: "Chewsy", headerBackVisible: false }}
           />
           <Stack.Screen
             name="Profile"
             component={Profile}
             options={{ title: "Chewsy", headerBackVisible: false }}
-
+          />
+          <Stack.Screen
+            name="PendingInvites"
+            component={PendingInvites}
+            options={{ title: "Chewsy", headerBackVisible: false }}
           />
         </Stack.Navigator>
       </SafeAreaProvider>

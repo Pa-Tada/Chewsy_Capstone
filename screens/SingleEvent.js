@@ -329,7 +329,6 @@ export default function EventPage({ route, navigation }) {
   };
 
   useEffect(() => {
-    console.log("im working");
     getUsersInGroup();
   }, []);
 
@@ -362,7 +361,6 @@ export default function EventPage({ route, navigation }) {
   };
 
   useEffect(() => {
-    console.log("im also working");
     getSelectedGenre();
   }, [users]);
 
@@ -492,7 +490,7 @@ export default function EventPage({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#242526",
+    backgroundColor: "#1b1b1b",
   },
   contents: {
     flex: 2.4,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useReducer } from "react";
 import {
   StyleSheet,
   Text,
@@ -19,11 +19,13 @@ import Footer from "../components/Footer";
 import Groups from "../components/Groups";
 import Events from "../components/Events";
 import CreateGroup from "../components/CreateGroup";
+import { LinearGradient } from "expo-linear-gradient";
 
-const Home = () => {
+const Home = ({ route }) => {
   const navigation = useNavigation();
   const [user, setUser] = useState({});
   const [groupModalOpen, setGroupModalOpen] = useState(false);
+  const [groupIds, setGroupIds] = useState([])
 
 
   const userInfo = () => {
@@ -38,12 +40,18 @@ const Home = () => {
     getUser()
   }, [user]);
 
+//  useEffect(() => {
+//     if (route.params?.deletedGroupId) {
+//       const deletedId = route.params.deletedGroupId
+//       store = user.groupIds?.filter((id)=> id!=deletedId)
+//       console.log("HOME DELETED ID", store)
+//     }
+//   }, [route.params?.deletedGroupId]);
 
   return (
     <SafeAreaView style={styles.container}>
       <Divider color="orange" />
-
-      <Modal visible={groupModalOpen} animationType="slide" transparent={true}>
+      <Modal visible={groupModalOpen} transparent={true}>
         <CreateGroup
         user={user}
         setUser={setUser}
@@ -68,7 +76,7 @@ const Home = () => {
           </TouchableOpacity>
         </View>
         {user?.groupIds && user.groupIds.length ? (
-          <Groups groupIds={user.groupIds} />
+          <Groups groupIds={user.groupIds} setUser={setUser} user={user}/>
         ) : (
           <View style={styles.nodata}>
             <Text style={styles.nodataText}>
@@ -97,7 +105,8 @@ const Home = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#242526",
+  //backgroundColor: "#242526",
+  backgroundColor: "#1b1b1b"
   },
   titleContainer: {
     flexDirection: "row",
@@ -111,9 +120,9 @@ const styles = StyleSheet.create({
   },
   iconWrapper: {
     shadowColor: "black",
-    shadowOffset: { height: 1, width: 1 },
+    shadowOffset: { height: 2, width: 2 },
     shadowOpacity: 1,
-    shadowRadius: 1,
+    shadowRadius: 2,
   },
   shadow: {
     shadowColor: "black",

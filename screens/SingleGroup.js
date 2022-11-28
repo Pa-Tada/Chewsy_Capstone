@@ -131,7 +131,7 @@ const SingleGroup = ({ route }) => {
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFuys8jY57bOyYwcKNIapFCCYLx18yRcXyEYJxcw7-BQgr5eqvIa-RRSY2XoByxp_GuVE&usqp=CAU",
       restLoc: "",
       restName: "",
-      submissions: 1,
+      submissions: [auth.currentUser.uid],
     });
   };
 
@@ -169,6 +169,7 @@ const SingleGroup = ({ route }) => {
           currentGroup={currentGroup}
           friends={friends}
           setFriends={setFriends}
+          groups={groups} setGroup={setGroup}
         />
       </View>
       <Modal visible={eventModalOpen} animationType="slide">
@@ -337,7 +338,7 @@ const SingleGroup = ({ route }) => {
 
       <View style={styles.eventsWrapper}>
         <View style={styles.titleContainer}>
-          <Text style={styles.sectionTitle}>Group Events</Text>
+          <Text style={styles.sectionTitle}>{currentGroup.name} Events</Text>
           <TouchableOpacity
             style={styles.iconWrapper}
             onPress={() => setEventModalOpen(true)}
@@ -361,7 +362,7 @@ const SingleGroup = ({ route }) => {
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#242526",
+    backgroundColor: "#1b1b1b",
   },
   buttonWrapper: {
     paddingVertical: 10,
@@ -409,9 +410,9 @@ export const styles = StyleSheet.create({
   },
   iconWrapper: {
     shadowColor: "black",
-    shadowOffset: { height: 1, width: 1 },
+    shadowOffset: { height: 2, width: 2 },
     shadowOpacity: 1,
-    shadowRadius: 1,
+    shadowRadius: 2,
   },
   shadow: {
     shadowColor: "black",
