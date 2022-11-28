@@ -34,20 +34,51 @@ import Events from "../components/Events";
 import Friends from "../components/Friends";
 import AddFriend from "../components/AddFriend";
 
+import RNDateTimePicker from "@react-native-community/datetimepicker";
+import RNPickerSelect from "react-native-picker-select";
+
+const addFriendField = [{ id: 1, field: "Email/Username" }];
+
 const SingleGroup = ({ route }) => {
   const { groupId, currentGroup, groups } = route.params;
   const navigation = useNavigation();
   const [modalOpen, setModalOpen] = useState(false);
   const [eventModalOpen, setEventModalOpen] = useState(false);
+
   const [userFoodGenre, setUserFoodGenre] = useState(user.foodGenre);
   const [userFoodGenreName, setUserFoodGenreName] = useState("");
   const [group, setGroup] = useState(currentGroup);
 
+  const [date, setDate] = useState(new Date());
+
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setShow(false);
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    if (Platform.OS === "android") {
+      setShow(true);
+      // for iOS, add a button that closes the picker
+    }
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode("date");
+  };
+
+  const showTimepicker = () => {
+    showMode("time");
+  };
+
   const [friends, setFriends] = useState([
     { name: "Loading...", id: "unique" },
   ]);
-
-
 
   useEffect(() => {
     const groupInfo = onSnapshot(collection(db, "groups"), (snapshot) => {
@@ -78,15 +109,29 @@ const SingleGroup = ({ route }) => {
   const handleFoodGenreEdit = () => {
     console.log(user);
     setDoc(doc(db, "users", auth.currentUser.uid), {
-      imgUrl: user.imgUrl,
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
-      groupIds: user.groupIds,
       foodGenre: userFoodGenre,
       restaurantRating: user.restaurantRating,
       dietaryRestrictions: user.dietaryRestrictions,
       affordability: user.affordability,
+      imgUrl: user.imgUrl,
+      groupIds: user.groupIds,
+    });
+  };
+
+  const createEvent = async () => {
+    console.log("group id:", groupId);
+    console.log("date:", date);
+    await addDoc(collection(db, "events"), {
+      createdAt: date,
+      groupId: groupId,
+      restImageUrl:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFuys8jY57bOyYwcKNIapFCCYLx18yRcXyEYJxcw7-BQgr5eqvIa-RRSY2XoByxp_GuVE&usqp=CAU",
+      restLoc: "",
+      restName: "",
+      submissions: [auth.currentUser.uid],
     });
   };
 
@@ -136,7 +181,7 @@ const SingleGroup = ({ route }) => {
                 <Text style={styles.sectionTitle}>Create Event</Text>
 
                 <View style={styles.form}>
-                  <Input
+                  {/* <Input
                     labelStyle={{ fontWeight: "normal" }}
                     inputStyle={{ color: "white", fontSize: 14 }}
                     label="Event Date"
@@ -145,13 +190,86 @@ const SingleGroup = ({ route }) => {
                     labelStyle={{ fontWeight: "normal" }}
                     inputStyle={{ color: "white", fontSize: 14 }}
                     label="Event Time"
-                  />
-                  <Input
+                  /> */}
+
+                  <View style={{ display: "flex", alignItems: "center" }}>
+                    <Text
+                      style={{
+                        color: "orange",
+                        fontSize: "16",
+                        alignSelf: "center",
+                        marginTop: 15,
+                      }}
+                    >
+                      Your Event Will take place on {date.toLocaleString()}
+                    </Text>
+                    {/* <TouchableOpacity
+                      style={styles.buttonWrapper}
+                      onPress={showDatepicker}
+                    >
+                      <Text>Select Date</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.buttonWrapper}
+                      onPress={showTimepicker}
+                    >
+                      <Text>Select Time</Text>
+                    </TouchableOpacity> */}
+
+                    <RNDateTimePicker
+                      style={{ marginTop: 10, marginBottom: 10 }}
+                      testID="dateTimePicker"
+                      value={date}
+                      mode="datetime"
+                      minuteInterval={15}
+                      is24Hour={true}
+                      onChange={onChange}
+                      display="spinner"
+                      textColor="orange" // change this to change text color
+                    />
+                  </View>
+
+                  {/* <Input
                     labelStyle={{ fontWeight: "normal" }}
                     inputStyle={{ color: "white", fontSize: 14 }}
                     label="What are you feeling?"
                     value={userFoodGenreName}
                     onChangeText={setUserFoodGenreName}
+                  /> */}
+                  <RNPickerSelect
+                    // labelStyle={{ fontWeight: "normal" }}
+                    style={pickerSelectStyles}
+                    label="Food Genre"
+                    onValueChange={(value) => setUserFoodGenreName(value)}
+                    // onDonePress = {setFoodGenre([...foodGenre, foodName])}
+                    placeholder={{
+                      label: "What are you feeling?",
+                      value: null,
+                    }}
+                    items={[
+                      { label: "American", value: "newamerican" },
+                      {
+                        label: "Breakfast & Brunch",
+                        value: "breakfast_brunch",
+                      },
+                      { label: "Burgers", value: "burgers" },
+                      { label: "Caribbean", value: "caribbean" },
+                      { label: "Chinese", value: "chinese" },
+                      { label: "Cuban", value: "cuban" },
+                      { label: "French", value: "french" },
+                      { label: "Halal", value: "halal" },
+                      { label: "Indian", value: "indpak" },
+                      { label: "Italian", value: "italian" },
+                      { label: "Mediterranean", value: "mediterranean" },
+                      { label: "Mexican", value: "mexican" },
+                      { label: "Middle Eastern", value: "mideastern" },
+                      { label: "Pizza", value: "pizza" },
+                      { label: "Sandwiches", value: "sandwiches" },
+                      { label: "Sushi", value: "sushi" },
+                      { label: "Thai", value: "thai" },
+                      { label: "Vegan", value: "vegan" },
+                      { label: "Vegetarian", value: "vegetarian" },
+                    ]}
                   />
                   <TouchableOpacity
                     style={styles.buttonWrapper}
@@ -164,7 +282,7 @@ const SingleGroup = ({ route }) => {
                       getUser();
                     }}
                   >
-                    <Text>Add Food Genre</Text>
+                    <Text>+</Text>
                   </TouchableOpacity>
                   {/* <View style = {}> */}
                   <FlatList
@@ -193,7 +311,13 @@ const SingleGroup = ({ route }) => {
                   />
                   {/* </View> */}
 
-                  <TouchableOpacity onPress={() => setEventModalOpen(false)}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      handleFoodGenreEdit();
+                      createEvent();
+                      setEventModalOpen(false);
+                    }}
+                  >
                     <View style={styles.buttonWrapper}>
                       <Text style={styles.button}>Create Event</Text>
                     </View>
@@ -202,7 +326,6 @@ const SingleGroup = ({ route }) => {
                     title="Cancel"
                     onPress={() => {
                       setEventModalOpen(false);
-                      handleFoodGenreEdit();
                     }}
                   ></Button>
                 </View>
@@ -244,6 +367,8 @@ export const styles = StyleSheet.create({
   buttonWrapper: {
     paddingVertical: 10,
     paddingHorizontal: 10,
+    marginBottom: 10,
+    marginTop: 10,
     borderRadius: 60,
     width: 150,
     backgroundColor: "orange",
@@ -314,6 +439,21 @@ export const styles = StyleSheet.create({
   },
   modalContent: {
     flex: 1,
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 4,
+    color: "white",
+    paddingRight: 30, // to ensure the text is never behind the icon
+    marginTop: 10,
+    marginBottom: 10,
   },
 });
 

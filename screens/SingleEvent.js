@@ -436,6 +436,15 @@ export default function EventPage({ route, navigation }) {
                   // await getRestaurantData(cuisineType)
                   setIsShown(!isShown);
                   Alert.alert("Your restaurant is ready!");
+                  setDoc(collection(db, "events"), {
+                    createdAt: date,
+                    groupId: groupId,
+                    restImageUrl:
+                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFuys8jY57bOyYwcKNIapFCCYLx18yRcXyEYJxcw7-BQgr5eqvIa-RRSY2XoByxp_GuVE&usqp=CAU",
+                    restLoc: "",
+                    restName: "",
+                    submissions: 1,
+                  });
                 }}
               >
                 <Text style={{ fontSize: 32 }}>Chewse</Text>

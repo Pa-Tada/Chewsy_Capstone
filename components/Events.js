@@ -93,6 +93,15 @@ function Item({ item, index, scrollX }) {
         <View style={styles.shadow}>
           <Image style={styles.eventImg} source={{ uri: item.restImgUrl }} />
         </View>
+        <Text style={styles.eventName}>
+          Your Event at{" "}
+          {new Date(item.createdAt?.seconds * 1000).toLocaleTimeString(
+            "en-US",
+            { hour: "2-digit", minute: "2-digit" }
+          )}{" "}
+          on{" "}
+          {new Date(item.createdAt?.seconds * 1000).toLocaleDateString("en-US")}
+        </Text>
         <Text style={styles.eventName}>{item.restName}</Text>
         <Text style={styles.eventLoc}>{item.restLoc}</Text>
       </TouchableOpacity>
@@ -137,9 +146,7 @@ const Events = (props) => {
         keyExtractor={(item) => item.id}
         horizontal
         renderItem={({ item, index }) => {
-          return (
-            <Item item={item} index={index} scrollX={scrollX} />
-          );
+          return <Item item={item} index={index} scrollX={scrollX} />;
         }}
         onScroll={(event) => {
           setScrollX(event.nativeEvent.contentOffset.x);

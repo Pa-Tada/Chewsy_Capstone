@@ -66,6 +66,8 @@ const Profile = () => {
       groupIds: user.groupIds,
     });
   };
+
+
   return (
     <View style={styles.container}>
       <Divider color="orange" />
