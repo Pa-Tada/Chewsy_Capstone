@@ -87,11 +87,14 @@ function Item({ item, index, scrollX }) {
             eventId: item.id,
             currentEvent: item,
             groupId: item.groupId,
+            //date: item.createdAt,
+            name: item.restName,
+            image: item.restImageUrl,
           })
         }
       >
         <View style={styles.shadow}>
-          <Image style={styles.eventImg} source={{ uri: item.restImgUrl }} />
+          <Image style={styles.eventImg} source={{ uri: item.restImageUrl }} />
         </View>
         <Text style={styles.eventName}>
           Your Event at{" "}
