@@ -58,9 +58,9 @@ const Welcome = () => {
         return getUser();
       })
       .then(() => {
+        navigation.navigate("Profile");
         setEmail("");
         setPassword("");
-        navigation.navigate("Profile");
       })
       .catch((error) => {
         if (error.message.includes("email-already-in-use")) {
@@ -84,9 +84,9 @@ const Welcome = () => {
         const user = userCredentials.user;
       })
       .then(() => {
+        navigation.navigate("Home");
         setEmail("");
         setPassword("");
-        navigation.navigate("Home");
       })
       .catch((error) => {
         console.log("ENTIRE ERROR", error.message);

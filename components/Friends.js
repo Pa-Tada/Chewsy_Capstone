@@ -30,8 +30,17 @@ import {
 import { Icon, Divider, Input } from "@rneui/themed";
 import Footer from "../components/Footer";
 import { useNavigation } from "@react-navigation/native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Events from "../components/Events";
+import Animated, {
+  interpolate,
+  Extrapolate,
+  useSharedValue,
+  useAnimatedStyle,
+} from "react-native-reanimated";
+
+// const CARD_LENGTH = 150;
+// const SPACING = 8;
+// const SIDECARD_LENGTH = 5;
+// const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 const Friends = (props) => {
   const { currentGroup, groups, setGroup, friends, setFriends } = props;
@@ -139,6 +148,11 @@ const Friends = (props) => {
 };
 
 export const styles = StyleSheet.create({
+  // card: {
+  //   width: CARD_LENGTH,
+  //   overflow: "hidden",
+  //   borderRadius: 15,
+  // },
   friends: {},
   list: {
     marginTop: 24,
@@ -161,9 +175,9 @@ export const styles = StyleSheet.create({
   iconWrapper: {
     marginTop: 12,
     shadowColor: "black",
-    shadowOffset: { height: 1, width: 1 },
+    shadowOffset: { height: 2, width: 2 },
     shadowOpacity: 1,
-    shadowRadius: 1,
+    shadowRadius: 2,
   },
   icon: {
     // width: 35,

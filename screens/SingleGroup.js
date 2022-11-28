@@ -239,7 +239,7 @@ const SingleGroup = ({ route }) => {
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#242526",
+    backgroundColor: "#1b1b1b",
   },
   buttonWrapper: {
     paddingVertical: 10,
@@ -285,9 +285,9 @@ export const styles = StyleSheet.create({
   },
   iconWrapper: {
     shadowColor: "black",
-    shadowOffset: { height: 1, width: 1 },
+    shadowOffset: { height: 2, width: 2 },
     shadowOpacity: 1,
-    shadowRadius: 1,
+    shadowRadius: 2,
   },
   shadow: {
     shadowColor: "black",

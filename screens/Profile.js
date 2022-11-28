@@ -326,7 +326,7 @@ const pickerSelectStyles = StyleSheet.create({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#242526",
+    backgroundColor: "#1b1b1b",
     flex: 1,
     justifyContent: "center",
   },

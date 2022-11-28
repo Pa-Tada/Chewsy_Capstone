@@ -71,11 +71,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   iconWrapper: {
-    marginTop: 12,
+    marginTop: 18,
     shadowColor: "black",
-    shadowOffset: { height: 1, width: 1 },
+    shadowOffset: { height: 2, width: 2 },
     shadowOpacity: 1,
-    shadowRadius: 1,
+    shadowRadius: 2,
   },
   icon: {
     // width: 35,
