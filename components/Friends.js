@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useReducer } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,53 +9,150 @@ import {
   SafeAreaView,
   Modal,
   Button,
+  Alert,
 } from "react-native";
-import { auth, db } from "../firebase";
-import {collection,getDocs,onSnapshot,addDoc,deleteDoc,doc,orderBy,serverTimestamp,getDoc,query,where} from "firebase/firestore";
+import { auth, db, getUser, user } from "../firebase";
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  addDoc,
+  deleteDoc,
+  doc,
+  orderBy,
+  serverTimestamp,
+  getDoc,
+  query,
+  where,
+  updateDoc,
+  arrayRemove,
+} from "firebase/firestore";
 import { Icon, Divider, Input } from "@rneui/themed";
 import Footer from "../components/Footer";
 import { useNavigation } from "@react-navigation/native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Events from "../components/Events";
+import Animated, {
+  interpolate,
+  Extrapolate,
+  useSharedValue,
+  useAnimatedStyle,
+} from "react-native-reanimated";
+
+// const CARD_LENGTH = 150;
+// const SPACING = 8;
+// const SIDECARD_LENGTH = 5;
+// const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 const Friends = (props) => {
-  const { currentGroup, friends, setFriends } = props
+  const { currentGroup, groups, setGroup, friends, setFriends } = props;
   const navigation = useNavigation();
 
-  // const [friends, setFriends] = useState([{name: "Loading...", id: "unique"}]);
+  const handleDelete = async (memberId, index, firstName) => {
+    Alert.alert("Delete", `Are you sure you want to delete ${firstName}?`, [
+      {
+        text: "Cancel",
+        onPress: () => {
+          console.log("Cancel delete");
+        },
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: async () => {
+          console.log("OK Deleting memberId", firstName, memberId);
 
-  // useEffect(()=> {
-  //   const unsub = onSnapshot(collection(db, "users"),  (snapshot)=> {
-  //     let members = []
-  //       snapshot.docs.map(doc=> {
-  //         if (currentGroup.userIds?.includes(doc.id)) // && doc.id != auth.currentUser.uid
-  //         members.push({...doc.data(), id: doc.id})
-  //       })
-  //     setFriends(members)
-  //     console.log("Friends.js friends", friends)
-  //   })
-  //   return unsub
-  // }, [currentGroup, currentGroup.userIds.length])
+//--------------------REMOVE GROUP FROM USER---------------------
+          await updateDoc(doc(db, "users", memberId), {
+            groupIds: arrayRemove(currentGroup.id),
+          });
+
+//-------------REMOVE USER FROM GROUP'S EVENTS' SUBMISSIONS------------
+          const q = query(
+            collection(db, "events"),
+            where("groupId", "==", `${currentGroup.id}`)
+          );
+          console.log("FRIENDS.JS QUERIED EVENT", query);
+          onSnapshot(q, (snapshot)=> {
+            snapshot.docs.map(async (snap)=> {
+              await updateDoc(doc(db, "events", snap.id), {
+                submissions: arrayRemove(memberId),
+              });
+            })})
+
+//--------------------REMOVE USER FROM FRIENDS STATE---------------------
+          // await setFriends((prevState) => {
+          //   const removed = prevState.splice(index, 1);
+          //   return [...prevState];
+          // });
+          await setFriends(friends.filter((friend) => friend.id != memberId));
+
+//--------------------REMOVE USER FROM GROUP (IF REMOVING SELF, NAVIGATE HOME)---------------------
+          if (memberId == auth.currentUser.uid) {
+            let nextLeader = friends[0].id;
+            await updateDoc(doc(db, "groups", currentGroup.id), {
+              userIds: arrayRemove(memberId),
+              leaderId: nextLeader,
+            });
+            navigation.navigate("Home", { deletedGroupId: currentGroup.id });
+          } else {
+            await updateDoc(doc(db, "groups", currentGroup.id), {
+              userIds: arrayRemove(memberId),
+            });
+          }
+        },
+      },
+    ]);
+  };
 
   return (
-        <View style={styles.friends}>
-          <FlatList
-          showsHorizontalScrollIndicator={false}
-            data={friends}
-            keyExtractor={(item) => item.id}
-            horizontal
-            renderItem={({ item }) => (
-              <View style={styles.list}>
-                <Image style={styles.img} source={{ uri: item.imgUrl }} />
-                <Text style={styles.name}>{item.firstName}</Text>
-              </View>
-            )}
-          />
-        </View>
+    <View style={styles.friends}>
+      <FlatList
+        extraData={friends}
+        showsHorizontalScrollIndicator={false}
+        data={friends}
+        keyExtractor={(item) => item.id}
+        horizontal
+        renderItem={({ item, index }) => (
+          <View style={styles.list}>
+            <Image style={styles.img} source={{ uri: item.imgUrl }} />
+            <Text style={styles.name}>{item.firstName}</Text>
+            {auth.currentUser.uid == currentGroup.leaderId ? (
+              <TouchableOpacity
+                style={styles.iconWrapper}
+                onPress={() => handleDelete(item.id, index, item.firstName)}
+              >
+                <Icon
+                  type="material-community"
+                  name="delete-outline"
+                  color="white"
+                  style={styles.icon}
+                />
+              </TouchableOpacity>
+            ) : auth.currentUser.uid == item.id ? (
+              <TouchableOpacity
+                style={styles.iconWrapper}
+                onPress={() => handleDelete(item.id, index, item.firstName)}
+              >
+                <Icon
+                  type="material-community"
+                  name="delete-outline"
+                  color="white"
+                  style={styles.icon}
+                />
+              </TouchableOpacity>
+            ) : null}
+          </View>
+        )}
+      />
+    </View>
   );
 };
 
 export const styles = StyleSheet.create({
+  // card: {
+  //   width: CARD_LENGTH,
+  //   overflow: "hidden",
+  //   borderRadius: 15,
+  // },
   friends: {},
   list: {
     marginTop: 24,
@@ -74,6 +171,18 @@ export const styles = StyleSheet.create({
     marginTop: 2,
     fontWeight: "bold",
     color: "darkgray",
+  },
+  iconWrapper: {
+    marginTop: 12,
+    shadowColor: "black",
+    shadowOffset: { height: 2, width: 2 },
+    shadowOpacity: 1,
+    shadowRadius: 2,
+  },
+  icon: {
+    // width: 35,
+    // height: 35,
+    // borderRadius: 50,
   },
 });
 

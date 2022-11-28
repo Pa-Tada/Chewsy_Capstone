@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { Icon } from "@rneui/themed";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
+import { auth, db, allUsers } from "../firebase";
 
 const Footer = (props) => {
   const navigation = useNavigation();
@@ -12,7 +13,6 @@ const Footer = (props) => {
         style={styles.iconWrapper}
         onPress={() => navigation.navigate("Home")}
       >
-        {/* Link to HOMEPAGE: maybe substitute later with <Image style={styles.icon} source={{ uri: PROFILE IMAGE }}/> */}
         <Icon type="antdesign" name="home" color="white" style={styles.icon} />
       </TouchableOpacity>
 
@@ -20,12 +20,13 @@ const Footer = (props) => {
         style={styles.iconWrapper}
         onPress={() => navigation.navigate("Profile")}
       >
-        {/* PROFILE LONG FORM */}
         <Icon type="antdesign" name="form" color="white" style={styles.icon} />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.iconWrapper}>
-        {/* PENDING INVITATIONS */}
+      <TouchableOpacity
+        style={styles.iconWrapper}
+        onPress={() => navigation.navigate("PendingInvites")}
+      >
         <Icon
           type="antdesign"
           name="calendar"
@@ -36,9 +37,16 @@ const Footer = (props) => {
 
       <TouchableOpacity
         style={styles.iconWrapper}
-        onPress={() => navigation.navigate("Welcome")}
+        onPress={async() => {
+          try{
+            await auth.signOut()
+            console.log("Signout successful")
+            navigation.navigate("Welcome")
+          } catch (err){
+            console.log("Signout error", err)
+          }
+          }}
       >
-        {/* LOG OUT */}
         <Icon
           type="antdesign"
           name="logout"
@@ -63,11 +71,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   iconWrapper: {
-    marginTop: 12,
+    marginTop: 18,
     shadowColor: "black",
-    shadowOffset: { height: 1, width: 1 },
+    shadowOffset: { height: 2, width: 2 },
     shadowOpacity: 1,
-    shadowRadius: 1,
+    shadowRadius: 2,
   },
   icon: {
     // width: 35,

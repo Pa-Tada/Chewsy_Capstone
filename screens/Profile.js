@@ -10,8 +10,6 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import React, { useEffect, useState } from "react";
 import { Icon, Input, Avatar, Divider } from "@rneui/themed";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import { auth, db, getUser, user } from "../firebase";
 import firebase from "firebase/compat";
 import RNPickerSelect from "react-native-picker-select";
@@ -330,7 +328,7 @@ const pickerSelectStyles = StyleSheet.create({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#242526",
+    backgroundColor: "#1b1b1b",
     flex: 1,
     justifyContent: "center",
   },
