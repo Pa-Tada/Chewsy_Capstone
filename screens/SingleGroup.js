@@ -35,6 +35,7 @@ import Friends from "../components/Friends";
 import AddFriend from "../components/AddFriend";
 
 import RNDateTimePicker from "@react-native-community/datetimepicker";
+import RNPickerSelect from "react-native-picker-select";
 
 const addFriendField = [{ id: 1, field: "Email/Username" }];
 
@@ -80,16 +81,15 @@ const SingleGroup = ({ route }) => {
   ]);
 
   useEffect(() => {
-    const groupInfo =
-      onSnapshot(collection(db, "groups"), (snapshot) => {
-        snapshot.docs.map((doc) => {
-          if (groupId == doc.id) {
-            setGroup({ ...doc.data(), id: doc.id });
-          }
-        });
+    const groupInfo = onSnapshot(collection(db, "groups"), (snapshot) => {
+      snapshot.docs.map((doc) => {
+        if (groupId == doc.id) {
+          setGroup({ ...doc.data(), id: doc.id });
+        }
       });
-      console.log("SingleGroup.js GROUP", group);
-    return groupInfo
+    });
+    console.log("SingleGroup.js GROUP", group);
+    return groupInfo;
   }, [currentGroup, currentGroup.userIds.length]);
 
   useEffect(() => {
@@ -122,13 +122,13 @@ const SingleGroup = ({ route }) => {
   };
 
   const createEvent = async () => {
-    console.log('group id:', groupId)
-    console.log('date:', date)
+    console.log("group id:", groupId);
+    console.log("date:", date);
     await addDoc(collection(db, "events"), {
       createdAt: date,
       groupId: groupId,
       restImageUrl:
-        "https://images.unsplash.com/photo-1540224769541-7e6e20a42330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=776&q=80",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFuys8jY57bOyYwcKNIapFCCYLx18yRcXyEYJxcw7-BQgr5eqvIa-RRSY2XoByxp_GuVE&usqp=CAU",
       restLoc: "",
       restName: "",
       submissions: 1,
@@ -191,13 +191,13 @@ const SingleGroup = ({ route }) => {
                     label="Event Time"
                   /> */}
 
-                  <View style = {{display:'flex', alignItems:'center'}}>
+                  <View style={{ display: "flex", alignItems: "center" }}>
                     <Text
                       style={{
                         color: "orange",
                         fontSize: "16",
                         alignSelf: "center",
-                        marginTop: 15
+                        marginTop: 15,
                       }}
                     >
                       Your Event Will take place on {date.toLocaleString()}
@@ -216,24 +216,59 @@ const SingleGroup = ({ route }) => {
                     </TouchableOpacity> */}
 
                     <RNDateTimePicker
-                      style={{ marginTop: 10, marginBottom:10}}
+                      style={{ marginTop: 10, marginBottom: 10 }}
                       testID="dateTimePicker"
                       value={date}
                       mode="datetime"
                       minuteInterval={15}
                       is24Hour={true}
                       onChange={onChange}
-                      display = "spinner"
+                      display="spinner"
                       textColor="orange" // change this to change text color
                     />
                   </View>
 
-                  <Input
+                  {/* <Input
                     labelStyle={{ fontWeight: "normal" }}
                     inputStyle={{ color: "white", fontSize: 14 }}
                     label="What are you feeling?"
                     value={userFoodGenreName}
                     onChangeText={setUserFoodGenreName}
+                  /> */}
+                  <RNPickerSelect
+                    // labelStyle={{ fontWeight: "normal" }}
+                    style={pickerSelectStyles}
+                    label="Food Genre"
+                    onValueChange={(value) => setUserFoodGenreName(value)}
+                    // onDonePress = {setFoodGenre([...foodGenre, foodName])}
+                    placeholder={{
+                      label: "What are you feeling?",
+                      value: null,
+                    }}
+                    items={[
+                      { label: "American", value: "newamerican" },
+                      {
+                        label: "Breakfast & Brunch",
+                        value: "breakfast_brunch",
+                      },
+                      { label: "Burgers", value: "burgers" },
+                      { label: "Caribbean", value: "caribbean" },
+                      { label: "Chinese", value: "chinese" },
+                      { label: "Cuban", value: "cuban" },
+                      { label: "French", value: "french" },
+                      { label: "Halal", value: "halal" },
+                      { label: "Indian", value: "indpak" },
+                      { label: "Italian", value: "italian" },
+                      { label: "Mediterranean", value: "mediterranean" },
+                      { label: "Mexican", value: "mexican" },
+                      { label: "Middle Eastern", value: "mideastern" },
+                      { label: "Pizza", value: "pizza" },
+                      { label: "Sandwiches", value: "sandwiches" },
+                      { label: "Sushi", value: "sushi" },
+                      { label: "Thai", value: "thai" },
+                      { label: "Vegan", value: "vegan" },
+                      { label: "Vegetarian", value: "vegetarian" },
+                    ]}
                   />
                   <TouchableOpacity
                     style={styles.buttonWrapper}
@@ -246,7 +281,7 @@ const SingleGroup = ({ route }) => {
                       getUser();
                     }}
                   >
-                    <Text>Add Food Genre</Text>
+                    <Text>+</Text>
                   </TouchableOpacity>
                   {/* <View style = {}> */}
                   <FlatList
@@ -403,6 +438,21 @@ export const styles = StyleSheet.create({
   },
   modalContent: {
     flex: 1,
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 4,
+    color: "white",
+    paddingRight: 30, // to ensure the text is never behind the icon
+    marginTop: 10,
+    marginBottom: 10,
   },
 });
 

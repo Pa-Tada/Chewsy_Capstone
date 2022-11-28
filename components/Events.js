@@ -33,58 +33,64 @@ const Events = (props) => {
   const [events, setEvents] = useState([{ name: "Loading...", id: "unique" }]);
 
   useEffect(() => {
-    const q = query(collection(db, "events"), orderBy("createdAt", "desc"))
-    const unsub = onSnapshot(q, (snapshot)=> {
-    let eventArr = []
-      snapshot.docs.map(doc=> {
-        if (groupIds?.includes(doc.data().groupId || groupIds == doc.data().groupId))
-        eventArr.push({...doc.data(), id: doc.id})
-      })
-      setEvents(eventArr)
-    console.log("Events.js events", events)
-  })
-  return unsub
+    const q = query(collection(db, "events"), orderBy("createdAt", "desc"));
+    const unsub = onSnapshot(q, (snapshot) => {
+      let eventArr = [];
+      snapshot.docs.map((doc) => {
+        if (
+          groupIds?.includes(
+            doc.data().groupId || groupIds == doc.data().groupId
+          )
+        )
+          eventArr.push({ ...doc.data(), id: doc.id });
+      });
+      setEvents(eventArr);
+      console.log("Events.js events", events);
+    });
+    return unsub;
   }, [groupIds]); //maybe add events
 
-
-    return (events?
-      <View style={styles.events}>
-        <FlatList
-          showsHorizontalScrollIndicator={false}
-          data={events}
-          keyExtractor={(item) => item.id}
-          horizontal
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={styles.eventList}
-              onPress={() =>{
-                // console.log("ITEM:",item.createdAt);
-                // console.log("ITEM DATE:", new Date(1669511280 *1000))
-                // console.log(new Date(item.createdAt.seconds *1000))
-                // let timestemp = new Date(item.createdAt.seconds *1000).toLocaleDateString('en-US');
-                // console.log(timestemp)
-
-                // navigation.navigate("SingleEvent", {
-                //   eventId: item.id,
-                //   currentEvent: item,
-                //   groupId: item.groupId,
-                // })
-              }
-              }
-            >
-              <View style={styles.shadow}>
-                <Image
-                  style={styles.eventImg}
-                  source={{ uri: item.restImageUrl }}
-                />
-              </View>
-              <Text style={styles.eventName}>Your Event at {new Date(item.createdAt?.seconds *1000).toLocaleTimeString('en-US', { hour: "2-digit", minute: "2-digit" })} on {new Date(item.createdAt?.seconds *1000).toLocaleDateString('en-US')}</Text>
-              <Text style={styles.eventLoc}>{item.restLoc}</Text>
-            </TouchableOpacity>
-          )}
-        />
-      </View>: <Text>Loading Events</Text>
-    );
+  return (
+    <View style={styles.events}>
+      <FlatList
+        showsHorizontalScrollIndicator={false}
+        data={events}
+        keyExtractor={(item) => item.id}
+        horizontal
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={styles.eventList}
+            onPress={() => {
+              navigation.navigate("SingleEvent", {
+                eventId: item.id,
+                currentEvent: item,
+                groupId: item.groupId,
+              });
+            }}
+          >
+            <View style={styles.shadow}>
+              <Image
+                style={styles.eventImg}
+                source={{ uri: item.restImageUrl }}
+              />
+            </View>
+            <Text style={styles.eventName}>
+              Your Event at{" "}
+              {new Date(item.createdAt?.seconds * 1000).toLocaleTimeString(
+                "en-US",
+                { hour: "2-digit", minute: "2-digit" }
+              )}{" "}
+              on{" "}
+              {new Date(item.createdAt?.seconds * 1000).toLocaleDateString(
+                "en-US"
+              )}
+            </Text>
+            <Text style={styles.eventLoc}>{item.restLoc}</Text>
+          </TouchableOpacity>
+        )}
+      />
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
