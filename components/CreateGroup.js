@@ -31,6 +31,7 @@ import {
   arrayUnion,
 } from "firebase/firestore";
 import { MultipleSelectList } from "react-native-dropdown-select-list";
+import Ripple from "react-native-material-ripple";
 
 const CreateGroup = (props) => {
   const { user, setUser, groupModalOpen, setGroupModalOpen } = props;
@@ -102,7 +103,8 @@ const CreateGroup = (props) => {
     <View style={styles.modalBackground}>
       <View style={styles.modalContent}>
         <KeyboardAwareScrollView>
-          <TouchableOpacity
+          <Ripple
+            rippleColor="#fff"
             onPress={() => setGroupModalOpen(false)}
             style={styles.iconWrapper}
           >
@@ -113,7 +115,7 @@ const CreateGroup = (props) => {
               style={styles.icon}
               size={30}
             />
-          </TouchableOpacity>
+           </Ripple>
           <View style={styles.formContainer}>
             <View style={styles.form}>
               <Input
@@ -199,11 +201,11 @@ const CreateGroup = (props) => {
                   }
                 />
               </View>
-              <TouchableOpacity onPress={() => handleSubmit()}>
+              <Ripple rippleColor="#fff" onPress={() => handleSubmit()}>
                 <View style={styles.buttonWrapper}>
                   <Text style={styles.button}>Create Group</Text>
                 </View>
-              </TouchableOpacity>
+                </Ripple>
             </View>
           </View>
         </KeyboardAwareScrollView>

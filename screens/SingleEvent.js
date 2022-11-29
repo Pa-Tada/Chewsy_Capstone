@@ -31,6 +31,7 @@ import Slider from "@react-native-community/slider";
 import RNPickerSelect from "react-native-picker-select";
 import Constants from "expo-constants";
 import * as Location from "expo-location";
+import Ripple from "react-native-material-ripple";
 
 
 export default function EventPage({ route }, props) {
@@ -269,7 +270,7 @@ console.log("EVENTID", eventId)
                 onValueChange={(value) => setRadius(Math.floor(value))}
               />
 
-              <TouchableOpacity
+              <Ripple rippleColor="#fff"
                 style={styles.roundButton1}
                 onPress={() => {
                   setIsShown(!isShown);
@@ -286,7 +287,7 @@ console.log("EVENTID", eventId)
                 }}
               >
                 <Text style={{ fontSize: 32 }}>Chewse</Text>
-              </TouchableOpacity>
+              </Ripple>
               <Text> </Text>
             </View>
           ) : (
@@ -318,13 +319,13 @@ console.log("EVENTID", eventId)
                 {restaurantData[0]?.location.zip_code}
                 {"\n"} */}
               </Text>
-              <TouchableOpacity
+              <Ripple rippleColor="#fff"
                 onPress={() => {
                   navigation.goBack();
                 }}
               >
                 <Text style={styles.eventText}>Back to Group</Text>
-              </TouchableOpacity>
+              </Ripple>
             </View>
           )}
           {isShown && event.restName !== ""? (
@@ -382,7 +383,7 @@ console.log("EVENTID", eventId)
             {"\n"}
           </Text> */}
 
-          <TouchableOpacity
+          <Ripple rippleColor="#fff"
             style={styles.roundButton2}
             onPress={() => {
               Alert.alert(
@@ -391,7 +392,7 @@ console.log("EVENTID", eventId)
             }}
           >
             <Text style={{ fontSize: 32 }}>Chewse</Text>
-          </TouchableOpacity>
+          </Ripple>
         </View>
       </View>
       <Footer />

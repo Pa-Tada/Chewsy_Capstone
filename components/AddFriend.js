@@ -31,6 +31,7 @@ import {
   setDoc,
   arrayUnion,
 } from "firebase/firestore";
+import Ripple from "react-native-material-ripple";
 
 const AddFriend = (props) => {
   const {
@@ -89,7 +90,7 @@ const AddFriend = (props) => {
   return (
     <View style={styles.modalBackground}>
       <View style={styles.modalContent}>
-        <TouchableOpacity
+      <Ripple rippleColor="#fff"
           onPress={() => setModalOpen(false)}
           style={styles.iconWrapper}
         >
@@ -100,7 +101,7 @@ const AddFriend = (props) => {
             style={styles.icon}
             size={30}
           />
-        </TouchableOpacity>
+        </Ripple>
         <View style={styles.formContainer}>
           <View style={styles.form}>
             <Text style={styles.text}>{"  "}Friends</Text>
@@ -146,11 +147,11 @@ const AddFriend = (props) => {
               />
             </View>
             <View style={styles.btnContainer}>
-              <TouchableOpacity onPress={() => handleSubmit()}>
+              <Ripple rippleColor="#fff" onPress={() => handleSubmit()}>
                 <View style={styles.buttonWrapper}>
                   <Text style={styles.button}>Add Friends</Text>
                 </View>
-              </TouchableOpacity>
+                </Ripple>
             </View>
           </View>
         </View>

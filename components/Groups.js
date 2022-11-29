@@ -31,6 +31,7 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
 } from "react-native-reanimated";
+import Ripple from "react-native-material-ripple";
 
 const CARD_LENGTH = 190;
 const SPACING = 8;
@@ -85,7 +86,7 @@ function Item({ item, groups, index, scrollX }) {
         },
       ]}
     >
-      <TouchableOpacity
+      <Ripple rippleColor="#fff"
         style={styles.list}
         onPress={() =>
           navigation.navigate("SingleGroup", {
@@ -100,7 +101,7 @@ function Item({ item, groups, index, scrollX }) {
         </View>
 
         <Text style={styles.name}>{item?.name}</Text>
-      </TouchableOpacity>
+      </Ripple>
     </Animated.View>
   );
 }

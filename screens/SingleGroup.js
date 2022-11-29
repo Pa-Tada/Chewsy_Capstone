@@ -34,7 +34,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import Events from "../components/Events";
 import Friends from "../components/Friends";
 import AddFriend from "../components/AddFriend";
-
+import Ripple from "react-native-material-ripple"
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import RNPickerSelect from "react-native-picker-select";
 
@@ -152,12 +152,12 @@ const SingleGroup = ({ route }) => {
       <View style={styles.friendsWrapper}>
         <View style={styles.titleContainer}>
           <Text style={styles.sectionTitle}>{currentGroup.name} Members</Text>
-          <TouchableOpacity
+          <Ripple rippleColor="#fff"
             style={styles.iconWrapper}
             onPress={() => setModalOpen(true)}
           >
             <Icon type="antdesign" size="28px" name="adduser" color="white" />
-          </TouchableOpacity>
+          </Ripple>
         </View>
         <Friends
           currentGroup={currentGroup}
@@ -170,7 +170,7 @@ const SingleGroup = ({ route }) => {
       <Modal visible={eventModalOpen} animationType="slide" transparent={true}>
         <View style={styles.modalBackground}>
           <View style={styles.modalContent}>
-            <TouchableOpacity
+          <Ripple rippleColor="#fff"
               onPress={() => {
                 setEventModalOpen(false);
               }}
@@ -183,7 +183,7 @@ const SingleGroup = ({ route }) => {
                 style={styles.icon}
                 size={30}
               />
-            </TouchableOpacity>
+             </Ripple>
             <View style={styles.formContainer}>
               <View style={styles.form}>
                 <Input
@@ -266,7 +266,7 @@ const SingleGroup = ({ route }) => {
                       { label: "Vegetarian", value: "vegetarian" },
                     ]}
                   />
-                  <TouchableOpacity
+                  <Ripple rippleColor="#fff"
                     style={styles.plusbuttonWrapper}
                     onPress={() => {
                       setUserFoodGenre([...userFoodGenre, userFoodGenreName]);
@@ -277,14 +277,14 @@ const SingleGroup = ({ route }) => {
                     }}
                   >
                     <Text style={styles.button}>+</Text>
-                  </TouchableOpacity>
+                    </Ripple>
                 </View>
                 <FlatList
                   data={userFoodGenre}
                   renderItem={(foodGenre) => (
                     <View style={styles.foodGenres}>
                       <Text style={styles.foodListItem}>{foodGenre.item}</Text>
-                      <TouchableOpacity
+                      <Ripple rippleColor="#fff"
                         style={styles.foodButtonWrapper}
                         onPress={() => {
                           console.log(foodGenre.item);
@@ -297,13 +297,13 @@ const SingleGroup = ({ route }) => {
                         }}
                       >
                         <Text style={styles.button}>-</Text>
-                      </TouchableOpacity>
+                        </Ripple>
                     </View>
                   )}
                 />
               </View>
               <View style={styles.createbutton}>
-                <TouchableOpacity
+              <Ripple rippleColor="#fff"
                   onPress={() => {
                     handleFoodGenreEdit();
                     createEvent();
@@ -313,7 +313,7 @@ const SingleGroup = ({ route }) => {
                   <View style={styles.buttonWrapper}>
                     <Text style={styles.button}>Create Event</Text>
                   </View>
-                </TouchableOpacity>
+                  </Ripple>
               </View>
             </View>
           </View>
@@ -323,7 +323,7 @@ const SingleGroup = ({ route }) => {
       <View style={styles.eventsWrapper}>
         <View style={styles.titleContainer}>
           <Text style={styles.sectionTitle}>{currentGroup.name} Events</Text>
-          <TouchableOpacity
+          <Ripple rippleColor="#fff"
             style={styles.iconWrapper}
             onPress={() => setEventModalOpen(true)}
           >
@@ -333,7 +333,7 @@ const SingleGroup = ({ route }) => {
               name="calendar-plus"
               color="white"
             />
-          </TouchableOpacity>
+          </Ripple>
         </View>
         <Events groupIds={groupId} />
       </View>

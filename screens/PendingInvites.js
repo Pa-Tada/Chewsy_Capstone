@@ -32,6 +32,7 @@ import {
 } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import { MultipleSelectList } from "react-native-dropdown-select-list";
+import Ripple from "react-native-material-ripple";
 
 const PendingInvites = (props) => {
   const { inviteModalOpen, setInviteModalOpen } = props;
@@ -124,7 +125,7 @@ const PendingInvites = (props) => {
   return (
     <View style={styles.modalBackground}>
       <View style={styles.modalContent}>
-        <TouchableOpacity
+      <Ripple rippleColor="#fff"
           onPress={() => setInviteModalOpen(false)}
           style={styles.iconWrapper}
         >
@@ -135,7 +136,7 @@ const PendingInvites = (props) => {
             style={styles.icon}
             size={30}
           />
-        </TouchableOpacity>
+        </Ripple>
         <View style={styles.contents}>
           {currentEvent.id ? (
             <View style={styles.formContainer}>
@@ -213,7 +214,7 @@ const PendingInvites = (props) => {
                       { label: "Vegetarian", value: "vegetarian" },
                     ]}
                   />
-                  <TouchableOpacity
+                  <Ripple rippleColor="#fff"
                     style={styles.plusbuttonWrapper}
                     onPress={() => {
                       setUserFoodGenre([...userFoodGenre, userFoodGenreName]);
@@ -224,14 +225,14 @@ const PendingInvites = (props) => {
                     }}
                   >
                     <Text style={styles.button}>+</Text>
-                  </TouchableOpacity>
+                    </Ripple>
                 </View>
                 <FlatList
                   data={userFoodGenre}
                   renderItem={(foodGenre) => (
                     <View style={styles.foodGenres}>
                       <Text style={styles.foodListItem}>{foodGenre.item}</Text>
-                      <TouchableOpacity
+                      <Ripple rippleColor="#fff"
                         style={styles.foodButtonWrapper}
                         onPress={() => {
                           console.log(foodGenre.item);
@@ -244,14 +245,14 @@ const PendingInvites = (props) => {
                         }}
                       >
                         <Text style={styles.button}>-</Text>
-                      </TouchableOpacity>
+                        </Ripple>
                     </View>
                   )}
                 />
                 </View>
                 <View style={styles.fields}>
                 <View style={styles.createbutton}>
-                <TouchableOpacity
+                <Ripple rippleColor="#fff"
                   onPress={() => {
                     handleSubmit();
                     getUser();
@@ -261,7 +262,7 @@ const PendingInvites = (props) => {
                   <View style={styles.buttonWrapper}>
                     <Text style={styles.button}>Send Your Preferences</Text>
                   </View>
-                </TouchableOpacity>
+                </Ripple>
                 </View>
                 </View>
               </View>
