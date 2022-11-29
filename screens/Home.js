@@ -20,6 +20,7 @@ import Groups from "../components/Groups";
 import Events from "../components/Events";
 import CreateGroup from "../components/CreateGroup";
 import { LinearGradient } from "expo-linear-gradient";
+import Ripple from "react-native-material-ripple";
 
 const Home = ({ route }) => {
   const navigation = useNavigation();
@@ -63,7 +64,7 @@ const Home = ({ route }) => {
       <View style={styles.groupsWrapper}>
         <View style={styles.titleContainer}>
           <Text style={styles.sectionTitle}>Your Groups</Text>
-          <TouchableOpacity
+          <Ripple rippleColor="#fff"
             style={styles.iconWrapper}
             onPress={() => setGroupModalOpen(true)}
           >
@@ -73,7 +74,7 @@ const Home = ({ route }) => {
               name="addusergroup"
               color="white"
             />
-          </TouchableOpacity>
+          </Ripple>
         </View>
         {user?.groupIds && user.groupIds.length ? (
           <Groups groupIds={user.groupIds} setUser={setUser} user={user}/>

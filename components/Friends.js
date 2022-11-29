@@ -36,6 +36,7 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
 } from "react-native-reanimated";
+import Ripple from "react-native-material-ripple";
 
 // const CARD_LENGTH = 150;
 // const SPACING = 8;
@@ -116,7 +117,7 @@ const Friends = (props) => {
             <Image style={styles.img} source={{ uri: item.imgUrl }} />
             <Text style={styles.name}>{item.firstName}</Text>
             {auth.currentUser.uid == currentGroup.leaderId ? (
-              <TouchableOpacity
+              <Ripple rippleColor="#fff"
                 style={styles.iconWrapper}
                 onPress={() => handleDelete(item.id, index, item.firstName)}
               >
@@ -126,9 +127,9 @@ const Friends = (props) => {
                   color="white"
                   style={styles.icon}
                 />
-              </TouchableOpacity>
+              </Ripple>
             ) : auth.currentUser.uid == item.id ? (
-              <TouchableOpacity
+              <Ripple rippleColor="#fff"
                 style={styles.iconWrapper}
                 onPress={() => handleDelete(item.id, index, item.firstName)}
               >
@@ -138,7 +139,7 @@ const Friends = (props) => {
                   color="white"
                   style={styles.icon}
                 />
-              </TouchableOpacity>
+              </Ripple>
             ) : null}
           </View>
         )}

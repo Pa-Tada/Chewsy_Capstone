@@ -31,6 +31,7 @@ import {
   arrayUnion,
 } from "firebase/firestore";
 import { MultipleSelectList } from "react-native-dropdown-select-list";
+import Ripple from "react-native-material-ripple";
 
 const CreateGroup = (props) => {
   const { user, setUser, groupModalOpen, setGroupModalOpen } = props;
@@ -104,7 +105,8 @@ const CreateGroup = (props) => {
     <View style={styles.modalBackground}>
       <View style={styles.modalContent}>
         <KeyboardAwareScrollView>
-          <TouchableOpacity
+          <Ripple
+            rippleColor="#fff"
             onPress={() => setGroupModalOpen(false)}
             style={styles.iconWrapper}
           >
@@ -115,10 +117,10 @@ const CreateGroup = (props) => {
               style={styles.icon}
               size={30}
             />
-          </TouchableOpacity>
+          </Ripple>
           <View style={styles.form}>
             <Input
-            inputContainerStyle = {{borderBottomWidth: 0}}
+              inputContainerStyle={{ borderBottomWidth: 0 }}
               labelStyle={{ color: "white", fontWeight: "normal" }}
               inputStyle={{
                 color: "white",
@@ -149,34 +151,35 @@ const CreateGroup = (props) => {
                 dropdownTextStyles={{ color: "white" }}
                 maxHeight={220}
                 searchPlaceholder="Username"
-                closeicon={<Icon
-                  type="antdesign"
-                  name="close"
-                  color="white"
-                  size={18}
-                />}
-                searchicon={<Icon
-                  type="antdesign"
-                  name="search1"
-                  color="white"
-                  size={15}
-                />}
-                arrowicon={<Icon
-                  type="material"
-                  name="keyboard-arrow-down"
-                  color="white"
-                  size={18}
-                  checkBoxStyles={{backgroundColor: "white"}}
-                  badgeStyles={{backgroundColor: "white"}}
-                  labelStyles={{backgroundColor: "white"}}
-                />}
+                closeicon={
+                  <Icon type="antdesign" name="close" color="white" size={18} />
+                }
+                searchicon={
+                  <Icon
+                    type="antdesign"
+                    name="search1"
+                    color="white"
+                    size={15}
+                  />
+                }
+                arrowicon={
+                  <Icon
+                    type="material"
+                    name="keyboard-arrow-down"
+                    color="white"
+                    size={18}
+                    checkBoxStyles={{ backgroundColor: "white" }}
+                    badgeStyles={{ backgroundColor: "white" }}
+                    labelStyles={{ backgroundColor: "white" }}
+                  />
+                }
               />
             </View>
-            <TouchableOpacity onPress={() => handleSubmit()}>
+            <Ripple rippleColor="#fff" onPress={() => handleSubmit()}>
               <View style={styles.buttonWrapper}>
                 <Text style={styles.button}>Create Group</Text>
               </View>
-            </TouchableOpacity>
+            </Ripple>
           </View>
         </KeyboardAwareScrollView>
       </View>
@@ -230,7 +233,7 @@ const styles = StyleSheet.create({
   },
   button: {
     fontWeight: "bold",
-    fontSize: 15
+    fontSize: 15,
   },
   iconWrapper: {
     alignItems: "flex-end",

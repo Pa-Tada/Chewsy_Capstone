@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Component } from "react";
 import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -15,6 +15,7 @@ import {
 } from "react-native";
 import { auth, getUser, db } from "../firebase";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
+import Ripple from "react-native-material-ripple";
 
 const Welcome = () => {
   const navigation = useNavigation();
@@ -137,16 +138,16 @@ const Welcome = () => {
           onChangeText={(text) => setPassword(text)}
           placeholderTextColor="white"
         ></TextInput>
-        <TouchableOpacity onPress={handleSignup}>
+        <Ripple rippleColor="#fff" onPress={handleSignup}>
           <View style={styles.buttonWrapper}>
             <Text style={styles.button}>Sign Up</Text>
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleLogin}>
+        </Ripple>
+        <Ripple rippleColor="#fff" onPress={handleLogin}>
           <View style={styles.buttonWrapper}>
             <Text style={styles.button}>Log In</Text>
           </View>
-        </TouchableOpacity>
+        </Ripple>
       </KeyboardAvoidingView>
     </View>
   );
