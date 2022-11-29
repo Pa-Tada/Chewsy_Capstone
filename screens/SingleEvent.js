@@ -74,7 +74,7 @@ console.log("EVENTID", eventId)
   // const [eventDate, setEventDate] = useState(date);// ---------WHY NOT JUST PUT IMPORTED PROPS AS VALUES??-----------------
   const [restaurantName, setRestaurantName] = useState(event?.restName);
   const [restaurantLocation, setRestaurantLocation] = useState("");
-  //const [restaurantImage, setRestaurantImage] = useState("");
+  const [restaurantImage, setRestaurantImage] = useState("");
 
   const [cuisineType, setCuisineType] = useState("");
   const [budget, setBudget] = useState("3"); // 1 = $, 2 = $$, 3 = $$$, 4 = $$$$
@@ -228,7 +228,7 @@ console.log("EVENTID", eventId)
        setRestaurantData(data.businesses);
        setRestaurantName(data.businesses[0]?.name);
        setRestaurantLocation(data.businesses[0]?.location.address1);
-      //setRestaurantImage(restaurantData[0]?.image_url);
+      setRestaurantImage(data.businesses[0]?.image_url);
 
     console.log("HANDLE EDIT RESTNAME", restaurantName)
     await updateDoc(doc(db, "events", eventId), {
@@ -237,7 +237,7 @@ console.log("EVENTID", eventId)
       // groupId: groupId,
       restName: data.businesses[0]?.name,
       restLoc: data.businesses[0]?.location.address1,
-      //restImageUrl: restaurantImage,
+      restImageUrl: data.businesses[0]?.image_url
     });
   } catch (err){
     console.log("Error updating events table",err)
@@ -257,7 +257,7 @@ console.log("EVENTID", eventId)
             {/* Event Date: {date} */}
             {"\n"}
           </Text>
-          {!isShown ? (
+          {!isShown && event.restName === "" ? (
             <View>
               <Text style={styles.eventText}>
                 Choice Radius: {(radius / 1609).toFixed(2)} Miles
@@ -291,35 +291,34 @@ console.log("EVENTID", eventId)
               </Ripple>
               <Text> </Text>
             </View>
-          ) : null}
-          {isShown && (
+          ) : (
             <View style={{ justifyContent: "center", alignItems: "center" }}>
               <Text style={styles.eventText}>
                 Your Restaurant Is:
                 {"\n"}
               </Text>
-              {/* <Image
+              <Image
                 style={styles.imgEvent}
                 // source={{ uri: image }}
-                source={{ uri: restaurantData[0]?.image_url }}
-              /> */}
+                source={{ uri: event.restImageUrl }}
+              />
               <Text style={styles.eventText}>
                 {"\n"}
                 {/* {name} */}
-                {restaurantData[0]?.name}
+                {event.restName}
                 {"\n"}
               </Text>
 
               <Text style={styles.eventText}>
-                {restaurantData[0]?.location.address1}
+                {event.restLoc}
               </Text>
 
               <Text style={styles.eventText}>
-                {/* {location} */}
+                {/* {location}
                 {restaurantData[0]?.location.city},{" "}
                 {restaurantData[0]?.location.state}{" "}
                 {restaurantData[0]?.location.zip_code}
-                {"\n"}
+                {"\n"} */}
               </Text>
               <Ripple rippleColor="#fff"
                 onPress={() => {
@@ -330,6 +329,44 @@ console.log("EVENTID", eventId)
               </Ripple>
             </View>
           )}
+          {isShown && event.restName !== ""? (
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              {/* <Text style={styles.eventText}>
+                Your Restaurant Is:
+                {"\n"}
+              </Text> */}
+              {/* <Image
+                style={styles.imgEvent}
+                // source={{ uri: image }}
+                source={{ uri: restaurantData[0]?.image_url }}
+              /> */}
+              {/* <Text style={styles.eventText}> */}
+                {/* {"\n"} */}
+                {/* {name} */}
+                {/* {restaurantData[0]?.name} */}
+                {/* {"\n"} */}
+              {/* </Text> */}
+
+              {/* <Text style={styles.eventText}>
+                {restaurantData[0]?.location.address1}
+              </Text> */}
+
+              {/* <Text style={styles.eventText}> */}
+                {/* {location} */}
+                {/* {restaurantData[0]?.location.city},{" "}
+                {restaurantData[0]?.location.state}{" "}
+                {restaurantData[0]?.location.zip_code} */}
+                {/* {"\n"} */}
+              {/* </Text> */}
+              {/* <TouchableOpacity
+                onPress={() => {
+                  navigation.goBack();
+                }}
+              >
+                <Text style={styles.eventText}>Back to Group</Text>
+              </TouchableOpacity> */}
+            </View>
+          ):null}
         </View>
       </View>
       <Footer />
