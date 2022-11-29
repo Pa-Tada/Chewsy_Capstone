@@ -256,7 +256,7 @@ console.log("EVENTID", eventId)
             {/* Event Date: {date} */}
             {"\n"}
           </Text>
-          {!isShown ? (
+          {!isShown && event.restName === "" ? (
             <View>
               <Text style={styles.eventText}>
                 Choice Radius: {(radius / 1609).toFixed(2)} Miles
@@ -290,8 +290,7 @@ console.log("EVENTID", eventId)
               </TouchableOpacity>
               <Text> </Text>
             </View>
-          ) : null}
-          {isShown && (
+          ) : (
             <View style={{ justifyContent: "center", alignItems: "center" }}>
               <Text style={styles.eventText}>
                 Your Restaurant Is:
@@ -300,25 +299,25 @@ console.log("EVENTID", eventId)
               <Image
                 style={styles.imgEvent}
                 // source={{ uri: image }}
-                source={{ uri: restaurantData[0]?.image_url }}
+                source={{ uri: event.restImageUrl }}
               />
               <Text style={styles.eventText}>
                 {"\n"}
                 {/* {name} */}
-                {restaurantData[0]?.name}
+                {event.restName}
                 {"\n"}
               </Text>
 
               <Text style={styles.eventText}>
-                {restaurantData[0]?.location.address1}
+                {event.restLoc}
               </Text>
 
               <Text style={styles.eventText}>
-                {/* {location} */}
+                {/* {location}
                 {restaurantData[0]?.location.city},{" "}
                 {restaurantData[0]?.location.state}{" "}
                 {restaurantData[0]?.location.zip_code}
-                {"\n"}
+                {"\n"} */}
               </Text>
               <TouchableOpacity
                 onPress={() => {
@@ -329,6 +328,44 @@ console.log("EVENTID", eventId)
               </TouchableOpacity>
             </View>
           )}
+          {isShown && event.restName !== ""? (
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              {/* <Text style={styles.eventText}>
+                Your Restaurant Is:
+                {"\n"}
+              </Text> */}
+              {/* <Image
+                style={styles.imgEvent}
+                // source={{ uri: image }}
+                source={{ uri: restaurantData[0]?.image_url }}
+              /> */}
+              {/* <Text style={styles.eventText}> */}
+                {/* {"\n"} */}
+                {/* {name} */}
+                {/* {restaurantData[0]?.name} */}
+                {/* {"\n"} */}
+              {/* </Text> */}
+
+              {/* <Text style={styles.eventText}>
+                {restaurantData[0]?.location.address1}
+              </Text> */}
+
+              {/* <Text style={styles.eventText}> */}
+                {/* {location} */}
+                {/* {restaurantData[0]?.location.city},{" "}
+                {restaurantData[0]?.location.state}{" "}
+                {restaurantData[0]?.location.zip_code} */}
+                {/* {"\n"} */}
+              {/* </Text> */}
+              {/* <TouchableOpacity
+                onPress={() => {
+                  navigation.goBack();
+                }}
+              >
+                <Text style={styles.eventText}>Back to Group</Text>
+              </TouchableOpacity> */}
+            </View>
+          ):null}
         </View>
       </View>
       <Footer />
