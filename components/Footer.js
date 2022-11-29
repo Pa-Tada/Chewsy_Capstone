@@ -3,27 +3,31 @@ import { Icon } from "@rneui/themed";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { auth, db, allUsers } from "../firebase";
+import Ripple from "react-native-material-ripple";
 
 const Footer = (props) => {
   const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
+      <Ripple
+        rippleColor="#fff"
         style={styles.iconWrapper}
         onPress={() => navigation.navigate("Home")}
       >
         <Icon type="antdesign" name="home" color="white" style={styles.icon} />
-      </TouchableOpacity>
+      </Ripple>
 
-      <TouchableOpacity
+      <Ripple
+        rippleColor="#fff"
         style={styles.iconWrapper}
         onPress={() => navigation.navigate("Profile")}
       >
         <Icon type="antdesign" name="form" color="white" style={styles.icon} />
-      </TouchableOpacity>
+      </Ripple>
 
-      <TouchableOpacity
+      <Ripple
+        rippleColor="#fff"
         style={styles.iconWrapper}
         onPress={() => navigation.navigate("PendingInvites")}
       >
@@ -33,19 +37,20 @@ const Footer = (props) => {
           color="white"
           style={styles.icon}
         />
-      </TouchableOpacity>
+      </Ripple>
 
-      <TouchableOpacity
+      <Ripple
+        rippleColor="#fff"
         style={styles.iconWrapper}
-        onPress={async() => {
-          try{
-            await auth.signOut()
-            console.log("Signout successful")
-            navigation.navigate("Welcome")
-          } catch (err){
-            console.log("Signout error", err)
+        onPress={async () => {
+          try {
+            await auth.signOut();
+            console.log("Signout successful");
+            navigation.navigate("Welcome");
+          } catch (err) {
+            console.log("Signout error", err);
           }
-          }}
+        }}
       >
         <Icon
           type="antdesign"
@@ -53,7 +58,7 @@ const Footer = (props) => {
           color="white"
           style={styles.icon}
         />
-      </TouchableOpacity>
+      </Ripple>
     </View>
   );
 };

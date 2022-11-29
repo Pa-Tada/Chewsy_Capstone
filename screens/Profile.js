@@ -26,6 +26,7 @@ import { set } from "react-native-reanimated";
 import { Button } from "@rneui/base";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
+import Ripple from "react-native-material-ripple";
 
 
 const Profile = () => {
@@ -76,7 +77,7 @@ const Profile = () => {
 
         <View style={styles.form}>
           <KeyboardAwareScrollView>
-            <TouchableOpacity>
+            <Ripple rippleColor="#fff">
               <Avatar
                 rounded
                 containerStyle={{ alignSelf: "center", paddingBottom: 10 }}
@@ -85,7 +86,7 @@ const Profile = () => {
                   uri: `${imgUrl}`,
                 }}
               />
-            </TouchableOpacity>
+            </Ripple>
             <Input
               labelStyle={{ fontWeight: "normal" }}
               inputStyle={{ color: "white", fontSize: 14 }}
@@ -139,7 +140,7 @@ const Profile = () => {
               ]}
             />
 
-            <TouchableOpacity
+            <Ripple rippleColor="#fff"
               onPress={() => {
                 setFoodGenre([...foodGenre, foodName]);
                 setFoodName("");
@@ -148,13 +149,13 @@ const Profile = () => {
               <View style={styles.buttonWrapper2}>
                 <Text style={styles.button}>Add food</Text>
               </View>
-            </TouchableOpacity>
+            </Ripple>
 
             <View>
               {foodGenre.map((item, index) => (
                 <View key={index} style={styles.foodGenres}>
                   <Text style={styles.foodListItem}>{item}</Text>
-                  <TouchableOpacity
+                  <Ripple rippleColor="#fff"
                     style={styles.foodButtonWrapper}
                     onPress={() => {
                       console.log("Profile.js", foodGenre);
@@ -167,7 +168,7 @@ const Profile = () => {
                     }}
                   >
                     <Text>-</Text>
-                  </TouchableOpacity>
+                  </Ripple>
                 </View>
               ))}
             </View>
@@ -290,7 +291,7 @@ const Profile = () => {
               </View>
             </TouchableOpacity> */}
 
-            <TouchableOpacity
+            <Ripple rippleColor="#fff"
               onPress={() => {
                 handleEdit();
                 getUser();
@@ -301,7 +302,7 @@ const Profile = () => {
               <View style={styles.buttonWrapper}>
                 <Text style={styles.button}>Submit</Text>
               </View>
-            </TouchableOpacity>
+            </Ripple>
           </KeyboardAwareScrollView>
         </View>
       </View>
