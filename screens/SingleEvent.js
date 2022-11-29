@@ -118,7 +118,6 @@ console.log("EVENTID", eventId)
   console.log("GROUPS", groups);
 
   useEffect(() => {
-    console.log("im working");
     getUsersInGroup();
     // setEventTime(time);// -------------- WHY??-----------------
     // setEventDate(date);// -------------- WHY??-----------------

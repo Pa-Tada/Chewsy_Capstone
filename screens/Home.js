@@ -51,7 +51,7 @@ const Home = ({ route }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Divider color="orange" />
-      <Modal visible={groupModalOpen} transparent={true}>
+      <Modal visible={groupModalOpen} transparent={true} animationType="slide">
         <CreateGroup
         user={user}
         setUser={setUser}

@@ -35,6 +35,7 @@ import { MultipleSelectList } from "react-native-dropdown-select-list";
 const CreateGroup = (props) => {
   const { user, setUser, groupModalOpen, setGroupModalOpen } = props;
   const [groupName, setGroupName] = useState("");
+  const [groupImg, setGroupImg] = useState("");
   const [allSelected, setAllSelected] = useState([]);
   const [data, setData] = useState([]);
 
@@ -70,13 +71,10 @@ const CreateGroup = (props) => {
         leaderId: auth.currentUser.uid,
         createdAt: serverTimestamp(),
         imgUrl:
+          groupImg ||
           "https://s3.amazonaws.com/freestock-prod/450/freestock_564895924.jpg",
         userIds: allSelected,
       });
-
-      // await updateDoc(doc(db, "users", auth.currentUser.uid), {
-      //   groupIds: arrayUnion(groupDocRef.id),
-      // });
 
       await Promise.all(
         allSelected.map(async (memberId) => {
@@ -111,72 +109,102 @@ const CreateGroup = (props) => {
             <Icon
               type="antdesign"
               name="closecircleo"
-              color="white"
+              color="orange"
               style={styles.icon}
               size={30}
             />
           </TouchableOpacity>
-          <View style={styles.form}>
-            <Input
-            inputContainerStyle = {{borderBottomWidth: 0}}
-              labelStyle={{ color: "white", fontWeight: "normal" }}
-              inputStyle={{
-                color: "white",
-                fontSize: 14,
-                borderRadius: 10,
-                borderWidth: 1,
-                borderColor: "gray",
-                paddingVertical: 12,
-                paddingHorizontal: 10,
-                marginTop: 10,
-                marginBottom: 10,
-              }}
-              label="Add Group Name"
-              value={groupName}
-              onChangeText={(text) => setGroupName(text)}
-            />
-            <Text style={styles.text}>Add Friends</Text>
-            <View style={styles.selectionList}>
-              <MultipleSelectList
-                save="key"
-                setSelected={(val) => setAllSelected(val)}
-                data={data}
-                placeholder="search"
-                boxStyles={{ color: "white" }}
-                dropdownStyles={{ color: "white" }}
-                inputStyles={{ color: "white" }}
-                dropdownItemStyles={{ color: "white" }}
-                dropdownTextStyles={{ color: "white" }}
-                maxHeight={220}
-                searchPlaceholder="Username"
-                closeicon={<Icon
-                  type="antdesign"
-                  name="close"
-                  color="white"
-                  size={18}
-                />}
-                searchicon={<Icon
-                  type="antdesign"
-                  name="search1"
-                  color="white"
-                  size={15}
-                />}
-                arrowicon={<Icon
-                  type="material"
-                  name="keyboard-arrow-down"
-                  color="white"
-                  size={18}
-                  checkBoxStyles={{backgroundColor: "white"}}
-                  badgeStyles={{backgroundColor: "white"}}
-                  labelStyles={{backgroundColor: "white"}}
-                />}
+          <View style={styles.formContainer}>
+            <View style={styles.form}>
+              <Input
+                placeholder="Enter group name"
+                placeholderTextColor="gray"
+                inputContainerStyle={{ borderBottomWidth: 0 }}
+                labelStyle={{ color: "orange", fontWeight: "600" }}
+                inputStyle={{
+                  color: "white",
+                  fontSize: 14,
+                  borderRadius: 10,
+                  borderWidth: 1,
+                  borderColor: "gray",
+                  paddingVertical: 11,
+                  paddingHorizontal: 18,
+                  marginTop: 10,
+                  marginBottom: 10,
+                }}
+                label=" Group Name"
+                value={groupName}
+                onChangeText={(text) => setGroupName(text)}
               />
-            </View>
-            <TouchableOpacity onPress={() => handleSubmit()}>
-              <View style={styles.buttonWrapper}>
-                <Text style={styles.button}>Create Group</Text>
+              <Input
+                placeholder="Enter URL"
+                placeholderTextColor="gray"
+                inputContainerStyle={{ borderBottomWidth: 0 }}
+                labelStyle={{ color: "orange", fontWeight: "600" }}
+                inputStyle={{
+                  color: "white",
+                  fontSize: 14,
+                  borderRadius: 10,
+                  borderWidth: 1,
+                  borderColor: "gray",
+                  paddingVertical: 11,
+                  paddingHorizontal: 18,
+                  marginTop: 10,
+                  marginBottom: 10,
+                }}
+                label=" Group Image"
+                value={groupImg}
+                onChangeText={(text) => setGroupImg(text)}
+              />
+              <Text style={styles.text}> Friends</Text>
+              <View style={styles.selectionList}>
+                <MultipleSelectList
+                  save="key"
+                  setSelected={(val) => setAllSelected(val)}
+                  data={data}
+                  placeholder="Find friends"
+                  boxStyles={{ color: "white" }}
+                  dropdownStyles={{ color: "white" }}
+                  inputStyles={{ color: "gray" }}
+                  dropdownItemStyles={{ color: "white" }}
+                  dropdownTextStyles={{ color: "white" }}
+                  maxHeight={220}
+                  searchPlaceholder="     Username"
+                  closeicon={
+                    <Icon
+                      type="antdesign"
+                      name="close"
+                      color="white"
+                      size={17}
+                    />
+                  }
+                  searchicon={
+                    <Icon
+                      type="antdesign"
+                      name="search1"
+                      color="white"
+                      size={15}
+                    />
+                  }
+                  arrowicon={
+                    <Icon
+                      type="material"
+                      name="keyboard-arrow-down"
+                      color="white"
+                      size={18}
+                      checkBoxStyles={{ backgroundColor: "white" }}
+                      badgeStyles={{ backgroundColor: "white" }}
+                      labelStyles={{ backgroundColor: "white" }}
+                    />
+                  }
+                />
               </View>
-            </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleSubmit()}>
+                <View style={styles.buttonWrapper}>
+                  <Text style={styles.button}>Create Group</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
         </KeyboardAwareScrollView>
       </View>
@@ -187,29 +215,31 @@ const CreateGroup = (props) => {
 const styles = StyleSheet.create({
   modalBackground: {
     flex: 1,
-    backgroundColor: "rgba(240,200,167,0.6)",
+    backgroundColor: "rgba(240,200,167,0.8)",
     justifyContent: "center",
     alignItems: "center",
   },
   modalContent: {
-    borderWidth: 0.2,
-    borderColor: "orange",
+    // borderWidth: 0.2,
+    // borderColor: "orange",
     backgroundColor: "#181818",
     elevation: 20,
-    //alignContent: "center",
     borderRadius: 15,
-
     width: "80%",
-    height: "70%",
+    height: "75%",
+  },
+  formContainer: {
+    justifyContent: "center"
+    //paddingBottom: 40,
+    // flexDirection: "column",
+    // justifyContent: "flex-end"
   },
   form: {
-    paddingTop: 50,
-    //paddingVertical: 20,
     paddingHorizontal: 30,
   },
   text: {
-    color: "white",
-    fontWeight: "normal",
+    color: "orange",
+    fontWeight: "600",
     fontSize: 17,
     paddingLeft: 10,
   },
@@ -226,11 +256,12 @@ const styles = StyleSheet.create({
     backgroundColor: "orange",
     alignItems: "center",
     alignSelf: "center",
-    marginBottom: 15,
+    marginBottom: 30,
   },
   button: {
-    fontWeight: "bold",
-    fontSize: 15
+    fontWeight: "700",
+    fontSize: 18,
+    color: "#181818",
   },
   iconWrapper: {
     alignItems: "flex-end",

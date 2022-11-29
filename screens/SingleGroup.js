@@ -37,7 +37,6 @@ import AddFriend from "../components/AddFriend";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import RNPickerSelect from "react-native-picker-select";
 
-const addFriendField = [{ id: 1, field: "Email/Username" }];
 
 const SingleGroup = ({ route }) => {
   const { groupId, currentGroup, groups } = route.params;
@@ -137,7 +136,6 @@ const SingleGroup = ({ route }) => {
 
   useEffect(() => {
     getUser();
-    console.log("im working");
   });
 
   return (
@@ -181,17 +179,6 @@ const SingleGroup = ({ route }) => {
                 <Text style={styles.sectionTitle}>Create Event</Text>
 
                 <View style={styles.form}>
-                  {/* <Input
-                    labelStyle={{ fontWeight: "normal" }}
-                    inputStyle={{ color: "white", fontSize: 14 }}
-                    label="Event Date"
-                  />
-                  <Input
-                    labelStyle={{ fontWeight: "normal" }}
-                    inputStyle={{ color: "white", fontSize: 14 }}
-                    label="Event Time"
-                  /> */}
-
                   <View style={{ display: "flex", alignItems: "center" }}>
                     <Text
                       style={{
@@ -203,18 +190,6 @@ const SingleGroup = ({ route }) => {
                     >
                       Your Event Will take place on {date.toLocaleString()}
                     </Text>
-                    {/* <TouchableOpacity
-                      style={styles.buttonWrapper}
-                      onPress={showDatepicker}
-                    >
-                      <Text>Select Date</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.buttonWrapper}
-                      onPress={showTimepicker}
-                    >
-                      <Text>Select Time</Text>
-                    </TouchableOpacity> */}
 
                     <RNDateTimePicker
                       style={{ marginTop: 10, marginBottom: 10 }}
@@ -228,14 +203,6 @@ const SingleGroup = ({ route }) => {
                       textColor="orange" // change this to change text color
                     />
                   </View>
-
-                  {/* <Input
-                    labelStyle={{ fontWeight: "normal" }}
-                    inputStyle={{ color: "white", fontSize: 14 }}
-                    label="What are you feeling?"
-                    value={userFoodGenreName}
-                    onChangeText={setUserFoodGenreName}
-                  /> */}
                   <RNPickerSelect
                     // labelStyle={{ fontWeight: "normal" }}
                     style={pickerSelectStyles}
@@ -284,7 +251,6 @@ const SingleGroup = ({ route }) => {
                   >
                     <Text>+</Text>
                   </TouchableOpacity>
-                  {/* <View style = {}> */}
                   <FlatList
                     data={userFoodGenre}
                     renderItem={(foodGenre) => (
