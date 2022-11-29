@@ -31,6 +31,7 @@ import {
 } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import { MultipleSelectList } from "react-native-dropdown-select-list";
+import Ripple from "react-native-material-ripple";
 
 const PendingInvites = () => {
   console.log("USER WITHIN PENDING INVITES:", user);
@@ -135,7 +136,7 @@ const PendingInvites = () => {
                     { label: "$$$$", value: "$$$$" },
                   ]}
                 />
-                <TouchableOpacity
+                <Ripple rippleColor="#fff"
                   onPress={() => {
                     handleSubmit();
                     getUser();
@@ -145,7 +146,7 @@ const PendingInvites = () => {
                   <View style={styles.buttonWrapper}>
                     <Text style={styles.button}>Submit</Text>
                   </View>
-                </TouchableOpacity>
+                </Ripple>
               </KeyboardAwareScrollView>
             </View>
           </View>
@@ -154,7 +155,7 @@ const PendingInvites = () => {
             <Text style={styles.nodataText}>
               You don't have any pending invites
             </Text>
-            <TouchableOpacity
+            <Ripple rippleColor="#fff"
                   onPress={() => {
                     navigation.goBack(); // or group page
                   }}
@@ -162,7 +163,7 @@ const PendingInvites = () => {
                   <View style={styles.buttonWrapper}>
                     <Text style={styles.button}>Go back</Text>
                   </View>
-                </TouchableOpacity>
+                </Ripple>
           </View>
         )}
       </View>

@@ -36,6 +36,7 @@ import AddFriend from "../components/AddFriend";
 
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import RNPickerSelect from "react-native-picker-select";
+import Ripple from "react-native-material-ripple";
 
 const addFriendField = [{ id: 1, field: "Email/Username" }];
 
@@ -158,12 +159,12 @@ const SingleGroup = ({ route }) => {
       <View style={styles.friendsWrapper}>
         <View style={styles.titleContainer}>
           <Text style={styles.sectionTitle}>{currentGroup.name} Members</Text>
-          <TouchableOpacity
+          <Ripple rippleColor="#fff"
             style={styles.iconWrapper}
             onPress={() => setModalOpen(true)}
           >
             <Icon type="antdesign" size="28px" name="adduser" color="white" />
-          </TouchableOpacity>
+          </Ripple>
         </View>
         <Friends
           currentGroup={currentGroup}
@@ -271,7 +272,7 @@ const SingleGroup = ({ route }) => {
                       { label: "Vegetarian", value: "vegetarian" },
                     ]}
                   />
-                  <TouchableOpacity
+                  <Ripple rippleColor="#fff"
                     style={styles.buttonWrapper}
                     onPress={() => {
                       setUserFoodGenre([...userFoodGenre, userFoodGenreName]);
@@ -283,7 +284,7 @@ const SingleGroup = ({ route }) => {
                     }}
                   >
                     <Text>+</Text>
-                  </TouchableOpacity>
+                  </Ripple>
                   {/* <View style = {}> */}
                   <FlatList
                     data={userFoodGenre}
@@ -292,7 +293,7 @@ const SingleGroup = ({ route }) => {
                         <Text style={styles.foodListItem}>
                           {foodGenre.item}
                         </Text>
-                        <TouchableOpacity
+                        <Ripple rippleColor="#fff"
                           style={styles.foodButtonWrapper}
                           onPress={() => {
                             console.log(foodGenre.item);
@@ -305,13 +306,13 @@ const SingleGroup = ({ route }) => {
                           }}
                         >
                           <Text>-</Text>
-                        </TouchableOpacity>
+                        </Ripple>
                       </View>
                     )}
                   />
                   {/* </View> */}
 
-                  <TouchableOpacity
+                  <Ripple rippleColor="#fff"
                     onPress={() => {
                       handleFoodGenreEdit();
                       createEvent();
@@ -321,7 +322,7 @@ const SingleGroup = ({ route }) => {
                     <View style={styles.buttonWrapper}>
                       <Text style={styles.button}>Create Event</Text>
                     </View>
-                  </TouchableOpacity>
+                  </Ripple>
                   <Button
                     title="Cancel"
                     onPress={() => {
@@ -339,7 +340,7 @@ const SingleGroup = ({ route }) => {
       <View style={styles.eventsWrapper}>
         <View style={styles.titleContainer}>
           <Text style={styles.sectionTitle}>{currentGroup.name} Events</Text>
-          <TouchableOpacity
+          <Ripple rippleColor="#fff"
             style={styles.iconWrapper}
             onPress={() => setEventModalOpen(true)}
           >
@@ -349,7 +350,7 @@ const SingleGroup = ({ route }) => {
               name="calendar-plus"
               color="white"
             />
-          </TouchableOpacity>
+          </Ripple>
         </View>
         <Events groupIds={groupId} />
       </View>

@@ -31,6 +31,7 @@ import {
   setDoc,
   arrayUnion,
 } from "firebase/firestore";
+import Ripple from "react-native-material-ripple";
 
 const AddFriend = (props) => {
   const {
@@ -105,17 +106,17 @@ const AddFriend = (props) => {
           />
         </View>
         <View style={styles.allButtons}>
-          <TouchableOpacity onPress={() => handleSubmit()}>
+          <Ripple rippleColor="#fff" onPress={() => handleSubmit()}>
             <View style={styles.buttonWrapper}>
               <Text style={styles.button}>Submit</Text>
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </Ripple>
+          <Ripple rippleColor="#fff"
             onPress={() => setModalOpen(false)}
             style={{ color: "white" }}
           >
             <Text style={{ color: "white", textAlign: "center" }}>Cancel</Text>
-          </TouchableOpacity>
+          </Ripple>
         </View>
       </View>
     </View>
