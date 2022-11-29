@@ -73,7 +73,7 @@ console.log("EVENTID", eventId)
   // const [eventDate, setEventDate] = useState(date);// ---------WHY NOT JUST PUT IMPORTED PROPS AS VALUES??-----------------
   const [restaurantName, setRestaurantName] = useState(event?.restName);
   const [restaurantLocation, setRestaurantLocation] = useState("");
-  //const [restaurantImage, setRestaurantImage] = useState("");
+  const [restaurantImage, setRestaurantImage] = useState("");
 
   const [cuisineType, setCuisineType] = useState("");
   const [budget, setBudget] = useState("3"); // 1 = $, 2 = $$, 3 = $$$, 4 = $$$$
@@ -227,7 +227,7 @@ console.log("EVENTID", eventId)
        setRestaurantData(data.businesses);
        setRestaurantName(data.businesses[0]?.name);
        setRestaurantLocation(data.businesses[0]?.location.address1);
-      //setRestaurantImage(restaurantData[0]?.image_url);
+      setRestaurantImage(data.businesses[0]?.image_url);
 
     console.log("HANDLE EDIT RESTNAME", restaurantName)
     await updateDoc(doc(db, "events", eventId), {
@@ -236,7 +236,7 @@ console.log("EVENTID", eventId)
       // groupId: groupId,
       restName: data.businesses[0]?.name,
       restLoc: data.businesses[0]?.location.address1,
-      //restImageUrl: restaurantImage,
+      restImageUrl: data.businesses[0]?.image_url
     });
   } catch (err){
     console.log("Error updating events table",err)
@@ -297,11 +297,11 @@ console.log("EVENTID", eventId)
                 Your Restaurant Is:
                 {"\n"}
               </Text>
-              {/* <Image
+              <Image
                 style={styles.imgEvent}
                 // source={{ uri: image }}
                 source={{ uri: restaurantData[0]?.image_url }}
-              /> */}
+              />
               <Text style={styles.eventText}>
                 {"\n"}
                 {/* {name} */}
