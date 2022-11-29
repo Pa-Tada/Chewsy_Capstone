@@ -112,11 +112,15 @@ const AddFriend = (props) => {
                 placeholder="Find Friends"
                 boxStyles={{ color: "white" }}
                 dropdownStyles={{ color: "white" }}
-                inputStyles={{ color: "gray" }}
+                inputStyles={{
+                  color: "white",
+                  fontSize: 16,
+                  paddingHorizontal: 5,
+                }}
                 dropdownItemStyles={{ color: "white" }}
                 dropdownTextStyles={{ color: "white" }}
                 maxHeight={300}
-                searchPlaceholder="     Username"
+                searchPlaceholder="Username"
                 closeicon={
                   <Icon type="antdesign" name="close" color="white" size={17} />
                 }
@@ -142,11 +146,11 @@ const AddFriend = (props) => {
               />
             </View>
             <View style={styles.btnContainer}>
-            <TouchableOpacity onPress={() => handleSubmit()}>
-              <View style={styles.buttonWrapper}>
-                <Text style={styles.button}>Add Friends</Text>
-              </View>
-            </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleSubmit()}>
+                <View style={styles.buttonWrapper}>
+                  <Text style={styles.button}>Add Friends</Text>
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -158,13 +162,11 @@ const AddFriend = (props) => {
 const styles = StyleSheet.create({
   modalBackground: {
     flex: 1,
-    backgroundColor: "rgba(240,200,167,0.8)",
+    backgroundColor: "rgba(240,200,167,0.9)",
     justifyContent: "center",
     alignItems: "center",
   },
   modalContent: {
-    // borderWidth: 0.2,
-    // borderColor: "orange",
     backgroundColor: "#181818",
     elevation: 20,
     borderRadius: 15,
@@ -175,7 +177,6 @@ const styles = StyleSheet.create({
     //justifyContent: "center",
     flexDirection: "column",
     justifyContent: "space-evenly",
-
   },
   form: {
     paddingHorizontal: 30,

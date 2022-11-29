@@ -40,13 +40,6 @@ const Home = ({ route }) => {
     getUser()
   }, [user]);
 
-//  useEffect(() => {
-//     if (route.params?.deletedGroupId) {
-//       const deletedId = route.params.deletedGroupId
-//       store = user.groupIds?.filter((id)=> id!=deletedId)
-//       console.log("HOME DELETED ID", store)
-//     }
-//   }, [route.params?.deletedGroupId]);
 
   return (
     <SafeAreaView style={styles.container}>

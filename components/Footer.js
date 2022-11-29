@@ -1,14 +1,29 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Modal,
+} from "react-native";
 import { Icon } from "@rneui/themed";
-import React from "react";
+import React, {useState} from "react";
 import { useNavigation } from "@react-navigation/native";
 import { auth, db, allUsers } from "../firebase";
+import PendingInvites from "../screens/PendingInvites";
 
 const Footer = (props) => {
   const navigation = useNavigation();
+  const [inviteModalOpen, setInviteModalOpen] = useState(false);
 
   return (
     <View style={styles.container}>
+      <Modal visible={inviteModalOpen} transparent={true} animationType="slide">
+        <PendingInvites
+          inviteModalOpen={inviteModalOpen}
+          setInviteModalOpen={setInviteModalOpen}
+        />
+      </Modal>
       <TouchableOpacity
         style={styles.iconWrapper}
         onPress={() => navigation.navigate("Home")}
@@ -18,14 +33,14 @@ const Footer = (props) => {
 
       <TouchableOpacity
         style={styles.iconWrapper}
-        onPress={() => navigation.navigate("Profile")}
+        onPress={() =>navigation.navigate("Profile") }
       >
         <Icon type="antdesign" name="form" color="white" style={styles.icon} />
       </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.iconWrapper}
-        onPress={() => navigation.navigate("PendingInvites")}
+        onPress={() => setInviteModalOpen(true)}
       >
         <Icon
           type="antdesign"
@@ -37,15 +52,15 @@ const Footer = (props) => {
 
       <TouchableOpacity
         style={styles.iconWrapper}
-        onPress={async() => {
-          try{
-            await auth.signOut()
-            console.log("Signout successful")
-            navigation.navigate("Welcome")
-          } catch (err){
-            console.log("Signout error", err)
+        onPress={async () => {
+          try {
+            await auth.signOut();
+            console.log("Signout successful");
+            navigation.navigate("Welcome");
+          } catch (err) {
+            console.log("Signout error", err);
           }
-          }}
+        }}
       >
         <Icon
           type="antdesign"

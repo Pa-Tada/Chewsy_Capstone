@@ -72,11 +72,11 @@ export default function App() {
             component={Profile}
             options={{ title: "Chewsy", headerBackVisible: false }}
           />
-          <Stack.Screen
+          {/* <Stack.Screen
             name="PendingInvites"
             component={PendingInvites}
             options={{ title: "Chewsy", headerBackVisible: false }}
-          />
+          /> */}
         </Stack.Navigator>
       </SafeAreaProvider>
     </NavigationContainer>

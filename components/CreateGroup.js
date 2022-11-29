@@ -118,12 +118,12 @@ const CreateGroup = (props) => {
             <View style={styles.form}>
               <Input
                 placeholder="Enter group name"
-                placeholderTextColor="gray"
+                placeholderTextColor="white"
                 inputContainerStyle={{ borderBottomWidth: 0 }}
-                labelStyle={{ color: "orange", fontWeight: "600" }}
+                labelStyle={{ color: "orange", fontWeight: "600", fontSize: 19, }}
                 inputStyle={{
                   color: "white",
-                  fontSize: 14,
+                  fontSize: 16,
                   borderRadius: 10,
                   borderWidth: 1,
                   borderColor: "gray",
@@ -138,12 +138,12 @@ const CreateGroup = (props) => {
               />
               <Input
                 placeholder="Enter URL"
-                placeholderTextColor="gray"
+                placeholderTextColor="white"
                 inputContainerStyle={{ borderBottomWidth: 0 }}
-                labelStyle={{ color: "orange", fontWeight: "600" }}
+                labelStyle={{fontSize: 19, color: "orange", fontWeight: "600" }}
                 inputStyle={{
                   color: "white",
-                  fontSize: 14,
+                  fontSize: 16,
                   borderRadius: 10,
                   borderWidth: 1,
                   borderColor: "gray",
@@ -165,7 +165,7 @@ const CreateGroup = (props) => {
                   placeholder="Find friends"
                   boxStyles={{ color: "white" }}
                   dropdownStyles={{ color: "white" }}
-                  inputStyles={{ color: "gray" }}
+                  inputStyles={{ color: "white", fontSize: 16 }}
                   dropdownItemStyles={{ color: "white" }}
                   dropdownTextStyles={{ color: "white" }}
                   maxHeight={220}
@@ -175,7 +175,7 @@ const CreateGroup = (props) => {
                       type="antdesign"
                       name="close"
                       color="white"
-                      size={17}
+                      size={16}
                     />
                   }
                   searchicon={
@@ -215,13 +215,11 @@ const CreateGroup = (props) => {
 const styles = StyleSheet.create({
   modalBackground: {
     flex: 1,
-    backgroundColor: "rgba(240,200,167,0.8)",
+    backgroundColor: "rgba(240,200,167,0.9)",
     justifyContent: "center",
     alignItems: "center",
   },
   modalContent: {
-    // borderWidth: 0.2,
-    // borderColor: "orange",
     backgroundColor: "#181818",
     elevation: 20,
     borderRadius: 15,
@@ -240,7 +238,7 @@ const styles = StyleSheet.create({
   text: {
     color: "orange",
     fontWeight: "600",
-    fontSize: 17,
+    fontSize: 20,
     paddingLeft: 10,
   },
   selectionList: {
