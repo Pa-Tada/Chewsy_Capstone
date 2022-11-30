@@ -34,7 +34,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import Events from "../components/Events";
 import Friends from "../components/Friends";
 import AddFriend from "../components/AddFriend";
-import Ripple from "react-native-material-ripple"
+import Ripple from "react-native-material-ripple";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import RNPickerSelect from "react-native-picker-select";
 
@@ -123,7 +123,8 @@ const SingleGroup = ({ route }) => {
       createdAt: date,
       groupId: groupId,
       restImageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFuys8jY57bOyYwcKNIapFCCYLx18yRcXyEYJxcw7-BQgr5eqvIa-RRSY2XoByxp_GuVE&usqp=CAU",
+        "https://media.istockphoto.com/id/646314156/vector/restaurant-icon-isolated-vector.jpg?s=612x612&w=0&k=20&c=2qFLVCalkUeQEo75tuBarbGy30Rbvr4bUfalsW9o1cw=",
+      // "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFuys8jY57bOyYwcKNIapFCCYLx18yRcXyEYJxcw7-BQgr5eqvIa-RRSY2XoByxp_GuVE&usqp=CAU",
       restLoc: "",
       restName: "",
       submissions: [auth.currentUser.uid],
@@ -152,7 +153,10 @@ const SingleGroup = ({ route }) => {
       <View style={styles.friendsWrapper}>
         <View style={styles.titleContainer}>
           <Text style={styles.sectionTitle}>{currentGroup.name} Members</Text>
-          <Ripple rippleColor="#fff"
+          <Ripple
+            rippleColor="#f5c007"
+            rippleSize={40}
+            rippleOpacity={0.9}
             style={styles.iconWrapper}
             onPress={() => setModalOpen(true)}
           >
@@ -170,7 +174,10 @@ const SingleGroup = ({ route }) => {
       <Modal visible={eventModalOpen} animationType="slide" transparent={true}>
         <View style={styles.modalBackground}>
           <View style={styles.modalContent}>
-          <Ripple rippleColor="#fff"
+            <Ripple
+              rippleColor="#f5c007"
+              rippleSize={40}
+              rippleOpacity={0.9}
               onPress={() => {
                 setEventModalOpen(false);
               }}
@@ -183,7 +190,7 @@ const SingleGroup = ({ route }) => {
                 style={styles.icon}
                 size={30}
               />
-             </Ripple>
+            </Ripple>
             <View style={styles.formContainer}>
               <View style={styles.form}>
                 <Input
@@ -266,7 +273,10 @@ const SingleGroup = ({ route }) => {
                       { label: "Vegetarian", value: "vegetarian" },
                     ]}
                   />
-                  <Ripple rippleColor="#fff"
+                  <Ripple
+                    rippleColor="#f5c007"
+                    rippleSize={40}
+                    rippleOpacity={0.9}
                     style={styles.plusbuttonWrapper}
                     onPress={() => {
                       setUserFoodGenre([...userFoodGenre, userFoodGenreName]);
@@ -277,14 +287,17 @@ const SingleGroup = ({ route }) => {
                     }}
                   >
                     <Text style={styles.button}>+</Text>
-                    </Ripple>
+                  </Ripple>
                 </View>
                 <FlatList
                   data={userFoodGenre}
                   renderItem={(foodGenre) => (
                     <View style={styles.foodGenres}>
                       <Text style={styles.foodListItem}>{foodGenre.item}</Text>
-                      <Ripple rippleColor="#fff"
+                      <Ripple
+                        rippleColor="#f5c007"
+                        rippleSize={40}
+                        rippleOpacity={0.9}
                         style={styles.foodButtonWrapper}
                         onPress={() => {
                           console.log(foodGenre.item);
@@ -297,13 +310,16 @@ const SingleGroup = ({ route }) => {
                         }}
                       >
                         <Text style={styles.button}>-</Text>
-                        </Ripple>
+                      </Ripple>
                     </View>
                   )}
                 />
               </View>
               <View style={styles.createbutton}>
-              <Ripple rippleColor="#fff"
+                <Ripple
+                  rippleColor="#f5c007"
+                  rippleSize={80}
+                  rippleOpacity={0.8}
                   onPress={() => {
                     handleFoodGenreEdit();
                     createEvent();
@@ -313,7 +329,7 @@ const SingleGroup = ({ route }) => {
                   <View style={styles.buttonWrapper}>
                     <Text style={styles.button}>Create Event</Text>
                   </View>
-                  </Ripple>
+                </Ripple>
               </View>
             </View>
           </View>
@@ -323,7 +339,10 @@ const SingleGroup = ({ route }) => {
       <View style={styles.eventsWrapper}>
         <View style={styles.titleContainer}>
           <Text style={styles.sectionTitle}>{currentGroup.name} Events</Text>
-          <Ripple rippleColor="#fff"
+          <Ripple
+            rippleColor="#f5c007"
+            rippleSize={40}
+            rippleOpacity={0.9}
             style={styles.iconWrapper}
             onPress={() => setEventModalOpen(true)}
           >
@@ -378,7 +397,7 @@ export const styles = StyleSheet.create({
   },
   eventsWrapper: {
     paddingHorizontal: 12,
-    flex: 1,
+    flex: 1.1,
   },
   modalBackground: {
     flex: 1,
@@ -388,7 +407,6 @@ export const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: "#181818",
-    elevation: 20,
     borderRadius: 15,
     width: "90%",
     height: "75%",

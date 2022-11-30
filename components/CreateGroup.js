@@ -36,7 +36,9 @@ import Ripple from "react-native-material-ripple";
 const CreateGroup = (props) => {
   const { user, setUser, groupModalOpen, setGroupModalOpen } = props;
   const [groupName, setGroupName] = useState("");
-  const [groupImg, setGroupImg] = useState("");
+  const [groupImg, setGroupImg] = useState(
+    "https://s3.amazonaws.com/freestock-prod/450/freestock_564895924.jpg"
+  );
   const [allSelected, setAllSelected] = useState([]);
   const [data, setData] = useState([]);
 
@@ -71,9 +73,7 @@ const CreateGroup = (props) => {
         name: groupName,
         leaderId: auth.currentUser.uid,
         createdAt: serverTimestamp(),
-        imgUrl:
-          groupImg ||
-          "https://s3.amazonaws.com/freestock-prod/450/freestock_564895924.jpg",
+        imgUrl: groupImg,
         userIds: allSelected,
       });
 
@@ -104,7 +104,9 @@ const CreateGroup = (props) => {
       <View style={styles.modalContent}>
         <KeyboardAwareScrollView>
           <Ripple
-            rippleColor="#fff"
+        rippleColor="#f5c007"
+        rippleSize={40}
+        rippleOpacity={0.9}
             onPress={() => setGroupModalOpen(false)}
             style={styles.iconWrapper}
           >
@@ -115,14 +117,18 @@ const CreateGroup = (props) => {
               style={styles.icon}
               size={30}
             />
-           </Ripple>
+          </Ripple>
           <View style={styles.formContainer}>
             <View style={styles.form}>
               <Input
                 placeholder="Enter group name"
                 placeholderTextColor="white"
                 inputContainerStyle={{ borderBottomWidth: 0 }}
-                labelStyle={{ color: "orange", fontWeight: "600", fontSize: 19, }}
+                labelStyle={{
+                  color: "orange",
+                  fontWeight: "600",
+                  fontSize: 19,
+                }}
                 inputStyle={{
                   color: "white",
                   fontSize: 16,
@@ -142,7 +148,11 @@ const CreateGroup = (props) => {
                 placeholder="Enter URL"
                 placeholderTextColor="white"
                 inputContainerStyle={{ borderBottomWidth: 0 }}
-                labelStyle={{fontSize: 19, color: "orange", fontWeight: "600" }}
+                labelStyle={{
+                  fontSize: 19,
+                  color: "orange",
+                  fontWeight: "600",
+                }}
                 inputStyle={{
                   color: "white",
                   fontSize: 16,
@@ -201,11 +211,16 @@ const CreateGroup = (props) => {
                   }
                 />
               </View>
-              <Ripple rippleColor="#fff" onPress={() => handleSubmit()}>
+              <Ripple
+                rippleColor="#f5c007"
+                rippleSize={80}
+                rippleOpacity={0.8}
+                onPress={() => handleSubmit()}
+              >
                 <View style={styles.buttonWrapper}>
                   <Text style={styles.button}>Create Group</Text>
                 </View>
-                </Ripple>
+              </Ripple>
             </View>
           </View>
         </KeyboardAwareScrollView>
@@ -223,13 +238,12 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: "#181818",
-    elevation: 20,
     borderRadius: 15,
     width: "80%",
     height: "75%",
   },
   formContainer: {
-    justifyContent: "center"
+    justifyContent: "center",
     //paddingBottom: 40,
     // flexDirection: "column",
     // justifyContent: "flex-end"

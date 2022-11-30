@@ -90,7 +90,10 @@ const AddFriend = (props) => {
   return (
     <View style={styles.modalBackground}>
       <View style={styles.modalContent}>
-      <Ripple rippleColor="#fff"
+        <Ripple
+        rippleColor="#f5c007"
+        rippleSize={40}
+        rippleOpacity={0.9}
           onPress={() => setModalOpen(false)}
           style={styles.iconWrapper}
         >
@@ -147,11 +150,16 @@ const AddFriend = (props) => {
               />
             </View>
             <View style={styles.btnContainer}>
-              <Ripple rippleColor="#fff" onPress={() => handleSubmit()}>
+              <Ripple
+                rippleColor="#f5c007"
+                rippleSize={80}
+                rippleOpacity={0.8}
+                onPress={() => handleSubmit()}
+              >
                 <View style={styles.buttonWrapper}>
                   <Text style={styles.button}>Add Friends</Text>
                 </View>
-                </Ripple>
+              </Ripple>
             </View>
           </View>
         </View>
@@ -169,7 +177,6 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: "#181818",
-    elevation: 20,
     borderRadius: 15,
     width: "80%",
     height: "60%",

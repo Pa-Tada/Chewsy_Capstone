@@ -62,29 +62,6 @@ const PendingInvites = (props) => {
   }, []);
 
   const [affordability, setAffordability] = useState(user.affordability);
-  // const [allSelected, setAllSelected] = useState([]);
-  // const data = [
-  //   { value: "American", key: "newamerican" },
-  //   { value: "Breakfast & Brunch", key: "breakfast_brunch" },
-  //   { value: "Burgers", key: "burgers" },
-  //   { value: "Caribbean", key: "caribbean" },
-  //   { value: "Chinese", key: "chinese" },
-  //   { value: "Cuban", key: "cuban" },
-  //   { value: "French", key: "french" },
-  //   { value: "Halal", key: "halal" },
-  //   { value: "Indian", key: "indpak" },
-  //   { value: "Italian", key: "italian" },
-  //   { value: "Mediterranean", key: "mediterranean" },
-  //   { value: "Mexican", key: "mexican" },
-  //   { value: "Middle Eastern", key: "mideastern" },
-  //   { value: "Pizza", key: "pizza" },
-  //   { value: "Sandwiches", key: "sandwiches" },
-  //   { value: "Sushi", key: "sushi" },
-  //   { value: "Thai", key: "thai" },
-  //   { value: "Vegan", key: "vegan" },
-  //   { value: "Vegetarian", key: "vegetarian" },
-  // ];
-
   const [userFoodGenre, setUserFoodGenre] = useState(user.foodGenre);
   const [userFoodGenreName, setUserFoodGenreName] = useState("");
 
@@ -109,7 +86,6 @@ const PendingInvites = (props) => {
     console.log("handleSubmit EventId Group", currGroup);
     try {
       await updateDoc(doc(db, "users", auth.currentUser.uid), {
-        //foodGenre: allSelected,
         foodGenre: userFoodGenre,
         affordability: affordability,
       });
@@ -125,7 +101,10 @@ const PendingInvites = (props) => {
   return (
     <View style={styles.modalBackground}>
       <View style={styles.modalContent}>
-      <Ripple rippleColor="#fff"
+        <Ripple
+          rippleColor="#f5c007"
+          rippleSize={40}
+          rippleOpacity={0.9}
           onPress={() => setInviteModalOpen(false)}
           style={styles.iconWrapper}
         >
@@ -145,125 +124,120 @@ const PendingInvites = (props) => {
                   Invitation from{"\n"}
                   {currGroup?.name}
                 </Text>
-                {/* <View style={styles.selectionList}> */}
-                {/* <MultipleSelectList
-                      //defaultOption={{ key:'1', value:'Jammu & Kashmir' }}
-                      save="key"
-                      setSelected={(val) => setAllSelected(val)}
-                      data={data}
-                      placeholder="What are you feeling?"
-                      boxStyles={{ color: "white" }}
-                      dropdownStyles={{ color: "white" }}
-                      inputStyles={{ color: "white" }}
-                      dropdownItemStyles={{ color: "white" }}
-                      dropdownTextStyles={{ color: "white" }}
-                      maxHeight={250}
-                    />
-                  </View> */}
-                  <View style={styles.fields}>
-                <Text style={styles.text}>Price Range</Text>
-                <RNPickerSelect
-                  style={pickerSelectStylesPrice}
-                  label="Affordability"
-                  onValueChange={(value) => setAffordability(value.length)}
-                  placeholder={{ label: "Select range", value: "$" }}
-                  items={[
-                    { label: "$", value: "$" },
-                    { label: "$$", value: "$$" },
-                    { label: "$$$", value: "$$$" },
-                    { label: "$$$$", value: "$$$$" },
-                  ]}
-                />
+                <View style={styles.fields}>
+                  <Text style={styles.text}>Price Range</Text>
+                  <RNPickerSelect
+                    style={pickerSelectStylesPrice}
+                    label="Affordability"
+                    onValueChange={(value) => setAffordability(value.length)}
+                    placeholder={{ label: "Select range", value: "$" }}
+                    items={[
+                      { label: "$", value: "$" },
+                      { label: "$$", value: "$$" },
+                      { label: "$$$", value: "$$$" },
+                      { label: "$$$$", value: "$$$$" },
+                    ]}
+                  />
                 </View>
 
                 <View style={styles.fields}>
-                <Text style={styles.text}>Food Genre</Text>
-                <View style={styles.pickCuisine}>
-                  <RNPickerSelect
-                    // labelStyle={{ fontWeight: "normal" }}
-                    textColor="white"
-                    style={pickerSelectStyles}
-                    label="Food Genre"
-                    onValueChange={(value) => setUserFoodGenreName(value)}
-                    placeholder={{
-                      label: "What are you feeling?",
-                      value: null,
-                    }}
-                    items={[
-                      { label: "American", value: "newamerican" },
-                      {
-                        label: "Breakfast & Brunch",
-                        value: "breakfast_brunch",
-                      },
-                      { label: "Burgers", value: "burgers" },
-                      { label: "Caribbean", value: "caribbean" },
-                      { label: "Chinese", value: "chinese" },
-                      { label: "Cuban", value: "cuban" },
-                      { label: "French", value: "french" },
-                      { label: "Halal", value: "halal" },
-                      { label: "Indian", value: "indpak" },
-                      { label: "Italian", value: "italian" },
-                      { label: "Mediterranean", value: "mediterranean" },
-                      { label: "Mexican", value: "mexican" },
-                      { label: "Middle Eastern", value: "mideastern" },
-                      { label: "Pizza", value: "pizza" },
-                      { label: "Sandwiches", value: "sandwiches" },
-                      { label: "Sushi", value: "sushi" },
-                      { label: "Thai", value: "thai" },
-                      { label: "Vegan", value: "vegan" },
-                      { label: "Vegetarian", value: "vegetarian" },
-                    ]}
-                  />
-                  <Ripple rippleColor="#fff"
-                    style={styles.plusbuttonWrapper}
-                    onPress={() => {
-                      setUserFoodGenre([...userFoodGenre, userFoodGenreName]);
-                      console.log(userFoodGenre);
-                      handleFoodGenreEdit();
-                      setUserFoodGenreName("");
-                      getUser();
-                    }}
-                  >
-                    <Text style={styles.button}>+</Text>
+                  <Text style={styles.text}>Food Genre</Text>
+                  <View style={styles.pickCuisine}>
+                    <RNPickerSelect
+                      // labelStyle={{ fontWeight: "normal" }}
+                      textColor="white"
+                      style={pickerSelectStyles}
+                      label="Food Genre"
+                      onValueChange={(value) => setUserFoodGenreName(value)}
+                      placeholder={{
+                        label: "What are you feeling?",
+                        value: null,
+                      }}
+                      items={[
+                        { label: "American", value: "newamerican" },
+                        {
+                          label: "Breakfast & Brunch",
+                          value: "breakfast_brunch",
+                        },
+                        { label: "Burgers", value: "burgers" },
+                        { label: "Caribbean", value: "caribbean" },
+                        { label: "Chinese", value: "chinese" },
+                        { label: "Cuban", value: "cuban" },
+                        { label: "French", value: "french" },
+                        { label: "Halal", value: "halal" },
+                        { label: "Indian", value: "indpak" },
+                        { label: "Italian", value: "italian" },
+                        { label: "Mediterranean", value: "mediterranean" },
+                        { label: "Mexican", value: "mexican" },
+                        { label: "Middle Eastern", value: "mideastern" },
+                        { label: "Pizza", value: "pizza" },
+                        { label: "Sandwiches", value: "sandwiches" },
+                        { label: "Sushi", value: "sushi" },
+                        { label: "Thai", value: "thai" },
+                        { label: "Vegan", value: "vegan" },
+                        { label: "Vegetarian", value: "vegetarian" },
+                      ]}
+                    />
+                    <Ripple
+                                  rippleColor="#f5c007"
+                                  rippleSize={40}
+                                  rippleOpacity={0.9}
+                      style={styles.plusbuttonWrapper}
+                      onPress={() => {
+                        setUserFoodGenre([...userFoodGenre, userFoodGenreName]);
+                        console.log(userFoodGenre);
+                        handleFoodGenreEdit();
+                        setUserFoodGenreName("");
+                        getUser();
+                      }}
+                    >
+                      <Text style={styles.button}>+</Text>
                     </Ripple>
-                </View>
-                <FlatList
-                  data={userFoodGenre}
-                  renderItem={(foodGenre) => (
-                    <View style={styles.foodGenres}>
-                      <Text style={styles.foodListItem}>{foodGenre.item}</Text>
-                      <Ripple rippleColor="#fff"
-                        style={styles.foodButtonWrapper}
-                        onPress={() => {
-                          console.log(foodGenre.item);
-                          setUserFoodGenre(
-                            userFoodGenre.filter((currentFood) => {
-                              console.log("current food:", currentFood);
-                              return currentFood !== foodGenre.item;
-                            })
-                          );
-                        }}
-                      >
-                        <Text style={styles.button}>-</Text>
+                  </View>
+                  <FlatList
+                    data={userFoodGenre}
+                    renderItem={(foodGenre) => (
+                      <View style={styles.foodGenres}>
+                        <Text style={styles.foodListItem}>
+                          {foodGenre.item}
+                        </Text>
+                        <Ripple
+                                     rippleColor="#f5c007"
+                                     rippleSize={40}
+                                     rippleOpacity={0.9}
+                          style={styles.foodButtonWrapper}
+                          onPress={() => {
+                            console.log(foodGenre.item);
+                            setUserFoodGenre(
+                              userFoodGenre.filter((currentFood) => {
+                                console.log("current food:", currentFood);
+                                return currentFood !== foodGenre.item;
+                              })
+                            );
+                          }}
+                        >
+                          <Text style={styles.button}>-</Text>
                         </Ripple>
-                    </View>
-                  )}
-                />
+                      </View>
+                    )}
+                  />
                 </View>
                 <View style={styles.fields}>
-                <View style={styles.createbutton}>
-                <Ripple rippleColor="#fff"
-                  onPress={() => {
-                    handleSubmit();
-                    getUser();
-                    //navigation.navigate("Home"); // or group page
-                  }}
-                >
-                  <View style={styles.buttonWrapper}>
-                    <Text style={styles.button}>Send Your Preferences</Text>
+                  <View style={styles.createbutton}>
+                    <Ripple
+                      rippleColor="#f5c007"
+                      rippleSize={80}
+                      rippleOpacity={0.8}
+                      onPress={() => {
+                        handleSubmit();
+                        getUser();
+                      }}
+                    >
+                      <View style={styles.buttonWrapper}>
+                        <Text style={styles.button}>Send Your Preferences</Text>
+                      </View>
+                    </Ripple>
                   </View>
-                </Ripple>
-                </View>
                 </View>
               </View>
             </View>
@@ -280,7 +254,7 @@ const PendingInvites = (props) => {
 
 export default PendingInvites;
 
-const pickerSelectStylesPrice= StyleSheet.create({
+const pickerSelectStylesPrice = StyleSheet.create({
   inputIOS: {
     fontSize: 16,
     paddingVertical: 12,
@@ -298,7 +272,6 @@ const pickerSelectStylesPrice= StyleSheet.create({
     },
   },
 });
-
 
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
@@ -328,7 +301,6 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: "#181818",
-    elevation: 20,
     borderRadius: 15,
     width: "90%",
     height: "75%",
@@ -364,8 +336,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
   },
   fields: {
-    paddingVertical: 10
-
+    paddingVertical: 10,
   },
   text: {
     color: "orange",

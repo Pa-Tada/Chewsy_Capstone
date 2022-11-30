@@ -88,7 +88,6 @@ function Item({ item, index, scrollX }) {
             eventId: item.id,
             currentEvent: item,
             groupId: item.groupId,
-            //date: item.createdAt,
             name: item.restName,
             image: item.restImageUrl,
           })
@@ -98,16 +97,13 @@ function Item({ item, index, scrollX }) {
           <Image style={styles.eventImg} source={{ uri: item.restImageUrl }} />
         </View>
         <Text style={styles.eventName}>
-          Your Event at{" "}
+        {new Date(item.createdAt?.seconds * 1000).toLocaleDateString("en-US")}{" "}at{" "}
           {new Date(item.createdAt?.seconds * 1000).toLocaleTimeString(
             "en-US",
             { hour: "2-digit", minute: "2-digit" }
           )}{" "}
-          on{" "}
-          {new Date(item.createdAt?.seconds * 1000).toLocaleDateString("en-US")}
         </Text>
         <Text style={styles.eventName}>{item.restName}</Text>
-        <Text style={styles.eventLoc}>{item.restLoc}</Text>
       </Ripple>
     </Animated.View>
   );
@@ -131,7 +127,6 @@ const Events = (props) => {
           eventArr.push({ ...doc.data(), id: doc.id });
       });
       setEvents(eventArr);
-      //console.log("Events.js events", events)
     });
     return unsub;
   }, [groupIds]);
@@ -187,14 +182,9 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   eventName: {
-    marginTop: 2,
+    marginTop: 7,
     fontWeight: "bold",
     color: "darkgray",
-  },
-  eventLoc: {
-    marginTop: 2,
-    color: "darkgray",
-    fontSize: 12,
   },
 });
 

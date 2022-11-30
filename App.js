@@ -70,6 +70,7 @@ export default function App() {
           <Stack.Screen
             name="Profile"
             component={Profile}
+            // options={{ headerShown: false }}
             options={{ title: "Chewsy", headerBackVisible: false }}
           />
           {/* <Stack.Screen

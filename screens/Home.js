@@ -14,7 +14,19 @@ import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Icon, Divider, Input } from "@rneui/themed";
 import { auth, db, allUsers, getUser } from "../firebase";
-import {collection,getDocs,onSnapshot,addDoc,deleteDoc,doc,orderBy,serverTimestamp,getDoc,query,where} from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  addDoc,
+  deleteDoc,
+  doc,
+  orderBy,
+  serverTimestamp,
+  getDoc,
+  query,
+  where,
+} from "firebase/firestore";
 import Footer from "../components/Footer";
 import Groups from "../components/Groups";
 import Events from "../components/Events";
@@ -26,8 +38,7 @@ const Home = ({ route }) => {
   const navigation = useNavigation();
   const [user, setUser] = useState({});
   const [groupModalOpen, setGroupModalOpen] = useState(false);
-  const [groupIds, setGroupIds] = useState([])
-
+  const [groupIds, setGroupIds] = useState([]);
 
   const userInfo = () => {
     const filteredUser = allUsers.find(
@@ -37,18 +48,17 @@ const Home = ({ route }) => {
     console.log("Home.js USER", user);
   };
   useEffect(() => {
-     userInfo()
-    getUser()
+    userInfo();
+    getUser();
   }, [user]);
-
 
   return (
     <SafeAreaView style={styles.container}>
       <Divider color="orange" />
       <Modal visible={groupModalOpen} transparent={true} animationType="slide">
         <CreateGroup
-        user={user}
-        setUser={setUser}
+          user={user}
+          setUser={setUser}
           groupModalOpen={groupModalOpen}
           setGroupModalOpen={setGroupModalOpen}
         />
@@ -57,7 +67,10 @@ const Home = ({ route }) => {
       <View style={styles.groupsWrapper}>
         <View style={styles.titleContainer}>
           <Text style={styles.sectionTitle}>Your Groups</Text>
-          <Ripple rippleColor="#fff"
+          <Ripple
+            rippleColor="#f5c007"
+            rippleSize={40}
+            rippleOpacity={0.9}
             style={styles.iconWrapper}
             onPress={() => setGroupModalOpen(true)}
           >
@@ -70,7 +83,7 @@ const Home = ({ route }) => {
           </Ripple>
         </View>
         {user?.groupIds && user.groupIds.length ? (
-          <Groups groupIds={user.groupIds} setUser={setUser} user={user}/>
+          <Groups groupIds={user.groupIds} setUser={setUser} user={user} />
         ) : (
           <View style={styles.nodata}>
             <Text style={styles.nodataText}>
@@ -99,13 +112,11 @@ const Home = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  //backgroundColor: "#242526",
-  backgroundColor: "#1b1b1b"
+    backgroundColor: "#1b1b1b",
   },
   titleContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    //backgroundColor: "dodgerblue"
   },
   sectionTitle: {
     fontSize: 24,
@@ -131,7 +142,7 @@ const styles = StyleSheet.create({
   },
   eventsWrapper: {
     paddingHorizontal: 12,
-    flex: 1,
+    flex: 1.1,
   },
   nodata: {
     alignItems: "center",

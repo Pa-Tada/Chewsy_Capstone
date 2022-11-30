@@ -138,12 +138,22 @@ const Welcome = () => {
           onChangeText={(text) => setPassword(text)}
           placeholderTextColor="white"
         ></TextInput>
-        <Ripple rippleColor="#fff" onPress={handleSignup}>
+        <Ripple
+          rippleColor="#f5c007"
+          rippleSize={80}
+          rippleOpacity={0.8}
+          onPress={handleSignup}
+        >
           <View style={styles.buttonWrapper}>
             <Text style={styles.button}>Sign Up</Text>
           </View>
         </Ripple>
-        <Ripple rippleColor="#fff" onPress={handleLogin}>
+        <Ripple
+          rippleColor="#f5c007"
+          rippleSize={80}
+          rippleOpacity={0.8}
+          onPress={handleLogin}
+        >
           <View style={styles.buttonWrapper}>
             <Text style={styles.button}>Log In</Text>
           </View>
@@ -202,7 +212,9 @@ const styles = StyleSheet.create({
     backgroundColor: "orange",
     alignItems: "center",
   },
-  button: {},
+  button: {
+    fontWeight: "500",
+  },
 });
 
 export default Welcome;

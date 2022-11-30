@@ -7,7 +7,7 @@ import {
   Modal,
 } from "react-native";
 import { Icon } from "@rneui/themed";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { auth, db, allUsers } from "../firebase";
 import PendingInvites from "../screens/PendingInvites";
@@ -26,7 +26,9 @@ const Footer = (props) => {
         />
       </Modal>
       <Ripple
-        rippleColor="#fff"
+        rippleColor="#f5c007"
+        rippleSize={40}
+        rippleOpacity={0.9}
         style={styles.iconWrapper}
         onPress={() => navigation.navigate("Home")}
       >
@@ -34,15 +36,19 @@ const Footer = (props) => {
       </Ripple>
 
       <Ripple
-        rippleColor="#fff"
+        rippleColor="#f5c007"
+        rippleSize={40}
+        rippleOpacity={0.9}
         style={styles.iconWrapper}
-        onPress={() =>navigation.navigate("Profile") }
+        onPress={() => navigation.navigate("Profile")}
       >
         <Icon type="antdesign" name="form" color="white" style={styles.icon} />
       </Ripple>
 
       <Ripple
-        rippleColor="#fff"
+        rippleColor="#f5c007"
+        rippleSize={40}
+        rippleOpacity={0.9}
         style={styles.iconWrapper}
         onPress={() => setInviteModalOpen(true)}
       >
@@ -55,7 +61,9 @@ const Footer = (props) => {
       </Ripple>
 
       <Ripple
-        rippleColor="#fff"
+        rippleColor="#f5c007"
+        rippleSize={40}
+        rippleOpacity={0.9}
         style={styles.iconWrapper}
         onPress={async () => {
           try {

@@ -33,24 +33,20 @@ import Constants from "expo-constants";
 import * as Location from "expo-location";
 import Ripple from "react-native-material-ripple";
 
-
 export default function EventPage({ route }, props) {
-
-  const { groupId, name, location, image, eventId } =
-    route?.params;
+  const { groupId, name, location, image, eventId } = route?.params;
   const navigation = useNavigation();
-console.log("EVENTID", eventId)
+  console.log("EVENTID", eventId);
   const [restaurantData, setRestaurantData] = useState([]);
-  const [user, setUser] = useState({})// -----------------USE AUTH.CURRENTUSER.UID INSTEAD-------------------
+  const [user, setUser] = useState({}); // -----------------USE AUTH.CURRENTUSER.UID INSTEAD-------------------
   const [isShown, setIsShown] = useState(false);
-  const [event, setEvent] = useState({})
+  const [event, setEvent] = useState({});
 
   const userInfo = () => {
     const filteredUsers = allUsers.filter(
       (user) => user.id === auth.currentUser.uid
     );
     setUser(filteredUsers[0]);
-    console.log("USER", user);
   };
 
   useEffect(() => {
@@ -58,34 +54,32 @@ console.log("EVENTID", eventId)
     getUser();
   }, [user]);
 
-  const getEventDoc = async ()=> {
-    try{
-    const docSnap = await getDoc(doc(db, "events", eventId));
-    return setEvent({ ...docSnap.data(), id: docSnap.id })
-    } catch (err){
-      console.log("Error getting eventDoc", err)
+  const getEventDoc = async () => {
+    try {
+      const docSnap = await getDoc(doc(db, "events", eventId));
+      return setEvent({ ...docSnap.data(), id: docSnap.id });
+    } catch (err) {
+      console.log("Error getting eventDoc", err);
     }
-  }
-  useEffect(()=> {
-    getEventDoc()
-  }, [restaurantData])
+  };
+  useEffect(() => {
+    getEventDoc();
+  }, [restaurantData]);
 
-  // const [eventTime, setEventTime] = useState(time);// ---------WHY NOT JUST PUT IMPORTED PROPS AS VALUES??-----------------
-  // const [eventDate, setEventDate] = useState(date);// ---------WHY NOT JUST PUT IMPORTED PROPS AS VALUES??-----------------
   const [restaurantName, setRestaurantName] = useState(event?.restName);
   const [restaurantLocation, setRestaurantLocation] = useState("");
   const [restaurantImage, setRestaurantImage] = useState("");
-
   const [cuisineType, setCuisineType] = useState("");
   const [budget, setBudget] = useState("3"); // 1 = $, 2 = $$, 3 = $$$, 4 = $$$$
   const [radius, setRadius] = useState("0"); // 1 mile = 1609.34 meters
-  const [longitude, setLongitude] = useState(null); // having issues with this query, need to review documentation further
-  const [latitude, setLatitude] = useState(null); // having issues with this query, need to review documentation further
+  const [longitude, setLongitude] = useState(null);
+  const [latitude, setLatitude] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-
-
   const [users, setUsers] = useState([]);
-  const [groups, setGroups] = useState([{ name: "Loading...", id: "unique" }]);// -------------- WHY??-----------------
+  const [groups, setGroups] = useState([{ name: "Loading...", id: "unique" }]);
+  const [restaurantCity, setRestaurantCity] = useState("");
+  const [restaurantState, setRestaurantState] = useState("");
+  const [restaurantZip, setRestaurantZip] = useState("");
 
   // finding all users in the group
   const getUsersInGroup = async () => {
@@ -105,7 +99,7 @@ console.log("EVENTID", eventId)
   };
 
   // finding single group info
-  const groupRef = collection(db, "groups");// ---------------------------- WHY??-----------------
+  const groupRef = collection(db, "groups");
   useEffect(() => {
     getDocs(groupRef).then((snapshot) => {
       let currentGroup = [];
@@ -116,17 +110,9 @@ console.log("EVENTID", eventId)
     });
   }, []);
 
-  console.log("GROUPS", groups);
-
   useEffect(() => {
     getUsersInGroup();
-    // setEventTime(time);// -------------- WHY??-----------------
-    // setEventDate(date);// -------------- WHY??-----------------
-    // setRestaurantName(name);// -------------- WHY?? SEE BELOW-----------------
-    // setRestaurantLocation(location);// -------------- WHY?? SEE BELOW-----------------
-    // setRestaurantImage(image);// -------------- WHY?? SEE BELOW-----------------
   }, []);
-
 
   // finding most popular cuisine type in group
   const getSelectedGenre = async () => {
@@ -151,14 +137,12 @@ console.log("EVENTID", eventId)
       );
       const mostPopularGenre = sortedGenres[0][0];
       setCuisineType(mostPopularGenre);
-      console.log("cuisine type within function:", cuisineType);
     } catch (err) {
       console.log(err);
     }
   };
 
   useEffect(() => {
-    console.log("im also working");
     getSelectedGenre();
   }, [users]);
 
@@ -177,45 +161,8 @@ console.log("EVENTID", eventId)
     })();
   }, [radius]);
 
-  console.log("latitude", latitude);
-  console.log("longitude", longitude);
-  console.log("radius", radius);
-
-
-  // pulling data from yelp api
-  // const getRestaurantData = async () => {
-  //   try {
-  //     console.log("cuisine type within api call:", cuisineType);
-  //     // const { data } = await axios.get(
-  //     //   `https://api.yelp.com/v3/businesses/search?latitude=${latitude}&longitude=${longitude}&price=${budget}&radius=${radius}&categories=${cuisineType}&sortby=rating&limit=1`,
-  //     const { data } = await axios.get(
-  //       `https://api.yelp.com/v3/businesses/search?radius=${radius}&limit=1&categories=${cuisineType}&latitude=${latitude}&longitude=${longitude}&sort_by=rating`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${REACT_APP_YELP_API_KEY}`,
-  //         },
-  //       }
-  //     );
-  //     setRestaurantData(data.businesses);
-  //     setRestaurantName(data.businesses[0]?.name);
-  //     setRestaurantLocation(restaurantData[0]?.location.address1);
-  //     //setRestaurantImage(restaurantData[0]?.image_url);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getRestaurantData(cuisineType);
-  // }, [cuisineType]);
-
-  console.log("RESTURANT NAME OUTSIDE FUNCTIONS", event?.restName)
   const handleEdit = async () => {
-    try{
-      // console.log("Rest Name from db", event.restName)
-      console.log("cuisine type within api call:", cuisineType);
-      // const { data } = await axios.get(
-      //   `https://api.yelp.com/v3/businesses/search?latitude=${latitude}&longitude=${longitude}&price=${budget}&radius=${radius}&categories=${cuisineType}&sortby=rating&limit=1`,
+    try {
       const { data } = await axios.get(
         `https://api.yelp.com/v3/businesses/search?radius=${radius}&limit=1&categories=${cuisineType}&latitude=${latitude}&longitude=${longitude}&sort_by=rating`,
         {
@@ -224,25 +171,23 @@ console.log("EVENTID", eventId)
           },
         }
       );
-       setRestaurantData(data.businesses);
-       setRestaurantName(data.businesses[0]?.name);
-       setRestaurantLocation(data.businesses[0]?.location.address1);
+      setRestaurantData(data.businesses);
+      setRestaurantName(data.businesses[0]?.name);
+      setRestaurantLocation(data.businesses[0]?.location.address1);
+      setRestaurantCity(data.businesses[0]?.location.city);
+      setRestaurantState(data.businesses[0]?.location.state);
+      setRestaurantZip(data.businesses[0]?.location.zip_code);
       setRestaurantImage(data.businesses[0]?.image_url);
 
-    console.log("HANDLE EDIT RESTNAME", restaurantName)
-    await updateDoc(doc(db, "events", eventId), {
-      // eventDate: eventDate,
-      // eventTime: eventTime,
-      // groupId: groupId,
-      restName: data.businesses[0]?.name,
-      restLoc: data.businesses[0]?.location.address1,
-      restImageUrl: data.businesses[0]?.image_url
-    });
-  } catch (err){
-    console.log("Error updating events table",err)
-  }
+      await updateDoc(doc(db, "events", eventId), {
+        restName: data.businesses[0]?.name,
+        restLoc: `${data.businesses[0]?.location.address1}, ${data.businesses[0]?.location.city}, ${data.businesses[0]?.location.state}, ${data.businesses[0]?.location.zip_code}`,
+        restImageUrl: data.businesses[0]?.image_url,
+      });
+    } catch (err) {
+      console.log("Error updating events table", err);
+    }
   };
-
 
   const [, updateState] = React.useState();
   const forceUpdate = React.useCallback(() => updateState({}), []);
@@ -252,120 +197,92 @@ console.log("EVENTID", eventId)
       <Divider color="orange" />
       <View style={styles.contents}>
         <View style={{ justifyContent: "center", alignItems: "center" }}>
-          <Text style={styles.eventText}>
-            {/* Event Date: {date} */}
-            {"\n"}
-          </Text>
+          <Text style={styles.eventDate}></Text>
           {!isShown && event.restName === "" ? (
-            <View>
-              <Text style={styles.eventText}>
-                Choice Radius: {(radius / 1609).toFixed(2)} Miles
+            <View style={{ alignSelf: "center" }}>
+              <Text style={styles.eventRadius}>
+                Slide to select radius {"\n"}
+                {(radius / 1609).toFixed(2)} Miles
               </Text>
               <Slider
-                style={{ width: 200, height: 40 }}
+                style={{ width: 250, height: 70 }}
                 minimumValue={0}
                 maximumValue={16090}
-                minimumTrackTintColor="#FFFFFF"
-                maximumTrackTintColor="#000000"
+                minimumTrackTintColor="orange"
+                maximumTrackTintColor="#FFFFFF"
                 onValueChange={(value) => setRadius(Math.floor(value))}
               />
+              <View style={styles.yellowButtonWrapper}>
+                <Ripple
+                  rippleColor="#f5c007"
+                  rippleSize={300}
+                  rippleOpacity={0.7}
+                  style={styles.roundButton}
+                  onPress={() => {
+                    setIsShown(!isShown);
+                    // Alert.alert("Your restaurant is ready!");
 
-              <Ripple rippleColor="#fff"
-                style={styles.roundButton1}
-                onPress={() => {
-                  setIsShown(!isShown);
-                  Alert.alert("Your restaurant is ready!");
-                  console.log("cuisine type on press", cuisineType);
-                  console.log("radius on press", `${radius} meters`);
-                  console.log("RESTAURANT DATA", restaurantData);
-
-                  setRestaurantName(restaurantData[0]?.name); //--------WHYY HERE AND NOT INSIDE HANDLE EDIT FUNC???-----------
-                  setRestaurantLocation(restaurantData[0]?.location.address1);//--------WHYY???-----------
-                  //setRestaurantImage(restaurantData[0]?.image_url);//--------WHYY???-----------
-                  forceUpdate();
-                  handleEdit();
-                }}
-              >
-                <Text style={{ fontSize: 32 }}>Chewse</Text>
-              </Ripple>
-              <Text> </Text>
+                    forceUpdate();
+                    handleEdit();
+                  }}
+                >
+                  <Text style={{ fontSize: 38, fontWeight: "600" }}>
+                    CHEWSE
+                  </Text>
+                </Ripple>
+              </View>
+              <View style={styles.createbutton}>
+                <Ripple
+                  rippleColor="#f5c007"
+                  rippleSize={80}
+                  rippleOpacity={0.8}
+                  onPress={() => {
+                    navigation.goBack();
+                  }}
+                >
+                  <View style={styles.buttonWrapper}>
+                    <Text style={styles.button}>Back To Home</Text>
+                  </View>
+                </Ripple>
+              </View>
             </View>
           ) : (
-            <View style={{ justifyContent: "center", alignItems: "center" }}>
-              <Text style={styles.eventText}>
-                Your Restaurant Is:
-                {"\n"}
-              </Text>
-              <Image
-                style={styles.imgEvent}
-                // source={{ uri: image }}
-                source={{ uri: event.restImageUrl }}
-              />
-              <Text style={styles.eventText}>
-                {"\n"}
-                {/* {name} */}
-                {event.restName}
-                {"\n"}
-              </Text>
+            <View style={styles.showingEvent}>
+              <View style={styles.eventDetails}>
+                <Text style={styles.sectionTitle}>We've chosen</Text>
+                <Image
+                  style={styles.imgEvent}
+                  source={{ uri: event.restImageUrl }}
+                />
+                <Text style={styles.eventRestName}>
+                  {"\n"}
+                  {event.restName}
+                  {"\n"}
+                </Text>
 
-              <Text style={styles.eventText}>
-                {event.restLoc}
-              </Text>
-
-              <Text style={styles.eventText}>
-                {/* {location}
-                {restaurantData[0]?.location.city},{" "}
-                {restaurantData[0]?.location.state}{" "}
-                {restaurantData[0]?.location.zip_code}
-                {"\n"} */}
-              </Text>
-              <Ripple rippleColor="#fff"
-                onPress={() => {
-                  navigation.goBack();
-                }}
-              >
-                <Text style={styles.eventText}>Back to Group</Text>
-              </Ripple>
+                <Text style={styles.eventRestLocation}>{event.restLoc}</Text>
+              </View>
+              <View style={styles.createbutton}>
+                <Ripple
+                  rippleColor="#f5c007"
+                  rippleSize={80}
+                  rippleOpacity={0.8}
+                  onPress={() => {
+                    navigation.goBack();
+                  }}
+                >
+                  <View style={styles.buttonWrapper}>
+                    <Text style={styles.button}>Back To Home</Text>
+                  </View>
+                </Ripple>
+              </View>
             </View>
           )}
-          {isShown && event.restName !== ""? (
-            <View style={{ justifyContent: "center", alignItems: "center" }}>
-              {/* <Text style={styles.eventText}>
-                Your Restaurant Is:
-                {"\n"}
-              </Text> */}
-              {/* <Image
-                style={styles.imgEvent}
-                // source={{ uri: image }}
-                source={{ uri: restaurantData[0]?.image_url }}
-              /> */}
-              {/* <Text style={styles.eventText}> */}
-                {/* {"\n"} */}
-                {/* {name} */}
-                {/* {restaurantData[0]?.name} */}
-                {/* {"\n"} */}
-              {/* </Text> */}
-
-              {/* <Text style={styles.eventText}>
-                {restaurantData[0]?.location.address1}
-              </Text> */}
-
-              {/* <Text style={styles.eventText}> */}
-                {/* {location} */}
-                {/* {restaurantData[0]?.location.city},{" "}
-                {restaurantData[0]?.location.state}{" "}
-                {restaurantData[0]?.location.zip_code} */}
-                {/* {"\n"} */}
-              {/* </Text> */}
-              {/* <TouchableOpacity
-                onPress={() => {
-                  navigation.goBack();
-                }}
-              >
-                <Text style={styles.eventText}>Back to Group</Text>
-              </TouchableOpacity> */}
-            </View>
-          ):null}
+          {isShown && event.restName !== "" ? (
+            <View
+              style={{ justifyContent: "center", alignItems: "center" }}
+            ></View>
+          ) : null}
         </View>
       </View>
       <Footer />
@@ -374,24 +291,31 @@ console.log("EVENTID", eventId)
     <SafeAreaView style={styles.container}>
       <Divider color="orange" />
       <View style={styles.contents}>
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
-          {/* <Text style={styles.eventText}>
-            {"\n"}Event Time: {eventTime}
-          </Text> */}
-          {/* <Text style={styles.eventText}>
-            Event Date: {eventDate}
-            {"\n"}
-          </Text> */}
-
-          <Ripple rippleColor="#fff"
-            style={styles.roundButton2}
+        <View style={styles.roundButtonWrapper}>
+          <Ripple
+            rippleColor="#fff"
+            style={styles.roundButtonDisabled}
             onPress={() => {
-              Alert.alert(
-                "Please wait for the group leader to hit the Chewse button for the group."
-              );
+              Alert.alert("Please wait for the group leader to click Chewse.");
             }}
           >
-            <Text style={{ fontSize: 32 }}>Chewse</Text>
+            <Text style={{ fontSize: 38, fontWeight: "600", color: "white" }}>
+              CHEWSE
+            </Text>
+          </Ripple>
+        </View>
+        <View style={styles.createbutton}>
+          <Ripple
+            rippleColor="#f5c007"
+            rippleSize={80}
+            rippleOpacity={0.8}
+            onPress={() => {
+              navigation.goBack();
+            }}
+          >
+            <View style={styles.buttonWrapper}>
+              <Text style={styles.button}>Back To Home</Text>
+            </View>
           </Ripple>
         </View>
       </View>
@@ -403,113 +327,104 @@ console.log("EVENTID", eventId)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#242526",
+    backgroundColor: "#1b1b1b",
   },
   contents: {
     flex: 2.4,
     alignItems: "center",
   },
-  titleContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    //backgroundColor: "dodgerblue"
+  showingEvent: {
+    // justifyContent: "center",
+    // alignItems: "center",
+    // flexDirection: "column",
+    // justifyContent: "space-between"
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "white",
-  },
-  iconWrapper: {
-    shadowColor: "black",
-    shadowOffset: { height: 1, width: 1 },
-    shadowOpacity: 1,
-    shadowRadius: 1,
-  },
-  shadow: {
-    shadowColor: "black",
-    shadowOffset: { height: -1, width: 1 },
-    shadowOpacity: 0.8,
-    shadowRadius: 1,
-  },
-  friendsWrapper: {
-    marginTop: 30,
-    paddingHorizontal: 12,
-    flex: 1,
-  },
-  friends: {},
-  list: {
-    marginTop: 24,
-    marginRight: 8,
-    width: 100,
-    height: 200,
-    borderRadius: 50,
+  eventDetails: {
     alignItems: "center",
   },
-  img: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-  },
-  imgEvent: {
-    width: 200,
-    height: 200,
-    borderRadius: 10,
-  },
-  name: {
-    marginTop: 2,
-    fontWeight: "bold",
-    color: "darkgray",
-  },
-  eventsWrapper: {
-    paddingHorizontal: 12,
-    flex: 1.3,
-  },
-  events: {},
-  eventList: {
-    marginTop: 24,
-    marginRight: 8,
-    width: 180,
-    height: 250,
-    borderRadius: 15,
-  },
-  eventImg: {
-    width: 180,
-    height: 180,
-    borderRadius: 15,
-  },
-  eventName: {
-    marginTop: 2,
-    fontWeight: "bold",
-    color: "darkgray",
-  },
-  eventText: {
+  eventDate: {
     fontSize: 16,
     color: "white",
   },
-
-  eventLoc: {
-    marginTop: 2,
-    color: "darkgray",
-    fontSize: 12,
+  eventRadius: {
+    fontSize: 20,
+    color: "white",
+    textAlign: "center",
+    alignContent: "center",
   },
-  roundButton1: {
-    width: 150,
-    height: 150,
+  yellowButtonWrapper: {
+    paddingTop: 50,
+    shadowColor: "black",
+    shadowOffset: { height: 2, width: 2 },
+    shadowOpacity: 2,
+    shadowRadius: 2,
+  },
+  roundButtonWrapper: {
+    paddingTop: 150,
+    shadowColor: "black",
+    shadowOffset: { height: 2, width: 2 },
+    shadowOpacity: 2,
+    shadowRadius: 2,
+  },
+  roundButton: {
+    width: 240,
+    height: 240,
     justifyContent: "center",
     alignItems: "center",
     padding: 10,
-    borderRadius: 100,
+    borderRadius: 240,
     backgroundColor: "orange",
   },
-  roundButton2: {
-    width: 150,
-    height: 150,
+  roundButtonDisabled: {
+    width: 240,
+    height: 240,
     justifyContent: "center",
     alignItems: "center",
-    padding: 10,
-    borderRadius: 100,
+    borderRadius: 240,
     backgroundColor: "grey",
   },
+  sectionTitle: {
+    fontSize: 26,
+    fontWeight: "700",
+    color: "white",
+    marginBottom: 20,
+    textAlign: "center",
+    paddingBottom: 25,
+    shadowColor: "black",
+    shadowOffset: { height: 2, width: 2 },
+    shadowOpacity: 2,
+    shadowRadius: 2,
+  },
+  imgEvent: {
+    width: 280,
+    height: 280,
+    borderRadius: 15,
+  },
+  eventRestName: {
+    fontSize: 19,
+    fontWeight: "bold",
+    color: "orange",
+  },
+  eventRestLocation: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "darkgray",
+  },
+  createbutton: {
+    paddingTop: 60,
+  },
+  buttonWrapper: {
+    paddingVertical: 10,
+    borderRadius: 60,
+    width: 170,
+    backgroundColor: "orange",
+    alignItems: "center",
+    alignSelf: "center",
+    marginBottom: 10,
+  },
+  button: {
+    fontWeight: "700",
+    fontSize: 16,
+    color: "#181818",
+  },
 });
-
-
