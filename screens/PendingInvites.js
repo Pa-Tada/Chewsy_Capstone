@@ -243,7 +243,7 @@ const PendingInvites = (props) => {
             </View>
           ) : (
             <View style={styles.nodata}>
-              <Text style={styles.nodataText}>No pending invites</Text>
+              <Text style={styles.sectionTitle}>No pending invites</Text>
             </View>
           )}
         </View>
@@ -398,7 +398,7 @@ const styles = StyleSheet.create({
   createbutton: { paddingTop: 20 },
   nodata: {
     alignItems: "center",
-    paddingBottom: 130,
+    paddingTop: 200,
     justifyContent: "center",
   },
   nodataText: {
