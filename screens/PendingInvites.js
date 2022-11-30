@@ -80,7 +80,6 @@ const PendingInvites = (props) => {
   };
 
   const handleSubmit = async () => {
-    console.log("handleSubmit SELECTS", allSelected);
     console.log("handleSubmit UserId", auth.currentUser.uid);
     console.log("handleSubmit EventId", currentEvent.id);
     console.log("handleSubmit EventId Group", currGroup);
