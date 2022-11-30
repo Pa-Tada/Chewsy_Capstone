@@ -399,7 +399,7 @@ const styles = StyleSheet.create({
     color: "white",
     marginBottom: 20,
     textAlign: "center",
-    paddingBottom: 25,
+    paddingVertical:22,
     shadowColor: "black",
     shadowOffset: { height: 2, width: 2 },
     shadowOpacity: 2,
