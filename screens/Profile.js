@@ -312,7 +312,7 @@ const Profile = () => {
                   rippleSize={80}
                   rippleOpacity={0.8}
                   onPress={() => {
-                    navigation.goBack();
+                    navigation.navigate("Home");
                   }}
                 >
                   <View style={styles.buttonWrapper}>
