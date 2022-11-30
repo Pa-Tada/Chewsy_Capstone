@@ -61,32 +61,33 @@ const Friends = (props) => {
         onPress: async () => {
           console.log("OK Deleting memberId", firstName, memberId);
 
-//--------------------REMOVE GROUP FROM USER---------------------
+          //--------------------REMOVE GROUP FROM USER---------------------
           await updateDoc(doc(db, "users", memberId), {
             groupIds: arrayRemove(currentGroup.id),
           });
 
-//-------------REMOVE USER FROM GROUP'S EVENTS' SUBMISSIONS------------
+          //-------------REMOVE USER FROM GROUP'S EVENTS' SUBMISSIONS------------
           const q = query(
             collection(db, "events"),
             where("groupId", "==", `${currentGroup.id}`)
           );
           console.log("FRIENDS.JS QUERIED EVENT", query);
-          onSnapshot(q, (snapshot)=> {
-            snapshot.docs.map(async (snap)=> {
+          onSnapshot(q, (snapshot) => {
+            snapshot.docs.map(async (snap) => {
               await updateDoc(doc(db, "events", snap.id), {
                 submissions: arrayRemove(memberId),
               });
-            })})
+            });
+          });
 
-//--------------------REMOVE USER FROM FRIENDS STATE---------------------
+          //--------------------REMOVE USER FROM FRIENDS STATE---------------------
           // await setFriends((prevState) => {
           //   const removed = prevState.splice(index, 1);
           //   return [...prevState];
           // });
           await setFriends(friends.filter((friend) => friend.id != memberId));
 
-//--------------------REMOVE USER FROM GROUP (IF REMOVING SELF, NAVIGATE HOME)---------------------
+          //--------------------REMOVE USER FROM GROUP (IF REMOVING SELF, NAVIGATE HOME)---------------------
           if (memberId == auth.currentUser.uid) {
             let nextLeader = friends[0].id;
             await updateDoc(doc(db, "groups", currentGroup.id), {
@@ -117,7 +118,10 @@ const Friends = (props) => {
             <Image style={styles.img} source={{ uri: item.imgUrl }} />
             <Text style={styles.name}>{item.firstName}</Text>
             {auth.currentUser.uid == currentGroup.leaderId ? (
-              <Ripple rippleColor="#fff"
+              <Ripple
+                rippleColor="#f5c007"
+                rippleSize={40}
+                rippleOpacity={0.9}
                 style={styles.iconWrapper}
                 onPress={() => handleDelete(item.id, index, item.firstName)}
               >
@@ -129,7 +133,10 @@ const Friends = (props) => {
                 />
               </Ripple>
             ) : auth.currentUser.uid == item.id ? (
-              <Ripple rippleColor="#fff"
+              <Ripple
+                rippleColor="#f5c007"
+                rippleSize={40}
+                rippleOpacity={0.9}
                 style={styles.iconWrapper}
                 onPress={() => handleDelete(item.id, index, item.firstName)}
               >

@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   Modal,
   Button,
+  TextInput,
 } from "react-native";
 import { auth, db, allUsers, user, getUser } from "../firebase";
 import {
@@ -33,12 +34,9 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import Events from "../components/Events";
 import Friends from "../components/Friends";
 import AddFriend from "../components/AddFriend";
-
+import Ripple from "react-native-material-ripple";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import RNPickerSelect from "react-native-picker-select";
-import Ripple from "react-native-material-ripple";
-
-const addFriendField = [{ id: 1, field: "Email/Username" }];
 
 const SingleGroup = ({ route }) => {
   const { groupId, currentGroup, groups } = route.params;
@@ -89,7 +87,6 @@ const SingleGroup = ({ route }) => {
         }
       });
     });
-    console.log("SingleGroup.js GROUP", group);
     return groupInfo;
   }, [currentGroup, currentGroup.userIds.length]);
 
@@ -98,17 +95,14 @@ const SingleGroup = ({ route }) => {
       let members = [];
       snapshot.docs.map((doc) => {
         if (currentGroup.userIds?.includes(doc.id))
-          // && doc.id != auth.currentUser.uid
           members.push({ ...doc.data(), id: doc.id });
       });
       setFriends(members);
     });
-    //console.log("SingleGroup.js friends", friends)
     return unsub;
   }, [currentGroup, currentGroup.userIds.length]);
 
   const handleFoodGenreEdit = () => {
-    console.log(user);
     setDoc(doc(db, "users", auth.currentUser.uid), {
       email: user.email,
       firstName: user.firstName,
@@ -129,7 +123,8 @@ const SingleGroup = ({ route }) => {
       createdAt: date,
       groupId: groupId,
       restImageUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFuys8jY57bOyYwcKNIapFCCYLx18yRcXyEYJxcw7-BQgr5eqvIa-RRSY2XoByxp_GuVE&usqp=CAU",
+        "https://media.istockphoto.com/id/646314156/vector/restaurant-icon-isolated-vector.jpg?s=612x612&w=0&k=20&c=2qFLVCalkUeQEo75tuBarbGy30Rbvr4bUfalsW9o1cw=",
+      // "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFuys8jY57bOyYwcKNIapFCCYLx18yRcXyEYJxcw7-BQgr5eqvIa-RRSY2XoByxp_GuVE&usqp=CAU",
       restLoc: "",
       restName: "",
       submissions: [auth.currentUser.uid],
@@ -138,7 +133,6 @@ const SingleGroup = ({ route }) => {
 
   useEffect(() => {
     getUser();
-    console.log("im working");
   });
 
   return (
@@ -159,7 +153,10 @@ const SingleGroup = ({ route }) => {
       <View style={styles.friendsWrapper}>
         <View style={styles.titleContainer}>
           <Text style={styles.sectionTitle}>{currentGroup.name} Members</Text>
-          <Ripple rippleColor="#fff"
+          <Ripple
+            rippleColor="#f5c007"
+            rippleSize={40}
+            rippleOpacity={0.9}
             style={styles.iconWrapper}
             onPress={() => setModalOpen(true)}
           >
@@ -170,79 +167,83 @@ const SingleGroup = ({ route }) => {
           currentGroup={currentGroup}
           friends={friends}
           setFriends={setFriends}
-          groups={groups} setGroup={setGroup}
+          groups={groups}
+          setGroup={setGroup}
         />
       </View>
-      <Modal visible={eventModalOpen} animationType="slide">
-        <SafeAreaView style={styles.modalContent}>
+      <Modal visible={eventModalOpen} animationType="slide" transparent={true}>
+        <View style={styles.modalBackground}>
           <View style={styles.modalContent}>
-            <View style={styles.container}>
-              <Divider />
-              <View style={styles.contents}>
-                <Text style={styles.sectionTitle}>Create Event</Text>
-
-                <View style={styles.form}>
-                  {/* <Input
-                    labelStyle={{ fontWeight: "normal" }}
-                    inputStyle={{ color: "white", fontSize: 14 }}
-                    label="Event Date"
+            <Ripple
+              rippleColor="#f5c007"
+              rippleSize={40}
+              rippleOpacity={0.9}
+              onPress={() => {
+                setEventModalOpen(false);
+              }}
+              style={styles.crossIconWrapper}
+            >
+              <Icon
+                type="antdesign"
+                name="closecircleo"
+                color="orange"
+                style={styles.icon}
+                size={30}
+              />
+            </Ripple>
+            <View style={styles.formContainer}>
+              <View style={styles.form}>
+                <Input
+                  label=" Event Date & Time"
+                  labelStyle={{
+                    color: "orange",
+                    fontWeight: "600",
+                    fontSize: 19,
+                  }}
+                  inputContainerStyle={{ borderBottomWidth: 0 }}
+                  inputStyle={{
+                    color: "white",
+                    fontSize: 16,
+                    borderRadius: 10,
+                    borderWidth: 1,
+                    borderColor: "gray",
+                    paddingVertical: 11,
+                    paddingHorizontal: 18,
+                    marginTop: 10,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "white",
+                      fontSize: "16",
+                      alignSelf: "center",
+                      marginTop: 15,
+                    }}
+                  >
+                    {date.toLocaleString()}
+                  </Text>
+                </Input>
+                <View style={{ display: "flex", alignItems: "center" }}>
+                  <RNDateTimePicker
+                    style={{}}
+                    testID="dateTimePicker"
+                    value={date}
+                    mode="datetime"
+                    minuteInterval={15}
+                    is24Hour={true}
+                    onChange={onChange}
+                    display="spinner"
+                    textColor="white" // change this to change text color
                   />
-                  <Input
-                    labelStyle={{ fontWeight: "normal" }}
-                    inputStyle={{ color: "white", fontSize: 14 }}
-                    label="Event Time"
-                  /> */}
-
-                  <View style={{ display: "flex", alignItems: "center" }}>
-                    <Text
-                      style={{
-                        color: "orange",
-                        fontSize: "16",
-                        alignSelf: "center",
-                        marginTop: 15,
-                      }}
-                    >
-                      Your Event Will take place on {date.toLocaleString()}
-                    </Text>
-                    {/* <TouchableOpacity
-                      style={styles.buttonWrapper}
-                      onPress={showDatepicker}
-                    >
-                      <Text>Select Date</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.buttonWrapper}
-                      onPress={showTimepicker}
-                    >
-                      <Text>Select Time</Text>
-                    </TouchableOpacity> */}
-
-                    <RNDateTimePicker
-                      style={{ marginTop: 10, marginBottom: 10 }}
-                      testID="dateTimePicker"
-                      value={date}
-                      mode="datetime"
-                      minuteInterval={15}
-                      is24Hour={true}
-                      onChange={onChange}
-                      display="spinner"
-                      textColor="orange" // change this to change text color
-                    />
-                  </View>
-
-                  {/* <Input
-                    labelStyle={{ fontWeight: "normal" }}
-                    inputStyle={{ color: "white", fontSize: 14 }}
-                    label="What are you feeling?"
-                    value={userFoodGenreName}
-                    onChangeText={setUserFoodGenreName}
-                  /> */}
+                </View>
+                <Text style={styles.text}>Food Genre</Text>
+                <View style={styles.pickCuisine}>
                   <RNPickerSelect
                     // labelStyle={{ fontWeight: "normal" }}
+                    textColor="white"
                     style={pickerSelectStyles}
                     label="Food Genre"
                     onValueChange={(value) => setUserFoodGenreName(value)}
-                    // onDonePress = {setFoodGenre([...foodGenre, foodName])}
                     placeholder={{
                       label: "What are you feeling?",
                       value: null,
@@ -272,75 +273,76 @@ const SingleGroup = ({ route }) => {
                       { label: "Vegetarian", value: "vegetarian" },
                     ]}
                   />
-                  <Ripple rippleColor="#fff"
-                    style={styles.buttonWrapper}
+                  <Ripple
+                    rippleColor="#f5c007"
+                    rippleSize={40}
+                    rippleOpacity={0.9}
+                    style={styles.plusbuttonWrapper}
                     onPress={() => {
                       setUserFoodGenre([...userFoodGenre, userFoodGenreName]);
-                      // handleFoodGenreEdit();
                       console.log(userFoodGenre);
                       handleFoodGenreEdit();
                       setUserFoodGenreName("");
                       getUser();
                     }}
                   >
-                    <Text>+</Text>
+                    <Text style={styles.button}>+</Text>
                   </Ripple>
-                  {/* <View style = {}> */}
-                  <FlatList
-                    data={userFoodGenre}
-                    renderItem={(foodGenre) => (
-                      <View style={styles.foodGenres}>
-                        <Text style={styles.foodListItem}>
-                          {foodGenre.item}
-                        </Text>
-                        <Ripple rippleColor="#fff"
-                          style={styles.foodButtonWrapper}
-                          onPress={() => {
-                            console.log(foodGenre.item);
-                            setUserFoodGenre(
-                              userFoodGenre.filter((currentFood) => {
-                                console.log("current food:", currentFood);
-                                return currentFood !== foodGenre.item;
-                              })
-                            );
-                          }}
-                        >
-                          <Text>-</Text>
-                        </Ripple>
-                      </View>
-                    )}
-                  />
-                  {/* </View> */}
-
-                  <Ripple rippleColor="#fff"
-                    onPress={() => {
-                      handleFoodGenreEdit();
-                      createEvent();
-                      setEventModalOpen(false);
-                    }}
-                  >
-                    <View style={styles.buttonWrapper}>
-                      <Text style={styles.button}>Create Event</Text>
-                    </View>
-                  </Ripple>
-                  <Button
-                    title="Cancel"
-                    onPress={() => {
-                      setEventModalOpen(false);
-                    }}
-                  ></Button>
                 </View>
+                <FlatList
+                  data={userFoodGenre}
+                  renderItem={(foodGenre) => (
+                    <View style={styles.foodGenres}>
+                      <Text style={styles.foodListItem}>{foodGenre.item}</Text>
+                      <Ripple
+                        rippleColor="#f5c007"
+                        rippleSize={40}
+                        rippleOpacity={0.9}
+                        style={styles.foodButtonWrapper}
+                        onPress={() => {
+                          console.log(foodGenre.item);
+                          setUserFoodGenre(
+                            userFoodGenre.filter((currentFood) => {
+                              console.log("current food:", currentFood);
+                              return currentFood !== foodGenre.item;
+                            })
+                          );
+                        }}
+                      >
+                        <Text style={styles.button}>-</Text>
+                      </Ripple>
+                    </View>
+                  )}
+                />
               </View>
-              {/* <Footer /> */}
+              <View style={styles.createbutton}>
+                <Ripple
+                  rippleColor="#f5c007"
+                  rippleSize={80}
+                  rippleOpacity={0.8}
+                  onPress={() => {
+                    handleFoodGenreEdit();
+                    createEvent();
+                    setEventModalOpen(false);
+                  }}
+                >
+                  <View style={styles.buttonWrapper}>
+                    <Text style={styles.button}>Create Event</Text>
+                  </View>
+                </Ripple>
+              </View>
             </View>
           </View>
-        </SafeAreaView>
+        </View>
       </Modal>
 
       <View style={styles.eventsWrapper}>
         <View style={styles.titleContainer}>
           <Text style={styles.sectionTitle}>{currentGroup.name} Events</Text>
-          <Ripple rippleColor="#fff"
+          <Ripple
+            rippleColor="#f5c007"
+            rippleSize={40}
+            rippleOpacity={0.9}
             style={styles.iconWrapper}
             onPress={() => setEventModalOpen(true)}
           >
@@ -365,42 +367,9 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#1b1b1b",
   },
-  buttonWrapper: {
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-    marginTop: 10,
-    borderRadius: 60,
-    width: 150,
-    backgroundColor: "orange",
-    alignItems: "center",
-    alignSelf: "center",
-  },
-  foodGenres: {
-    flexDirection: "row",
-    justifyContent: "",
-    padding: 5,
-  },
-  foodListItem: {
-    color: "white",
-    fontWeight: "normal",
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingTop: 5,
-  },
-  foodButtonWrapper: {
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    borderRadius: 80,
-    width: 50,
-    backgroundColor: "orange",
-    alignItems: "center",
-    alignSelf: "center",
-  },
   titleContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    //backgroundColor: "dodgerblue"
   },
   sectionTitle: {
     fontSize: 24,
@@ -428,33 +397,107 @@ export const styles = StyleSheet.create({
   },
   eventsWrapper: {
     paddingHorizontal: 12,
-    flex: 1,
+    flex: 1.1,
   },
-  modalToggle: {
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: "#f2f2f2",
-    padding: 10,
-    borderRadius: 10,
-    alignSelf: "center",
+  modalBackground: {
+    flex: 1,
+    backgroundColor: "rgba(240,200,167,0.9)",
+    justifyContent: "center",
+    alignItems: "center",
   },
   modalContent: {
-    flex: 1,
+    backgroundColor: "#181818",
+    borderRadius: 15,
+    width: "90%",
+    height: "75%",
   },
+  crossIconWrapper: {
+    alignItems: "flex-end",
+  },
+  formContainer: {
+    justifyContent: "center",
+    flexDirection: "column",
+    justifyContent: "flex-end",
+  },
+  form: {
+    paddingHorizontal: 18,
+  },
+  text: {
+    color: "orange",
+    fontWeight: "600",
+    fontSize: 20,
+    paddingLeft: 10,
+  },
+  pickCuisine: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 9,
+  },
+  plusbuttonWrapper: {
+    paddingVertical: 10,
+    //paddingHorizontal: 10,
+    borderRadius: 60,
+    width: 50,
+    backgroundColor: "orange",
+    alignItems: "center",
+    alignSelf: "center",
+    marginTop: 10,
+  },
+  buttonWrapper: {
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 60,
+    width: 300,
+    backgroundColor: "orange",
+    alignItems: "center",
+    alignSelf: "center",
+    marginBottom: 10,
+  },
+  button: {
+    fontWeight: "700",
+    fontSize: 18,
+    color: "#181818",
+  },
+  foodGenres: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    padding: 3,
+    paddingRight: 10,
+  },
+  foodListItem: {
+    color: "white",
+    fontWeight: "normal",
+    paddingTop: 8,
+    paddingRight: 11,
+  },
+  foodButtonWrapper: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 60,
+    width: 50,
+    backgroundColor: "orange",
+    alignItems: "center",
+    alignSelf: "center",
+  },
+  createbutton: { paddingTop: 20 },
 });
 
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
     fontSize: 16,
     paddingVertical: 12,
-    paddingHorizontal: 10,
+    paddingHorizontal: 16,
     borderWidth: 1,
     borderColor: "gray",
-    borderRadius: 4,
+    borderRadius: 10,
     color: "white",
     paddingRight: 30, // to ensure the text is never behind the icon
     marginTop: 10,
-    marginBottom: 10,
+    // marginBottom: 10,
+    width: 240,
+    placeholder: {
+      color: "white",
+    },
   },
 });
 

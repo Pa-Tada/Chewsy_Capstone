@@ -1,17 +1,34 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Modal,
+} from "react-native";
 import { Icon } from "@rneui/themed";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { auth, db, allUsers } from "../firebase";
+import PendingInvites from "../screens/PendingInvites";
 import Ripple from "react-native-material-ripple";
 
 const Footer = (props) => {
   const navigation = useNavigation();
+  const [inviteModalOpen, setInviteModalOpen] = useState(false);
 
   return (
     <View style={styles.container}>
+      <Modal visible={inviteModalOpen} transparent={true} animationType="slide">
+        <PendingInvites
+          inviteModalOpen={inviteModalOpen}
+          setInviteModalOpen={setInviteModalOpen}
+        />
+      </Modal>
       <Ripple
-        rippleColor="#fff"
+        rippleColor="#f5c007"
+        rippleSize={40}
+        rippleOpacity={0.9}
         style={styles.iconWrapper}
         onPress={() => navigation.navigate("Home")}
       >
@@ -19,7 +36,9 @@ const Footer = (props) => {
       </Ripple>
 
       <Ripple
-        rippleColor="#fff"
+        rippleColor="#f5c007"
+        rippleSize={40}
+        rippleOpacity={0.9}
         style={styles.iconWrapper}
         onPress={() => navigation.navigate("Profile")}
       >
@@ -27,9 +46,11 @@ const Footer = (props) => {
       </Ripple>
 
       <Ripple
-        rippleColor="#fff"
+        rippleColor="#f5c007"
+        rippleSize={40}
+        rippleOpacity={0.9}
         style={styles.iconWrapper}
-        onPress={() => navigation.navigate("PendingInvites")}
+        onPress={() => setInviteModalOpen(true)}
       >
         <Icon
           type="antdesign"
@@ -40,7 +61,9 @@ const Footer = (props) => {
       </Ripple>
 
       <Ripple
-        rippleColor="#fff"
+        rippleColor="#f5c007"
+        rippleSize={40}
+        rippleOpacity={0.9}
         style={styles.iconWrapper}
         onPress={async () => {
           try {

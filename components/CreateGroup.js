@@ -36,6 +36,9 @@ import Ripple from "react-native-material-ripple";
 const CreateGroup = (props) => {
   const { user, setUser, groupModalOpen, setGroupModalOpen } = props;
   const [groupName, setGroupName] = useState("");
+  const [groupImg, setGroupImg] = useState(
+    "https://s3.amazonaws.com/freestock-prod/450/freestock_564895924.jpg"
+  );
   const [allSelected, setAllSelected] = useState([]);
   const [data, setData] = useState([]);
 
@@ -70,14 +73,9 @@ const CreateGroup = (props) => {
         name: groupName,
         leaderId: auth.currentUser.uid,
         createdAt: serverTimestamp(),
-        imgUrl:
-          "https://s3.amazonaws.com/freestock-prod/450/freestock_564895924.jpg",
+        imgUrl: groupImg,
         userIds: allSelected,
       });
-
-      // await updateDoc(doc(db, "users", auth.currentUser.uid), {
-      //   groupIds: arrayUnion(groupDocRef.id),
-      // });
 
       await Promise.all(
         allSelected.map(async (memberId) => {
@@ -106,80 +104,124 @@ const CreateGroup = (props) => {
       <View style={styles.modalContent}>
         <KeyboardAwareScrollView>
           <Ripple
-            rippleColor="#fff"
+        rippleColor="#f5c007"
+        rippleSize={40}
+        rippleOpacity={0.9}
             onPress={() => setGroupModalOpen(false)}
             style={styles.iconWrapper}
           >
             <Icon
               type="antdesign"
               name="closecircleo"
-              color="white"
+              color="orange"
               style={styles.icon}
               size={30}
             />
           </Ripple>
-          <View style={styles.form}>
-            <Input
-              inputContainerStyle={{ borderBottomWidth: 0 }}
-              labelStyle={{ color: "white", fontWeight: "normal" }}
-              inputStyle={{
-                color: "white",
-                fontSize: 14,
-                borderRadius: 10,
-                borderWidth: 1,
-                borderColor: "gray",
-                paddingVertical: 12,
-                paddingHorizontal: 10,
-                marginTop: 10,
-                marginBottom: 10,
-              }}
-              label="Add Group Name"
-              value={groupName}
-              onChangeText={(text) => setGroupName(text)}
-            />
-            <Text style={styles.text}>Add Friends</Text>
-            <View style={styles.selectionList}>
-              <MultipleSelectList
-                save="key"
-                setSelected={(val) => setAllSelected(val)}
-                data={data}
-                placeholder="search"
-                boxStyles={{ color: "white" }}
-                dropdownStyles={{ color: "white" }}
-                inputStyles={{ color: "white" }}
-                dropdownItemStyles={{ color: "white" }}
-                dropdownTextStyles={{ color: "white" }}
-                maxHeight={220}
-                searchPlaceholder="Username"
-                closeicon={
-                  <Icon type="antdesign" name="close" color="white" size={18} />
-                }
-                searchicon={
-                  <Icon
-                    type="antdesign"
-                    name="search1"
-                    color="white"
-                    size={15}
-                  />
-                }
-                arrowicon={
-                  <Icon
-                    type="material"
-                    name="keyboard-arrow-down"
-                    color="white"
-                    size={18}
-                    checkBoxStyles={{ backgroundColor: "white" }}
-                    badgeStyles={{ backgroundColor: "white" }}
-                    labelStyles={{ backgroundColor: "white" }}
-                  />
-                }
+          <View style={styles.formContainer}>
+            <View style={styles.form}>
+              <Input
+                placeholder="Enter group name"
+                placeholderTextColor="white"
+                inputContainerStyle={{ borderBottomWidth: 0 }}
+                labelStyle={{
+                  color: "orange",
+                  fontWeight: "600",
+                  fontSize: 19,
+                }}
+                inputStyle={{
+                  color: "white",
+                  fontSize: 16,
+                  borderRadius: 10,
+                  borderWidth: 1,
+                  borderColor: "gray",
+                  paddingVertical: 11,
+                  paddingHorizontal: 18,
+                  marginTop: 10,
+                  marginBottom: 10,
+                }}
+                label=" Group Name"
+                value={groupName}
+                onChangeText={(text) => setGroupName(text)}
               />
-            </View>
-            <Ripple rippleColor="#fff" onPress={() => handleSubmit()}>
-              <View style={styles.buttonWrapper}>
-                <Text style={styles.button}>Create Group</Text>
+              <Input
+                placeholder="Enter URL"
+                placeholderTextColor="white"
+                inputContainerStyle={{ borderBottomWidth: 0 }}
+                labelStyle={{
+                  fontSize: 19,
+                  color: "orange",
+                  fontWeight: "600",
+                }}
+                inputStyle={{
+                  color: "white",
+                  fontSize: 16,
+                  borderRadius: 10,
+                  borderWidth: 1,
+                  borderColor: "gray",
+                  paddingVertical: 11,
+                  paddingHorizontal: 18,
+                  marginTop: 10,
+                  marginBottom: 10,
+                }}
+                label=" Group Image"
+                value={groupImg}
+                onChangeText={(text) => setGroupImg(text)}
+              />
+              <Text style={styles.text}> Friends</Text>
+              <View style={styles.selectionList}>
+                <MultipleSelectList
+                  save="key"
+                  setSelected={(val) => setAllSelected(val)}
+                  data={data}
+                  placeholder="Find friends"
+                  boxStyles={{ color: "white" }}
+                  dropdownStyles={{ color: "white" }}
+                  inputStyles={{ color: "white", fontSize: 16 }}
+                  dropdownItemStyles={{ color: "white" }}
+                  dropdownTextStyles={{ color: "white" }}
+                  maxHeight={220}
+                  searchPlaceholder="     Username"
+                  closeicon={
+                    <Icon
+                      type="antdesign"
+                      name="close"
+                      color="white"
+                      size={16}
+                    />
+                  }
+                  searchicon={
+                    <Icon
+                      type="antdesign"
+                      name="search1"
+                      color="white"
+                      size={15}
+                    />
+                  }
+                  arrowicon={
+                    <Icon
+                      type="material"
+                      name="keyboard-arrow-down"
+                      color="white"
+                      size={18}
+                      checkBoxStyles={{ backgroundColor: "white" }}
+                      badgeStyles={{ backgroundColor: "white" }}
+                      labelStyles={{ backgroundColor: "white" }}
+                    />
+                  }
+                />
               </View>
-            </Ripple>
+              <Ripple
+                rippleColor="#f5c007"
+                rippleSize={80}
+                rippleOpacity={0.8}
+                onPress={() => handleSubmit()}
+              >
+                <View style={styles.buttonWrapper}>
+                  <Text style={styles.button}>Create Group</Text>
+                </View>
+              </Ripple>
+            </View>
           </View>
         </KeyboardAwareScrollView>
       </View>
@@ -190,30 +232,29 @@ const CreateGroup = (props) => {
 const styles = StyleSheet.create({
   modalBackground: {
     flex: 1,
-    backgroundColor: "rgba(240,200,167,0.6)",
+    backgroundColor: "rgba(240,200,167,0.9)",
     justifyContent: "center",
     alignItems: "center",
   },
   modalContent: {
-    borderWidth: 0.2,
-    borderColor: "orange",
     backgroundColor: "#181818",
-    elevation: 20,
-    //alignContent: "center",
     borderRadius: 15,
-
     width: "80%",
-    height: "70%",
+    height: "75%",
+  },
+  formContainer: {
+    justifyContent: "center",
+    //paddingBottom: 40,
+    // flexDirection: "column",
+    // justifyContent: "flex-end"
   },
   form: {
-    paddingTop: 50,
-    //paddingVertical: 20,
     paddingHorizontal: 30,
   },
   text: {
-    color: "white",
-    fontWeight: "normal",
-    fontSize: 17,
+    color: "orange",
+    fontWeight: "600",
+    fontSize: 20,
     paddingLeft: 10,
   },
   selectionList: {
@@ -229,11 +270,12 @@ const styles = StyleSheet.create({
     backgroundColor: "orange",
     alignItems: "center",
     alignSelf: "center",
-    marginBottom: 15,
+    marginBottom: 30,
   },
   button: {
-    fontWeight: "bold",
-    fontSize: 15,
+    fontWeight: "700",
+    fontSize: 18,
+    color: "#181818",
   },
   iconWrapper: {
     alignItems: "flex-end",
