@@ -300,7 +300,7 @@ const Profile = () => {
                     handleEdit();
                     getUser();
                     setFoodName("");
-                    navigation.goBack();
+                    navigation.navigate("Home");
                   }}
                 >
                   <View style={styles.buttonWrapper}>
