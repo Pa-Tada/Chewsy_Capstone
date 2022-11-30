@@ -149,12 +149,10 @@ const styles = StyleSheet.create({
     paddingTop: 120,
   },
   nodataText: {
-    color: "white",
+    color: "orange",
     padding: 10,
-    shadowColor: "black",
-    shadowOffset: { height: 1, width: 1 },
-    shadowOpacity: 0.8,
-    shadowRadius: 1,
+    fontSize: 18,
+    fontWeight: "600"
   },
 });
 
