@@ -221,7 +221,17 @@ export default function EventPage({ route }, props) {
                   onPress={() => {
                     setIsShown(!isShown);
                     // Alert.alert("Your restaurant is ready!");
+                    console.log("cuisine type on press", cuisineType);
+                    console.log("radius on press", `${radius} meters`);
+                    console.log("RESTAURANT DATA", restaurantData);
+                    console.log("RESTAURANT DATA", restaurantData.location);
 
+                    setRestaurantName(restaurantData[0]?.name);
+                    setRestaurantLocation(restaurantData[0]?.location.address1);
+                    setRestaurantCity(restaurantData[0]?.location.city);
+                    setRestaurantState(restaurantData[0]?.location.state);
+                    setRestaurantZip(restaurantData[0]?.location.zip_code);
+                    setRestaurantImage(restaurantData[0]?.image_url);
                     forceUpdate();
                     handleEdit();
                   }}
