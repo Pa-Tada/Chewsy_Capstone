@@ -1,32 +1,30 @@
-> Why do I have a folder named ".expo" in my project?
-The ".expo" folder is created when an Expo project is started using "expo start" command.
-> What do the files contain?
-- "devices.json": contains information about devices that have recently opened this project. This is used to populate the "Development sessions" list in your development builds.
-- "settings.json": contains the server configuration that is used to serve the application manifest.
-> Should I commit the ".expo" folder?
-No, you should not share the ".expo" folder. It does not contain any information that is relevant for other developers working on the project, it is specific to your machine.
-Upon project creation, the ".expo" folder is already added to your ".gitignore" file.
+# Chewsy
 
------GITHUB PULL REQUEST STEPS-------
--Work in our local branches, add, commit
+An iOS app that will recommend a restauant by collecting the dietary preferences and restrictions of members in a group for their next event. Resolve indecision and the manual process of searching and filtering online and use our app to select a place to eat for your next meetup!
 
--Checkout to main
+## As a customer/visitor, I want to be able to,
 
--Pull down latest main
+* Access a deployed version of the app so that my friends and I can get a restaurant recommendation based on our combined dietary preferences and needs. 
+* Log in and out
+* Create and edit my profile 
+  * Fill out required and optional fields
+* Have an individual profile and group profiles
+* In my individual page, see all groups I’ve ever joined and all events I’ve been a part of
+* Create, join, and edit groups 
+  * Logged in user can remove themselves from a group but no one else can remove another member unless the logged in user is the group creator
+  * Create event 
+  * Add friends to a group and send them event invitations containing a mini questionnaire on dietary needs and cuisine preferences (known as food genre)
+* Get a restaurant recommendation for the event based on 
+  * Congruencies between group members’ choices once every member has filled out the questionnaire, 
+  * Location 
+* See all restaurant recommendations for each event in the group profile and my individual profile
+* Receive invitations to join other groups and send food preferences.
+* Click on an event and view restaurant details
 
--Once local main is up to date, checkout to branch we were working on
 
--Git merge main to the branch
+## Tech Stack
 
--GitHub merge conflicts
-  -If needed, save any code in some doc first to avoid code being lost during git auto-merges
-  -Resolve them locally inside of your branch
-  -Pair/Mob resolve as needed, i.e. for overlapping files
+React Native, Expo Go, Firebase, Cloud Firestore. 
 
--Git push to branch
-
--Create pull request
-
--Whoever ELSE is available, reviews, approves, & merges to GitHub main
 
 
