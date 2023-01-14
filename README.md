@@ -4,7 +4,7 @@ An iOS app that will recommend a restauant by collecting the dietary preferences
 
 ## As a customer/visitor, I want to be able to,
 
-* Access a deployed version of the app so that my friends and I can get a restaurant recommendation based on our combined dietary preferences and needs. 
+* Access a deployed version of the app so that my friends and I can get a restaurant recommendation based on our combined dietary preferences and needs 
 * Log in and out
 * Create and edit my profile 
   * Fill out required and optional fields
@@ -18,7 +18,7 @@ An iOS app that will recommend a restauant by collecting the dietary preferences
   * Congruencies between group members’ choices once every member has filled out the questionnaire, 
   * Location 
 * See all restaurant recommendations for each event in the group profile and my individual profile
-* Receive invitations to join other groups and send food preferences.
+* Receive invitations to join other groups and send food preferences
 * Click on an event and view restaurant details
 
 
