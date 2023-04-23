@@ -26,7 +26,7 @@ An iOS app that will recommend a restaurant by collecting the dietary preference
 
 React Native, Expo Go, Firebase, Cloud Firestore. 
 
-### Views
+## Views
 
 <img src='https://github.com/Pa-Tada/Chewsy_Capstone/blob/main/Chewsy%20Pages-min.png'/>
 
