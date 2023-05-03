@@ -1,6 +1,6 @@
 # Chewsy
 
-An iOS app that will recommend a restaurant by collecting the dietary preferences and restrictions of members in a group for their next event. Resolve indecision and the manual process of searching and filtering online and use our app to select a place to eat for your next meetup!
+An iOS app that recommends a restaurant by collecting the dietary preferences and restrictions of members in a group for their next event. Resolve indecision and the manual process of searching and filtering online and use our app to select a place to eat for your next meetup!
 
 ## As a customer/visitor, I want to be able to,
 
