@@ -30,7 +30,16 @@ React Native, Expo Go, Firebase, Cloud Firestore.
 
 <img src='https://github.com/Pa-Tada/Chewsy_Capstone/blob/main/Chewsy%20Pages-min.png'/>
 
-<video src='https://prooney.dev/gifs/chewsy/chewsylogin.mp4' width=180/>
+
+https://github.com/Pa-Tada/Chewsy_Capstone/assets/91238110/bc579207-0741-4c6c-90ec-ced4304f40fd
+
+https://github.com/Pa-Tada/Chewsy_Capstone/assets/91238110/31e8e5bc-368f-4e4d-be82-8324ffd04aea
+
+https://github.com/Pa-Tada/Chewsy_Capstone/assets/91238110/b448e061-dc23-4903-a68b-461b8ca64dea
+
+https://github.com/Pa-Tada/Chewsy_Capstone/assets/91238110/d5f8b245-246b-4066-ba92-d6dca42f9f0e
+
+https://github.com/Pa-Tada/Chewsy_Capstone/assets/91238110/edb97d48-1490-4aab-8226-b71a11e3c194
 
 
 
